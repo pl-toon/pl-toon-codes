@@ -7,7 +7,7 @@ Repository for a multi agent experimental platooning platform
 ![Single Agent 3D](/fusion360_images/angle.png)
 
 
-![Single Agent 3D side](/fusion360_images/side view.png)
+![Single Agent 3D side](/fusion360_images/side%20view.png)
 
 # Platform 
 ![Many agents real](/fusion360_images/many.jpg)
