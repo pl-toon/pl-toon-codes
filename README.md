@@ -3,7 +3,7 @@ Repository for a multi agent experimental platooning platform
 
 # Platform in action (Youtube Link)
 PL-TOON Description and Example (Spanish audio with English subtitles):
-https://youtu.be/xl1U0XIsi3g
+https://youtu.be/QAIMSYgBqKo
 
 # Single agent
 ![Single Agent 3D](/fusion360_images/angle.png)
