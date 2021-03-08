@@ -2,7 +2,7 @@
 Repository for a multi agent experimental platooning platform 
 
 # Platform in action (Youtube Link)
-PL-TOON Description and Example (ESP):
+PL-TOON Description and Example (Spanish audio with English subtitles):
 https://youtu.be/xl1U0XIsi3g
 
 # Single agent
