@@ -11,5 +11,7 @@ https://youtu.be/QAIMSYgBqKo
 
 ![Single Agent 3D side](/fusion360_images/side%20view.png)
 
+![Single Agent Connection Diagram](/Agente.png)
+
 # Platform 
 ![Many agents real](/fusion360_images/many.jpg)
