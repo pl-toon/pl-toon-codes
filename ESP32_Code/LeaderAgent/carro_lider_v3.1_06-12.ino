@@ -15,39 +15,39 @@
 /* Filtering */
 
 typedef struct filterIIR {
-    double x_vec[20];
-    double y_vec[20];
-    double b[20];
-    double a[20];
-    int N;
-    filterIIR(double *b_coeff, double *a_coeff, int N_points){
-        N = N_points;
-        bzero(x_vec, N*sizeof(double));
-        bzero(y_vec, N*sizeof(double));
-        bzero(b, N*sizeof(double));
-        bzero(a, N*sizeof(double));
-        if(b_coeff != NULL)
-            memcpy(b, b_coeff, N*sizeof(double));
-        if(a_coeff != NULL)
-            memcpy(a, a_coeff, N*sizeof(double));
-    }
-    double filtering(double x){
-        double ma = 0;
-        double ar = 0;
-        memmove(x_vec + 1, x_vec, (N-1)*sizeof(double));
-        memmove(y_vec + 1, y_vec, (N-1)*sizeof(double));
-        x_vec[0] = x;
-        // moving average
-        for(int n=0; n < N; n++){
-            ma += b[n]*x_vec[n];
-        }
-        // auto regressive
-        for(int n=1; n < N; n++){
-            ar += (-1)*a[n]*y_vec[n];
-        }
-        y_vec[0] = ar + ma;
-        return y_vec[0];
-    }
+	double x_vec[20];
+	double y_vec[20];
+	double b[20];
+	double a[20];
+	int N;
+	filterIIR(double *b_coeff, double *a_coeff, int N_points){
+		N = N_points;
+		bzero(x_vec, N*sizeof(double));
+		bzero(y_vec, N*sizeof(double));
+		bzero(b, N*sizeof(double));
+		bzero(a, N*sizeof(double));
+		if(b_coeff != NULL)
+			memcpy(b, b_coeff, N*sizeof(double));
+		if(a_coeff != NULL)
+			memcpy(a, a_coeff, N*sizeof(double));
+	}
+	double filtering(double x){
+		double ma = 0;
+		double ar = 0;
+		memmove(x_vec + 1, x_vec, (N-1)*sizeof(double));
+		memmove(y_vec + 1, y_vec, (N-1)*sizeof(double));
+		x_vec[0] = x;
+		// moving average
+		for(int n=0; n < N; n++){
+			ma += b[n]*x_vec[n];
+		}
+		// auto regressive
+		for(int n=1; n < N; n++){
+			ar += (-1)*a[n]*y_vec[n];
+		}
+		y_vec[0] = ar + ma;
+		return y_vec[0];
+	}
 } filterIIR;
 
 
@@ -62,14 +62,8 @@ filterIIR filterPos(b_win, NULL, 5);
 filterIIR filterVel(b_hamm, NULL, 20);
 
 ///////////////////////////////////////
-//     Configuración MQTT   ///////////
+//     MQTT Configuration   ///////////
 ///////////////////////////////////////
-//const char* ssid = "ac3e";  // Nombre WiFi a conectarse
-//const char* password = "rac3e/07"; // Contraseña WiFi
-//onst char* ssid = "stringUTEM";
-//const char* password = "stringstable";
-//const char* ssid = "trenesAC3E";
-//const char* password = "stringstable";
 //const char* ssid = "fvp";
 //const char* password = "nomeacuerdo";
 //const char* ssid = "VTR-6351300";
@@ -77,8 +71,6 @@ filterIIR filterVel(b_hamm, NULL, 20);
 const char* ssid = "MOVISTAR_7502";
 const char* password = "X27JgSvWteS2US4";
 
-//const char* mqtt_server = "10.1.28.117";  // IP de la Raspberry
-//const char* mqtt_server = "192.168.137.1";
 //const char* mqtt_server = "192.168.1.100";  // IP fvp
 const char* mqtt_server = "192.168.1.114";
 WiFiClient espClient;
@@ -87,37 +79,37 @@ long lastMsg = 0;
 char msg[50];  
 
 ////////////////////////////////////////////
-//      Configuracion ESP-NOW       ////////
+//      ESP-NOW Configuration       ////////
 ////////////////////////////////////////////
 uint8_t mac_leader[] = {0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F};		// custom MAC
 uint8_t mac_A[] = {0xc8, 0x2b, 0x96, 0xb4, 0xe6, 0xcc};
 uint8_t mac_addr_broadcast[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
 struct {
-    uint32_t timestamp;
-    double position;
-    double velocity;
+	uint32_t timestamp;
+	double position;
+	double velocity;
 } ESPNOW_payload;
 
-esp_now_peer_info_t peerInfo;   // Estructura para anadir peers a espnow
+esp_now_peer_info_t peerInfo;   // Struct to add peers to ESPNOW
 
 
 ////////////////////////////////////////////////////
-//          Configuración motor DC      ////////////
+//          DC Motor Configuration      ////////////
 ////////////////////////////////////////////////////
-const int Control_fwd = 25;                //  Pin AIN1  [Control del sentido de rotaciÃ³n +]
-const int Control_back = 26;            //  Pin AIN2   [Control del sentido de rotaciÃ³n -]
-const int Control_v = 12;                 //  Pin PWMA    [Control de la velocidad de rotaciÃ³n]
-int MotorSpeed = 0;                   // Velocidad del motor  0..1024
-int MotorDirection = 1;               // Avanzar (1) o Retroceder (0)
+const int Control_fwd = 25;                //  Pin AIN1  [Control del sentido de rotacion +]
+const int Control_back = 26;            //  Pin AIN2   [Control del sentido de rotacion -]
+const int Control_v = 12;                 //  Pin PWMA    [Control de la velocidad de rotacion]
+int MotorSpeed = 0;                   // Motor speed from 0 to 1024
+int MotorDirection = 1;               // Forward (1) or Backwards (0)
 
 ////////////////////////////////////////////////
 //         Variables para Sensor Distancia //////
 ////////////////////////////////////////////////
 VL53L0X SensorToF;
-double medi = 10;                
+double pos_med = 10;                
 double temp_cal;     // medicion temporal distancia [cm]      
-uint32_t old = 0;   // tiempo para mediciones 
+uint32_t time_old = 0;   // tiempo para mediciones 
 uint32_t t_old;     // tiempo para envio
 uint32_t t1;        // tiempo delay inicial
 uint32_t t2;
@@ -126,12 +118,12 @@ uint32_t t2;
 //          Variables sensor velocidad      //
 /////////////////////////////////////////////
 struct MD {              // Estructura para las mediciones de mouse_cam
-    byte motion;
-    char dx, dy;
-    byte squal;
-    word shutter;
-    byte max_pix;
-    int over;
+	byte motion;
+	char dx, dy;
+	byte squal;
+	word shutter;
+	byte max_pix;
+	int over;
 };
 double last_vel = 0;
 double vel_lim = 50;
@@ -192,19 +184,19 @@ void loop() {
     }
 	
     // Mediciones  
-    medi = 0;
+    pos_med = 0;
     int count_cam=0;
     int last_dy = 0;
-    MD md;
+    MD cam_med;
 	
     /* Rutina 1 mediciones */
     for (int i = 0; i < 20 ; i++) {
         if (i % 5 == 1) {    // solo algunas mediciones de ToF. No se actualiza muy seguido. Pero ya no hay tiempo perdido entre mediciones.
             uint16_t range = SensorToF.readReg16Bit(SensorToF.RESULT_RANGE_STATUS + 10);
-            medi += range;
+            pos_med += range;
         }
-        mousecam_read_motion(&md);
-        int curr_dy = (int8_t) md.dy;
+        mousecam_read_motion(&cam_med);
+        int curr_dy = (int8_t) cam_med.dy;
         if(curr_dy*last_dy < 0 && abs(curr_dy) > abs(last_dy)){
             curr_dy = last_dy;
         }
@@ -213,15 +205,15 @@ void loop() {
         uint32_t cam_t = micros();
         while(micros() - cam_t < DELAY_CAM);	//retardo en vez de utilizar delay
     }
-    mousecam_read_motion(&md);
-    count_cam += (int8_t) md.dy;
+    mousecam_read_motion(&cam_med);
+    count_cam += (int8_t) cam_med.dy;
     v_medida= (scale*1000)*count_cam/(millis()-old);   // Problema: Bajé el foco del lento para aumentar la resolución
                                                         // Funciona pero hay que revisar cada lente para mejorarla.
     if(abs(v_medida) > vel_lim){
 		v_medida = last_vel;
 	}
 	last_vel = v_medida;
-    old = millis();
+    time_old = millis();
 
     /////////////////////////////////////////////////
 	/* Rutina 2 mediciones */
@@ -251,8 +243,8 @@ void loop() {
 
 	v_medida = v_medida / 20;*/
 	   
-	medi = medi/40; // promediamos 4 mediciones del sensor de distancia. No se si sirve de algo
-	medi = filterPos.filtering(medi);
+	pos_med = pos_med/40; // promediamos 4 mediciones del sensor de distancia. No se si sirve de algo
+	pos_med = filterPos.filtering(pos_med);
     /*int WINDOW_SIZE = 5;
     SUM = SUM - READINGS[INDEX];       // Remove the oldest entry from the sum
     VALUE = medi/4;        // Read the next sensor value
@@ -263,7 +255,7 @@ void loop() {
     double AVERAGED = SUM / (float)WINDOW_SIZE;      // Divide the sum of the window by the window size for the resu
     medi = AVERAGED/10; // promediamos 4 mediciones del sensor de distancia. No se si sirve de algo*/
 
-    Serial.println(medi);
+    Serial.println(pos_med);
 
     
 	//double medi_y = filterVel.filtering(v_medida);   
@@ -271,47 +263,47 @@ void loop() {
 	//Serial.println(String(v_medida) + " " + String(medi_y));
 
 
-    /* Envio por ESP-NOW */
-    uint32_t time_now = millis() - t_old;
-    if( time_now > 50 ){
-        ESPNOW_payload.timestamp = time_now;
-        ESPNOW_payload.velocity = v_medida;
-        ESPNOW_payload.position = 20;
-        esp_now_send(mac_addr_broadcast, (uint8_t*) &ESPNOW_payload, sizeof(ESPNOW_payload));         // 'True' broadcast, no hay ACK del receptor
-        t_old = millis();
-    }
+	/* TX ESP-NOW */
+	uint32_t time_now = millis() - t_old;
+	if( time_now > 50 ){
+		ESPNOW_payload.timestamp = time_now;
+		ESPNOW_payload.velocity = v_medida;
+		ESPNOW_payload.position = 20;
+		esp_now_send(mac_addr_broadcast, (uint8_t*) &ESPNOW_payload, sizeof(ESPNOW_payload));         // 'True' broadcast, no hay ACK del receptor
+		t_old = millis();
+	}
 
-    ////////////////////////////////////////////////////////
-    //        Rutina del Carro                 /////////////
-    ////////////////////////////////////////////////////////
-	
+	////////////////////////////////////////////////////////
+	//         Agent Routine                   /////////////
+	////////////////////////////////////////////////////////
+
 	if(millis() - t1 < 3000)	return;     // retardo inicial al comienzo de la prueba para comenzar a capturar datos con el tren detenido
-	
-    if (abs(u) != 0 && medi > 12.0)
-    {
-        if (u >= 0){
-            MotorDirection = 1;
-            MotorSpeed = u;
-        }
-        else{
-            MotorDirection = 0;
-            MotorSpeed = -u;
-        } 
-    }
-    else  
-    {
-        if (MotorSpeed > 20)
-            MotorSpeed =  MotorSpeed - 20; 
-        else
-        {
-            //start = false;
-            MotorSpeed = 0;
-            u = 1;                            // Si queda en cero, al momento de reiniciar la prueba ingresara directamente a este bucle
-            run_test = false;
-            //reconnect();
-        } 
-    }
-    SetMotorControl();
+
+	if (abs(u) != 0 && pos_med > 12.0)
+	{
+		if (u >= 0){
+			MotorDirection = 1;
+			MotorSpeed = u;
+		}
+		else{
+			MotorDirection = 0;
+			MotorSpeed = -u;
+		} 
+	}
+	else  
+	{
+		if (MotorSpeed > 20)
+			MotorSpeed =  MotorSpeed - 20; 
+		else
+		{
+			//start = false;
+			MotorSpeed = 0;
+			u = 1;                            // Si queda en cero, al momento de reiniciar la prueba ingresara directamente a este bucle
+			run_test = false;
+			//reconnect();
+		} 
+	}
+	SetMotorControl();
 }
 
 ///////////////////////////////////////////////////////
@@ -331,7 +323,6 @@ void SetMotorControl()
 
     ledcWrite(Control_v, MotorSpeed); // esp32 (PIN, duty cycle PWM)
 }
-
 
 
 void callback(char* topic, byte* payload, unsigned int length) {
