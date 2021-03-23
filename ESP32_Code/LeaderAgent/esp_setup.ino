@@ -53,7 +53,7 @@ void setup() {
 	Serial.begin(115200);
 	Serial.println("");
 	/////////////////////////////////////
-	///       Inicio Motor         //////
+	///       Motor Start          //////
 	/////////////////////////////////////
 	pinMode(Control_fwd, OUTPUT);   // 1A - Definition as output pin
 	pinMode(Control_back, OUTPUT);    // 2A - Definition as output pin
@@ -71,7 +71,7 @@ void setup() {
 	// Only use the lines below to activate 'custom wifi settings'
 	//WiFi.disconnect();
 	//setup_custom_wifi(&my_config);
-	esp_wifi_set_ps(WIFI_PS_NONE);
+	esp_wifi_set_ps(WIFI_PS_NONE);		// No power-saving mode
 
 	/* MQTT */
 	setup_wifi();
@@ -155,7 +155,7 @@ void setup() {
 		pos_med += range;
 		delay(100);
 	}
-	temp_cal = pos_medi/80;		// average of 8 measurements [cm]
+	temp_cal = pos_med/80;		// average of 8 measurements [cm]
 	int count_cam = 0;		// variable to store the 'counts' of the camera 
 	MotorSpeed = 200;   
 	SetMotorControl();
@@ -175,10 +175,10 @@ void setup() {
 		delayMicroseconds(DELAY_CAM);  
 	}
 	pos_med = 0;
-	delay(500); //asegurar que se detuvo
+	delay(500); // make sure the train has stopped
 	for (int i = 0; i < 8; i++) {
 		uint16_t range = SensorToF.readReg16Bit(SensorToF.RESULT_RANGE_STATUS + 10);
-		pos_medi += range;
+		pos_med += range;
 		delay(100);
 	}
 	pos_med = pos_med/80;       // average 8 measurements
