@@ -1,4 +1,7 @@
-//#include "Adafruit_VL53L0X.h"
+/*
+ * Last Modified: 03-27-2021
+ */
+
 #include <PID_v1.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
@@ -250,7 +253,7 @@ void loop() {
 	}
 	mousecam_read_motion(&cam_med);
 	count_cam += (int8_t) cam_med.dy;
-	v_medida= (scale*1000)*count_cam/(millis()-old);   
+	v_medida= (scale*1000)*count_cam/(millis()-time_old);   
 
 	if(abs(v_medida) > vel_lim){
 		v_medida = last_vel;
@@ -339,7 +342,7 @@ void loop() {
 			if (u < 0)  MotorDirection = 1;
 			else  MotorDirection = 0;
 		}
-		if( (abs(weighted) > 0.75) && (medi < 200)){ // condition to turn on the PID again
+		if( (abs(weighted) > 0.75) && (pos_med < 200)){ // condition to turn on the PID again
 			myPID.SetMode(AUTOMATIC);
 			myPID_v.SetMode(AUTOMATIC);
 		}        

@@ -1,3 +1,7 @@
+/*
+ *	Last modified: 03-27-2021
+ */
+
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include "SPI.h"
@@ -205,7 +209,7 @@ void loop() {
 	}
 	mousecam_read_motion(&cam_med);
 	count_cam += (int8_t) cam_med.dy;
-	v_medida= (scale*1000)*count_cam/(millis()-old);   
+	v_medida= (scale*1000)*count_cam/(millis()-time_old);   
 
 	if(abs(v_medida) > vel_lim){
 		v_medida = last_vel;

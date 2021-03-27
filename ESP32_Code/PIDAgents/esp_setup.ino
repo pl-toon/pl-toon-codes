@@ -97,8 +97,6 @@ void setup() {
 	//add_peer(mac_addr_A, CHANNEL, false);     // (const char* mac, int channel, bool encryption)
 	setup_espnow();
 	add_peer(mac_addr_broadcast, CHANNEL, false);
-	add_peer(mac_A, CHANNEL, false);
-    
     
 	///////////////////////////////////////////
 	//         Sensors Initialization       ///
@@ -168,16 +166,16 @@ void setup() {
 	delay(1000);
 
 	time_old = millis();
-	while (millis()-old<1000) {
+	while (millis() - time_old < 1000) {
 		mousecam_read_motion(&cam_med); 
 		count_cam += (int8_t)cam_med.dy;
 		delayMicroseconds(DELAY_CAM);  
 	}
 	MotorSpeed = 0;   
 	SetMotorControl();
-	while (millis()-old<1500) {
-		mousecam_read_motion(&md);
-		count_cam += (int8_t)md.dy;
+	while (millis() - time_old < 1500) {
+		mousecam_read_motion(&cam_med);
+		count_cam += (int8_t)cam_med.dy;
 		delayMicroseconds(DELAY_CAM);  
 	}
 	pos_med = 0;
