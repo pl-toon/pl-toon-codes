@@ -27,6 +27,24 @@ After powering on the agent. An initial setup and calibration process is made be
 
 At each stage, a message telling if the step was successful or not, is printed by the serial port. After all the steps are done the train is ready to run experiments!
 
-
-
 ### Performing an Experiment
+
+All of the commands to run the experiment are sent by any device (e.g. laptop or smartphone) using the MQTT protocol. You can edit the parameters of the agents such as the motor speed of the leader, or the PID gains of the rest of the platoon.
+
+The following list details how to change the respective parameters specifying the MQTT topic and type of message to send:
+
+| Command                            | Topic                                                       | Type of Message  |
+|------------------------------------|-------------------------------------------------------------|------------------|
+| Change the motor speed (Leader)    | trenes/carrol/u                                             | Integer  |
+| Position Setpoint                  | trenes/ref                                                  | Float [cm]       |
+| Position PID Gains                 | trenes/carroD/p<br>trenes/carroD/i<br>trenes/carroD/d       | Float            |
+| Velocity PID Gains                 | trenes/carroD/p_v<br>trenes/carroD/i_v<br>trenes/carroD/d_v | Float            |
+| Leader Following Constant $\alpha$ | trenes/alpha                                                | Float (>=0)      |
+| Time Headway Constant $h$          | trenes/h                                                    | Float (>=0)      |
+| Controller Sample Time             | trenes/carroD/ts                                            | Integer [ms]     |
+
+After editing the parameters, the following sequence of commands have to be sent in order to start an experiment:
+1. Send the message `"True"` to the topic `trenes/sync` to synchronize all the agents. After this, the PID agents will start controlling and they will move to achieve the position setpoint defined beforehand.
+2. Send the message `"True"` to the topic `trenes/start` to send the signal to the leader agent to start the experiment. The Leader will start to advance with the defined motor speed and will stop until it encounters an obstacle in front.
+
+To learn more about how to acquire the sensors data and other variables of interest from the agents, check the section [CaptureData](https://github.com/pl-toon/pl-toon-codes/tree/main/CaptureData/esp_write_csv) in this repository.
