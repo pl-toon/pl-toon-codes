@@ -251,6 +251,7 @@ void reconnect() {
 			client.subscribe("trenes/ref");
 			client.subscribe("trenes/etha");
 			client.subscribe("trenes/alpha");
+			client.subscribe("trenes/h");
 			client.subscribe("trenes/u_lim");
 			client.subscribe("trenes/carroL/v_lider");
 			client.subscribe("trenes/sync");

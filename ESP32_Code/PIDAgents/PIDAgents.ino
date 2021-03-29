@@ -420,6 +420,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
 	if (strcmp(topic , "trenes/etha") == 0) {
 		etha = message.toFloat();
 	}
+	if (strcmp(topic, "trenes/h") == 0) {
+		h = mensaje.toFloat();
+	}
 	if (strcmp(topic, "trenes/alpha") == 0) {
 		alpha = message.toFloat();
 	}
