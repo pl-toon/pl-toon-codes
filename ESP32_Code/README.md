@@ -11,6 +11,8 @@ The code is developed for the ESP32 board using the Arduino IDE libraries to com
 
 The [LeaderAgent](https://github.com/pl-toon/pl-toon-codes/tree/main/ESP32_Code/LeaderAgent) code has to be uploaded to the train that will go in front of the platoon, while the [PIDAgents](https://github.com/pl-toon/pl-toon-codes/tree/main/ESP32_Code/PIDAgents) code is meant to be used by the following agents that need to control their own speed and distance respect to the next agent in front.
 
+In both cases you have to manually set in the code the `SSID` and `Password` of the Wi-Fi network to connect, as well as the `IP` and `Port` of the MQTT server.
+
 ***Note**: Before uploading the code, make sure to [calibrate the lens](https://github.com/pl-toon/pl-toon-codes/tree/main/ESP32_Code/Misc/Camera_Calibration) of the optical sensor in order to get a clear image on the checkerboard pattern and therefore obtain proper measurements of the velocity.*
 
 ---

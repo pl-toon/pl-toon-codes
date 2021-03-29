@@ -118,7 +118,7 @@ void setup() {
 		while(1);
 	}
 	Serial.println("Camera Initialized Successfully");
-    MD cam_med;
+	MD cam_med;
 
 	///////////////////////////////////////////
 	////    Motor Dead-Zone Routine	      /////

@@ -73,9 +73,9 @@ void setup() {
 	//setup_custom_wifi(&my_config);
 	esp_wifi_set_ps(WIFI_PS_NONE);		// No power-saving mode
     
-    setup_espnow();
-    //add_peer(mac_addr_A, CHANNEL, false);     // (const char* mac, int channel, bool encryption)
-    add_peer(mac_addr_broadcast, CHANNEL, false);
+	setup_espnow();
+	//add_peer(mac_addr_A, CHANNEL, false);     // (const char* mac, int channel, bool encryption)
+	add_peer(mac_addr_broadcast, CHANNEL, false);
     
 	/* MQTT */
 	setup_wifi();
@@ -121,7 +121,7 @@ void setup() {
 		while(1);
 	}
 	Serial.println("Camera Initialized Successfully");
-    MD cam_med;
+	MD cam_med;
 
 	///////////////////////////////////////////
 	////    Motor Dead-Zone Routine	      /////

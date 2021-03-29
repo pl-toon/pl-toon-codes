@@ -270,8 +270,8 @@ void loop() {
 	double pos_med_filt = filterPos.filtering(pos_med);
 	Serial.println(pos_med_filt);
 
-    /* Time Headway */
-    double X_ref = x_ref + h*v_medida;
+	/* Time Headway */
+	double X_ref = x_ref + h*v_medida;
 
 	error_distance = (x_ref - pos_med_filt);  
 	error_velocity = (v_medida - v_leader);
