@@ -1,4 +1,4 @@
-##ADNS3080 Calibration
+## ADNS3080 Calibration
 
 It is very important to manually adjust the lens of the sensor to get a clear image of the checkerboard pattern of the floor and therefore get an accurate measurement.
 
