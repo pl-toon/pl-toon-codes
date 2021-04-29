@@ -103,7 +103,7 @@ const char* password= "zkd2bxhcHqHm";
 
 //const char* mqtt_server = "192.168.1.100";  // IP fvp
 //const char* mqtt_server = "192.168.1.114";
-const char* mqtt_server = "192.168.0.4";
+const char* mqtt_server = "192.168.0.10";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -180,7 +180,7 @@ String estado;
 //      Motor & PID Variables       ////////
 ////////////////////////////////////////////
 double v_leader = 0, mierror, v_medida = 0;
-double x_ref = 20;							// position setpoint
+double x_ref = 15;							// position setpoint
 double u_distancia;							// actuation calculated by distance                           
 double u_velocidad;							// actuation calculated by velocity
 double u;									// weighted actuation
@@ -273,7 +273,7 @@ void loop() {
 	/* Time Headway */
 	double X_ref = x_ref + h*v_medida;
 
-	error_distance = (x_ref - pos_med_filt);  
+	error_distance = (x_ref - pos_med);  
 	error_velocity = (v_medida - v_leader);
 
 	//if(abs(error_distance < 0.6))	error_distance = 0;
@@ -421,7 +421,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 		etha = message.toFloat();
 	}
 	if (strcmp(topic, "trenes/h") == 0) {
-		h = mensaje.toFloat();
+		h = message.toFloat();
 	}
 	if (strcmp(topic, "trenes/alpha") == 0) {
 		alpha = message.toFloat();
