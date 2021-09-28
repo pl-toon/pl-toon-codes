@@ -2,7 +2,7 @@
  * Last Modified: 03-27-2021
  */
 
-#include <PID_v1.h>
+#include <PID_v2.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include "SPI.h"
@@ -12,10 +12,13 @@
 #include <esp_wifi_internal.h>
 #include <esp_wifi.h>
 #include <esp_now.h>
+#include "math.h"
 
 #define DATARATE        WIFI_PHY_RATE_6M   // Para cambiar el bitrate de ESP-NOW a 24Mbps
-#define CHANNEL         6                   // Canal WiFi
+#define CHANNEL         11                   // Canal WiFi
 #define DELAY_CAM		800
+
+#define CARRO_ID		0
 
 ////////////////////////////////////////////
 ///////////////////////////////////////////
@@ -96,14 +99,14 @@ filterIIR filterPos(3, b_butter, a_butter, Gain_butter);
 ///////////////////////////////////////
 //const char* ssid = "fvp";
 //const char* password = "nomeacuerdo";
-const char* ssid = "VTR-6351300";
-const char* password= "zkd2bxhcHqHm";
+const char* ssid = "GTD-3813230";
+const char* password= "g6yWsKswphfs";
 //const char* ssid = "MOVISTAR_7502";
 //const char* password = "X27JgSvWteS2US4";
 
 //const char* mqtt_server = "192.168.1.100";  // IP fvp
 //const char* mqtt_server = "192.168.1.114";
-const char* mqtt_server = "192.168.0.10";
+const char* mqtt_server = "192.168.1.14";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -124,7 +127,8 @@ typedef struct {
 	double velocity;
 } ESPNOW_payload;
 
-ESPNOW_payload monitor_data;
+//ESPNOW_payload monitor_data;
+double monitor_data[3];
 ESPNOW_payload rcv_data;
 
 esp_now_peer_info_t peerInfo;   // struct to add peers to ESPNOW
@@ -180,7 +184,7 @@ String estado;
 //      Motor & PID Variables       ////////
 ////////////////////////////////////////////
 double v_leader = 0, mierror, v_medida = 0;
-double x_ref = 15;							// position setpoint
+double x_ref = 20;							// position setpoint
 double u_distancia;							// actuation calculated by distance                           
 double u_velocidad;							// actuation calculated by velocity
 double u;									// weighted actuation
@@ -200,14 +204,17 @@ PID myPID(&error_distance, &u_distancia, &rf, Kp, Ki, Kd, DIRECT);
 PID myPID_v(&error_velocity, &u_velocidad, &rf, Kp_v, Ki_v, Kd_v, DIRECT);
 
 //////////////////////////////////////////////////////
-
+double frequencyCos = 1;
 void loop() {
-
+  //x_ref = 20+ 2*cos(2*3.14*frequencyCos*(0.001)*((double)millis()));
 	/*if(run_test){
 		client.disconnect();
 		start = true;
 		run_test = false;
 	}*/
+
+	client.loop();
+	
 	if(!flag){   // offset to synchronize the data of the experiment
 		String delta = String((millis()-tiempo_inicial)*0.001);
 		delta.toCharArray(msg, delta.length() + 1);                                                                           
@@ -215,7 +222,7 @@ void loop() {
 		flag = true;
 		start = true;
 		Serial.println("Sync!");
-		client.disconnect();
+		//client.disconnect();
 	}  // start the experiment
 
 	if(!start){ // while the experiment hasn't started, check for the MQTT conection
@@ -236,8 +243,8 @@ void loop() {
 	MD cam_med;
 	
 	/* Routine 1 Measurements */
-	for (int i = 0; i < 20 ; i++) {
-		if (i % 5 == 1) {   
+	for (int i = 0; i < 8 ; i++) {
+		if (i % 2 == 1) {   
 			uint16_t range = SensorToF.readReg16Bit(SensorToF.RESULT_RANGE_STATUS + 10);
 			pos_med += range;
 		}
@@ -249,7 +256,7 @@ void loop() {
 		count_cam += curr_dy;
 		last_dy = curr_dy;
 		uint32_t cam_t = micros();
-		while(micros() - cam_t < DELAY_CAM);	// using while instead of delay (?)
+		//Fwhile(micros() - cam_t < DELAY_CAM);	// using while instead of delay (?)
 	}
 	mousecam_read_motion(&cam_med);
 	count_cam += (int8_t) cam_med.dy;
@@ -268,10 +275,10 @@ void loop() {
 	}
 	last_distance = pos_med;
 	double pos_med_filt = filterPos.filtering(pos_med);
-	Serial.println(pos_med_filt);
+	//Serial.println(pos_med_filt);
 
 	/* Time Headway */
-	double X_ref = x_ref + h*v_medida;
+	//double X_ref = x_ref + h*v_medida;
 
 	error_distance = (x_ref - pos_med);  
 	error_velocity = (v_medida - v_leader);
@@ -293,10 +300,10 @@ void loop() {
     
 	// TX ESP-NOW
 	uint32_t time_now = millis() - t_old;
-	if( time_now >= 50 ){	// send data every 50 [ms]
-		monitor_data.timestamp = u;
-		monitor_data.position = pos_med_filt;
-		monitor_data.velocity = v_medida;
+	if( time_now >= t_envio ){	// send data every 50 [ms]
+		monitor_data[0] = u;
+		monitor_data[1] = pos_med;
+		monitor_data[2] = x_ref;
 		esp_now_send(mac_addr_broadcast, (uint8_t*) &monitor_data, sizeof(monitor_data));         // 'True' broadcast, no hay ACK del receptor
 		//esp_now_send(NULL, (uint8_t*) &v_leader, sizeof(v_leader));                     // Destino NULL para iteracion a todos los receptos. Sí hay ACK del receptor.
 		t_old = millis();
@@ -467,6 +474,7 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status)
 /* ESPNOW Receive Callback Function */
 void OnDataRecv(const uint8_t *mac, const uint8_t *Data, int len)
 {
+  Serial.println("llego");
 	int mac_eq = (mac[0]==mac_leader[0])+(mac[1]==mac_leader[1])+(mac[2]==mac_leader[2]);
 	mac_eq += (mac[3]==mac_leader[3])+(mac[4]==mac_leader[4])+(mac[5]==mac_leader[5]);
 	if(mac_eq < 6){

@@ -67,7 +67,7 @@ void setup() {
 	/////////////////////////////////////
 
 	WiFi.mode(WIFI_STA);
-	esp_wifi_set_mac(ESP_IF_WIFI_STA, mac_leader);
+	//esp_wifi_set_mac(ESP_IF_WIFI_STA, mac_leader);
 	// Only use the lines below to activate 'custom wifi settings'
 	//WiFi.disconnect();
 	//setup_custom_wifi(&my_config);
@@ -151,7 +151,7 @@ void setup() {
 	}
         
 	// Measure distance respect to an object
-	pos_med = 0;
+	/*pos_med = 0;
 	uint16_t range = SensorToF.readReg16Bit(SensorToF.RESULT_RANGE_STATUS + 10); // por alguna razón la primera medición de todo el loop sale muy mal. Posiblemente por el timebudget
 	delay(200);
 	for (int i = 0; i < 8; i++) {
@@ -200,7 +200,7 @@ void setup() {
 	ini.toCharArray(msg, ini.length() + 1);                    // Datos enviados para analizar controlador
 	tiempo_inicial = millis();
 	Serial.println(WiFi.macAddress());
-  
+	*/
 	myPID.SetMode(AUTOMATIC);
 	myPID.SetOutputLimits(umin, umax);
 	myPID.SetSampleTime(SampleTime);
