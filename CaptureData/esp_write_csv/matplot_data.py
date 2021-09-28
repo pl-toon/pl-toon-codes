@@ -10,8 +10,9 @@ if len(sys.argv) < 2:
 
 path = sys.argv[1]
 
-data = pd.read_csv(path, header=None)
-N_esp = np_max(data[0]) + 1
+#data = pd.read_csv(path, header=None)
+#N_esp = np_max(data[0]) + 1
+N_esp = 3
 
 fig = plt.figure()
 ax = fig.add_subplot(1, 2, 1)
@@ -29,14 +30,14 @@ graph_data = open(path, 'r').read()
 lines = graph_data.split('\n')
 for line in lines:
 	if len(line) > 1:
-		id, t1, t2, x, v = line.split(',')
+		id, t, u, x, ref = line.split(',')
 		id = int(id)
-		t2 = float(t1)
+		t = float(t)
 		x = float(x)	# velocity
-		v = float(v)	# position
-		xs[id].append(t2)
+		u = float(u)	# position
+		xs[id].append(t)
 		ys[id].append(x)
-		ys2[id].append(v)
+		ys2[id].append(u)
 
 for i in range(0, N_esp):
 	ax.plot(xs[i], ys[i], linewidth=0.8, label='Position: ESP '+str(i))

@@ -19,6 +19,8 @@
 #define MAC_2_MSBytes(MAC)  MAC == NULL ? 0 : (MAC[0] << 8) | MAC[1]
 #define MAC_4_LSBytes(MAC)  MAC == NULL ? 0 : (((((MAC[2] << 8) | MAC[3]) << 8) | MAC[4]) << 8) | MAC[5]
 
+#define N_8BYTES	3
+
 using namespace std;
 
 static uint8_t my_mac[6] = {0x48, 0x89, 0xE7, 0xFA, 0x60, 0x7C};
@@ -41,10 +43,12 @@ typedef struct {
 } ESP_MAC_list;
 
 typedef struct {
-	uint8_t leader;
-	uint32_t sent_time;
-	double position;
-	double velocity;
+	uint16_t n;
+	uint16_t id;
+	float dummy_bytes2;
+	double a1;
+	double a2;
+	double a3; 
 } ESPNOW_payload;
 
 bool first_packet = true;
@@ -56,7 +60,8 @@ auto t0_pc = std::chrono::steady_clock::now();	// tiempo inicial pc
 auto last_open_file = std::chrono::steady_clock::now();		// tiempo desde la ultima vez que se cerro el archivo
 
 bool stop_flag = false;		// flag de control para terminar el programa
-ESPNOW_payload rcv_data;	// struct para guardar los datos recibidos por la esp
+//ESPNOW_payload rcv_data;	// struct para guardar los datos recibidos por la esp
+double rcv_data[N_8BYTES];
 std::ofstream *myFile;		// objeto para manejar el archivo de 'output'
 ESP_MAC_list mac_list;		// struct para almacenar la lista de MACs
 
@@ -111,7 +116,7 @@ void callback(uint8_t src_mac[6], uint8_t *data, int len) {
 	int id = mac_list.get_esp_id(src_mac);
 
 	/* Copia los datos recibidos */
-	memcpy(&rcv_data, data, sizeof(ESPNOW_payload));
+	memcpy(&rcv_data, data, sizeof(rcv_data));
 	
 	/* Normalizacion para que el primer timestamp sea 0 */
 	if(first_packet){
@@ -136,7 +141,12 @@ void callback(uint8_t src_mac[6], uint8_t *data, int len) {
 	/* Guarda en el archivo 
 	 * Formato CSV: id, time_pc, time_esp, position, velocity
 	 */
-	*myFile << id << "," << dt_rcv.count() << "," << rcv_data.sent_time - mac_list.t0_esp[id]  << "," << rcv_data.position << "," << rcv_data.velocity << "\n";
+	//*myFile << rcv_data.id << "," << dt_rcv.count() << "," << rcv_data.a1  << "," << rcv_data.n << "\n";
+	*myFile << id << "," << dt_rcv.count();
+	for(int k=0; k < N_8BYTES; k++){
+		*myFile << "," << rcv_data[k];
+	}
+	*myFile << "\n";
 	
 	if (myFile->is_open() && dt_file.count() >= 40) {	// close the file if more than ~40 ms has passed since the last time it was closed
 		myFile->close();								// this trick is only done to make the plot in "real time" look smooth
