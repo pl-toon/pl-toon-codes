@@ -50,6 +50,10 @@
 #define ADNS3080_PRODUCT_ID_VAL        0x17
 
 void setup() {
+
+	pinMode(ONBOARD_LED,OUTPUT);
+	digitalWrite(ONBOARD_LED,HIGH);		// led para indicar que comienza el setup
+	
 	Serial.begin(115200);
 	Serial.println("");
 	/////////////////////////////////////
@@ -209,6 +213,8 @@ void setup() {
 	myPID_v.SetSampleTime(SampleTime);
   
     tiempo_inicial = millis();
+
+    digitalWrite(ONBOARD_LED,LOW);
 
 }
 

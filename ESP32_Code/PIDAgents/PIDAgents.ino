@@ -2,7 +2,7 @@
  * Last Modified: 03-27-2021
  */
 
-#include <PID_v2.h>
+#include <PID_v1.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include "SPI.h"
@@ -17,6 +17,8 @@
 #define DATARATE        WIFI_PHY_RATE_6M   // Para cambiar el bitrate de ESP-NOW a 24Mbps
 #define CHANNEL         11                   // Canal WiFi
 #define DELAY_CAM		800
+
+#define ONBOARD_LED  2
 
 #define CARRO_ID		0
 
@@ -79,12 +81,6 @@ typedef struct filterIIR {
 } filterIIR;
 
 
-double b_hann[20] = {0, 0.0013, 0.0063, 0.0164, 0.0318, 0.0514, 0.0729, 0.0932, 0.1090, 0.1176, 0.1176, 0.1090, 0.0932,
-                    0.0729, 0.0514, 0.0318, 0.0164, 0.0063, 0.0013, 0};
-double b_hamm[20] = {0.0005, 0.0022, 0.0065, 0.0153, 0.0298, 0.0492, 0.0716, 0.0934, 0.1109, 0.1206, 0.1206, 0.1109, 0.0934,
-                    0.0716, 0.0492, 0.0298, 0.0153, 0.0065, 0.0022, 0.0005};
-double b_win[5] = {0.2, 0.2, 0.2, 0.2, 0.2};
-
 double Gain_butter = 0.0201;
 double b_butter[3] = {1, 2, 1};
 double a_butter[3] = {1, -1.5610, 0.6414};
@@ -99,8 +95,10 @@ filterIIR filterPos(3, b_butter, a_butter, Gain_butter);
 ///////////////////////////////////////
 //const char* ssid = "fvp";
 //const char* password = "nomeacuerdo";
-const char* ssid = "GTD-3813230";
-const char* password= "g6yWsKswphfs";
+//const char* ssid = "GTD-3813230";
+//const char* password= "g6yWsKswphfs";
+const char* ssid = "KATRINA";
+const char* password = "wlan70634f";
 //const char* ssid = "MOVISTAR_7502";
 //const char* password = "X27JgSvWteS2US4";
 
