@@ -67,7 +67,7 @@ def animate(i):
 
 	return lines_plot
 
-ani = animation.FuncAnimation(fig, animate, interval=50, blit=False)
+ani = animation.FuncAnimation(fig, animate, interval=20, blit=False)
 
 plt.legend(loc='upper left')
 plt.show()

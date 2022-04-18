@@ -71,7 +71,7 @@ void setup() {
 	/////////////////////////////////////
 
 	WiFi.mode(WIFI_STA);
-  Serial.println(WiFi.macAddress());
+  	Serial.println(WiFi.macAddress());
 	//esp_wifi_set_mac(ESP_IF_WIFI_STA, mac_leader);
 	// Only use the lines below to activate 'custom wifi settings'
 	//WiFi.disconnect();
@@ -92,6 +92,8 @@ void setup() {
 		Serial.println("Subscribed to the topics ");
 	}
 	client.loop();
+
+	udp.begin(WiFi.localIP(), udp_port);
 
 	uint8_t ch; wifi_second_chan_t ch2;
 	esp_wifi_get_channel(&ch, &ch2);

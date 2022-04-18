@@ -12,6 +12,7 @@
 #include <esp_wifi_internal.h>
 #include <esp_wifi.h>
 #include <esp_now.h>
+#include <WiFiUDP.h>
 #include "math.h"
 
 #include "KickFiltersRT.h"
@@ -22,7 +23,10 @@
 
 #define ONBOARD_LED  2
 
-#define n_carro 0     // lider = 0
+#define PAYLOAD_SIZE	3     // numero de doubles para monitoreo
+#define Ts            	20    // tiempo en ms
+
+#define n_carro 1     // lider = 0
 
 
 ////////////////////////////////////////////
@@ -155,7 +159,14 @@ const char* password = "nomeacuerdo";
 
 //const char* mqtt_server = "192.168.1.100";  // IP fvp
 //const char* mqtt_server = "192.168.1.114";
-const char* mqtt_server = "192.168.1.100";
+const char* mqtt_server = "192.168.1.101";
+
+/* UDP Settings */
+WiFiUDP udp;
+uint32_t udp_port = 3333;
+const char* udp_server = "192.168.1.103";
+double udp_buffer[PAYLOAD_SIZE];
+uint32_t t_udp = 0;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -395,22 +406,27 @@ void loop() {
 	uint32_t time_now = millis() - t_old;
 	if( time_now >= t_envio ){	// send data every 50 [ms]
 
-    if(n_carro == 0)
-      v_leader = v_medida;
+	    if(n_carro == 0)
+	      v_leader = v_medida;
     
-		monitor_data[0] = x_ref;
-		monitor_data[1] = pos_med_filt;
-		monitor_data[2] = v_medida;
-    monitor_data[3] = v_leader;
-    monitor_data[4] = pos_med;
-    
-    Serial.println(monitor_data[2]);
-    //Serial.printf(" ");
-    //Serial.printf(error_distance);
-    
-		esp_now_send(mac_addr_broadcast, (uint8_t*) &monitor_data, sizeof(monitor_data));         // 'True' broadcast, no hay ACK del receptor
-       
-		t_old = millis();
+			/*monitor_data[0] = x_ref;
+			monitor_data[1] = pos_med_filt;
+			monitor_data[2] = v_medida;
+		    monitor_data[3] = v_leader;
+		    monitor_data[4] = pos_med;
+		    Serial.println(monitor_data[2]);*/
+
+		    udp_buffer[0] = (double) n_carro;
+		    udp_buffer[1] = pos_med_filt;
+		    udp_buffer[2] = v_medida;
+
+		    esp_udp_send((uint8_t*) udp_buffer, sizeof(udp_buffer));
+		    //Serial.printf(" ");
+		    //Serial.printf(error_distance);
+	    
+			//esp_now_send(mac_addr_broadcast, (uint8_t*) &monitor_data, sizeof(monitor_data));         // 'True' broadcast, no hay ACK del receptor
+	       
+			t_old = millis();
 	}
 
 	////////////////////////////////////////////////////////
@@ -462,6 +478,13 @@ void loop() {
 }
 
 /////////////////////////////////////////////////////////////
+
+void esp_udp_send(uint8_t* payload, uint32_t payload_size){
+
+	udp.beginPacket(udp_server, udp_port);
+    udp.write(payload, payload_size);     // buffer y el size en bytes
+    udp.endPacket();
+}
 
 void SetMotorControl()
 {

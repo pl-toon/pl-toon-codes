@@ -62,7 +62,7 @@ void loop() {
     udp_buffer[1] = (1 - a)*cos(2*PI*0.005*(double)k) + a*sin(2*PI*0.005*(double)k);
     udp_buffer[2] = (1 - a)*sin(2*PI*0.005*(double)k) + a*cos(2*PI*0.005*(double)k);
 
-		udp.beginPacket(server, udp_port);
+	udp.beginPacket(server, udp_port);
     udp.write((uint8_t*)&udp_buffer, sizeof(udp_buffer));     // buffer y el size en bytes
     udp.endPacket();
 
