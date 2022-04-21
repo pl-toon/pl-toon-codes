@@ -53,7 +53,7 @@ def animate(i):
 			d = float(d)
 			v = float(v)
 			xs[id].append(t)
-			ys[id].append(d)
+			ys[id].append(v)
 			ys2[id].append(v)
 
 

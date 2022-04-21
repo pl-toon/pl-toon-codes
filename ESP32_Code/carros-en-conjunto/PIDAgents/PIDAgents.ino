@@ -1,5 +1,5 @@
 /*
- * Last Modified: 03-27-2021
+ * Last Modified: 04-19-2022
  */
 
 #include <PID_v1.h>
@@ -26,7 +26,7 @@
 #define PAYLOAD_SIZE	3     // numero de doubles para monitoreo
 #define Ts            	20    // tiempo en ms
 
-#define n_carro 1     // lider = 0
+#define n_carro 0     // lider = 0
 
 
 ////////////////////////////////////////////
@@ -273,7 +273,7 @@ int umax = 400, umin = -umax;				// actuation limits
 double Kp = 20, Ki = 20, Kd = 0;			// Position PID gains
 double Kp_v = 20, Ki_v = 20, Kd_v = 0;      // Velocity PID gains   
 int SampleTime = 50;						// Controllers sampling time [ms]
-double alpha = 0.5;							// constant spacing policy
+double alpha = 0.0;							// constant spacing policy
 double h = 0.5;								// time headway
 double error_distance;
 double error_velocity;
@@ -282,7 +282,7 @@ double weighted;							// weighted error
 double rf = 0;
 int lim = 10;								// lower limit for the train to not move
 
-double R = 0;
+double R_acumulado = 0;
 double sum_s = 0;
 double lambda = 0.5;
 
@@ -292,7 +292,7 @@ PID myPID_v(&error_velocity, &u_velocidad, &rf, Kp_v, Ki_v, Kd_v, DIRECT);
 uint32_t time_trigger = millis();
 
 //////////////////////////////////////////////////////
-double frequencyCos = 0.2;
+double frequencyCos = 0.02;
 
 KickFiltersRT<float> filtersRT;
 float cutFreq = 4.0;
@@ -306,8 +306,13 @@ void loop() {
       if (x_ref == 15) x_ref = 25;
       else x_ref = 15;
     }*/
-  
-  //x_ref = 25+ 15*cos(2*3.14*frequencyCos*(0.001)*((double)millis()));
+	int offset_coseno = 20;
+    int amplitude_coseno = 10;
+    
+  	if(n_carro==0){ 		
+  		x_ref = offset_coseno + amplitude_coseno*cos(2*3.1415926335*frequencyCos*(0.001)*((double)millis()));
+  		x_ref = x_ref >= offset_coseno ? offset_coseno + amplitude_coseno : offset_coseno - amplitude_coseno; // onda rectangular
+  	}
 	/*if(run_test){
 		client.disconnect();
 		start = true;
@@ -382,8 +387,9 @@ void loop() {
 	/* Time Headway */
 	//double X_ref = x_ref + h*v_medida;
 
-	//error_distance = lambda*(x_ref - pos_med_filt) + (1 - lambda)*(R + x_ref - (sum_s + pos_med_filt));  
-  error_distance = x_ref - pos_med_filt;
+	error_distance = lambda*(x_ref - pos_med_filt) + (1 - lambda)*(R_acumulado + x_ref - (sum_s + pos_med_filt));  
+  	if(n_carro==0)
+  		error_distance = x_ref - pos_med_filt;
 	error_velocity = -(v_medida - v_leader);
 
 	//if(abs(error_distance < 0.6))	error_distance = 0;
@@ -399,8 +405,10 @@ void loop() {
 
 	weighted = etha*abs(error_distance); //abs(v_medida - v_leader);
 	//weighted = (1 - etha) * abs(x_ref - medi) + etha * abs(v_medida - v_leader);  // error weighted to avoid oscillation when the error is too small 
+	
+	u = u_distancia;
 	if(n_carro != 0)
-	  u = u_distancia + alpha*u_velocidad;
+	  u = u_distancia + 0*alpha*u_velocidad;
     
 	// TX ESP-NOW
 	uint32_t time_now = millis() - t_old;
@@ -409,22 +417,22 @@ void loop() {
 	    if(n_carro == 0)
 	      v_leader = v_medida;
     
-			/*monitor_data[0] = x_ref;
+			monitor_data[0] = x_ref;
 			monitor_data[1] = pos_med_filt;
-			monitor_data[2] = v_medida;
-		    monitor_data[3] = v_leader;
+			monitor_data[2] = R_acumulado + x_ref;				// R_acumulado + referencia_local
+		    monitor_data[3] = sum_s + pos_med_filt;		// SUMA de s_i + s_actual 
 		    monitor_data[4] = pos_med;
-		    Serial.println(monitor_data[2]);*/
+		    Serial.println(monitor_data[2]);
 
 		    udp_buffer[0] = (double) n_carro;
 		    udp_buffer[1] = pos_med_filt;
-		    udp_buffer[2] = v_medida;
+		    udp_buffer[2] = error_distance;
 
 		    esp_udp_send((uint8_t*) udp_buffer, sizeof(udp_buffer));
 		    //Serial.printf(" ");
 		    //Serial.printf(error_distance);
 	    
-			//esp_now_send(mac_addr_broadcast, (uint8_t*) &monitor_data, sizeof(monitor_data));         // 'True' broadcast, no hay ACK del receptor
+			esp_now_send(mac_addr_broadcast, (uint8_t*) &monitor_data, sizeof(monitor_data));         // 'True' broadcast, no hay ACK del receptor
 	       
 			t_old = millis();
 	}
@@ -629,8 +637,8 @@ void OnDataRecv(const uint8_t *mac, const uint8_t *Data, int len)
   
   double temp[5];
   memcpy(temp, Data, len);  // temp[0] = R carro anterior, temp[1] = sum_s del carro anterior
-  //R = temp[2]; 
-  //sum_s = temp[3];
-  v_leader = temp[3];
+  R_acumulado = temp[2]; 
+  sum_s = temp[3];
+  //v_leader = temp[3];
  
 }

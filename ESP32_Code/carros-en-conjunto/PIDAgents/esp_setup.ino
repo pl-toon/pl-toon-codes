@@ -156,16 +156,16 @@ void setup() {
 			}
 		}
 	}
-
+	//calibracion();
  /*---------------------------------------------------------------*/
-  int N = 20; //número de mediciones para calcular promedio
+  /*int N = 20; //número de mediciones para calcular promedio
   int deltaT = 9; //ms
  // Medir distancia a objeto en reposo
   double x_0 = 0;
   uint16_t range = SensorToF.readReg16Bit(SensorToF.RESULT_RANGE_STATUS + 10);
   delay(200);
 
-  /* Mide distancia inicial */
+  // Mide distancia inicial 
   averageDistance(&x_0, N);
   Serial.printf("Distancia Inicial = %.2f [cm]\n", x_0);
 
@@ -212,14 +212,14 @@ void setup() {
   Serial.printf("Scale = %.5f [cm/cuentas]\n", scale);
   delay(1000);
   Serial.println("------- Prueba Terminada ----------");
-  /*---------------------------------------------------*/
+  //---------------------------------------------------
   Serial.println("------- Comprobación Scale---------");
 // Medir distancia a objeto en reposo
   x_0 = 0;
   range = SensorToF.readReg16Bit(SensorToF.RESULT_RANGE_STATUS + 10);
   delay(200);
 
-  /* Mide distancia inicial */
+  // Mide distancia inicial 
   averageDistance(&x_0, N);
   Serial.printf("Distancia Inicial = %.2f [cm]\n", x_0);
 
@@ -261,7 +261,7 @@ void setup() {
   Serial.printf("Distancia Recorrida = %.2f [cm]\n", -(x_ff - x_0));
   Serial.printf("Distancia según cámara = %.2f [cm]\n", count_cam*scale);
   Serial.printf("Cuentas Camara = %d\n", count_cam);
-  scale = (x_ff - x_0) / count_cam;
+  scale = (x_ff - x_0) / count_cam;*/
 
  /*---------------------------------------------------*/
    /*     
@@ -327,6 +327,113 @@ void setup() {
 
     digitalWrite(ONBOARD_LED,LOW);
 
+}
+
+void calibracion(){
+	int N = 20; //número de mediciones para calcular promedio
+  int deltaT = 9; //ms
+ 	// Medir distancia a objeto en reposo
+  double x_0 = 0;
+  uint16_t range = SensorToF.readReg16Bit(SensorToF.RESULT_RANGE_STATUS + 10);
+  delay(200);
+
+  /* Mide distancia inicial */
+  averageDistance(&x_0, N);
+  Serial.printf("Distancia Inicial = %.2f [cm]\n", x_0);
+
+  int count_cam = 0;                      // variable para guardar las 'cuentas' entregadas por el sensor (yy1)
+  MD camara;                              // estructura para las mediciones del mouse_cam
+
+  MotorDirection = 1; //retroceder
+  MotorSpeed = 200;
+  SetMotorControl();
+
+  uint32_t time0 = millis();
+  uint32_t t_last = millis();
+
+  while( millis() - time0 < 1400){ // tiempo total de recorrido son 1.4 segundos
+    if(millis() - t_last >= deltaT){
+      do{
+        mousecam_read_motion(&camara);
+        count_cam += (int8_t)camara.dy;
+        if(camara.motion & 0x10) //1 = Overflow has occurred
+          Serial.println("Overflow");
+      } while(camara.motion & 0x80); //1 = Motion occurred, data ready for reading in Delta_X and Delta_Y registers
+    }
+  }
+
+  MotorSpeed = 0;
+  SetMotorControl();
+
+  delay(500); //asegurar que se detuvo
+
+  do{
+    mousecam_read_motion(&camara);
+    count_cam += (int8_t)camara.dy;
+    if(camara.motion & 0x10)
+      Serial.println("Overflow");
+  } while(camara.motion & 0x80);
+
+  double x_ff = 0;
+  averageDistance(&x_ff, N);
+  Serial.printf("Distancia Final = %.2f [cm]\n\n", x_ff);
+  Serial.printf("Distancia Recorrida = %.2f [cm]\n", -(x_ff - x_0));
+  Serial.printf("Cuentas Camara = %d\n", count_cam);
+
+  scale = -(x_ff - x_0) / count_cam;
+  Serial.printf("Scale = %.5f [cm/cuentas]\n", scale);
+  delay(1000);
+  Serial.println("------- Prueba Terminada ----------");
+  /*---------------------------------------------------*/
+  Serial.println("------- Comprobación Scale---------");
+// Medir distancia a objeto en reposo
+  x_0 = 0;
+  range = SensorToF.readReg16Bit(SensorToF.RESULT_RANGE_STATUS + 10);
+  delay(200);
+
+  /* Mide distancia inicial */
+  averageDistance(&x_0, N);
+  Serial.printf("Distancia Inicial = %.2f [cm]\n", x_0);
+
+  count_cam = 0;                  // variable para guardar las 'cuentas' entregadas por el sensor (yy1)
+  camara;                         // estructura para las mediciones del mouse_cam
+
+  MotorDirection = 0; //avanzar
+  MotorSpeed = 200;
+  SetMotorControl();
+
+  time0 = millis();
+  t_last = millis();
+
+  while( millis() - time0 < 1200){
+    if(millis() - t_last >= deltaT){
+      do{
+        mousecam_read_motion(&camara);
+        count_cam += (int8_t)camara.dy;
+        if(camara.motion & 0x10)
+          Serial.println("Overflow");
+      } while(camara.motion & 0x80);
+    }
+  }
+
+  MotorSpeed = 0;
+  SetMotorControl();
+
+  delay(500); //asegurar que se detuvo
+
+  do{
+    mousecam_read_motion(&camara);
+    count_cam += (int8_t)camara.dy;
+    if(camara.motion & 0x10)
+      Serial.println("Overflow");
+  } while(camara.motion & 0x80);
+
+  averageDistance(&x_ff, N);
+  Serial.printf("Distancia Final = %.2f [cm]\n\n", x_ff);
+  Serial.printf("Distancia Recorrida = %.2f [cm]\n", -(x_ff - x_0));
+  Serial.printf("Distancia según cámara = %.2f [cm]\n", count_cam*scale);
+  Serial.printf("Cuentas Camara = %d\n", count_cam);
+  scale = -(x_ff - x_0) / count_cam;
 }
 
 ///////////////////////////////////////////////
