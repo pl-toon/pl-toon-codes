@@ -15,7 +15,7 @@ path = sys.argv[1]
 
 fig = plt.figure(figsize=(9, 6))
 ax = fig.add_subplot(1, 1, 1)
-ax.set_xlim([0, max_x])
+#ax.set_xlim([0, max_x])
 #ax.set_ylim([-2, 2])
 
 ax.grid()
@@ -53,21 +53,21 @@ def animate(i):
 			d = float(d)
 			v = float(v)
 			xs[id].append(t)
-			ys[id].append(v)
+			ys[id].append(d)
 			ys2[id].append(v)
 
 
 	for k in range(0, N_esp):
 		L = len(ys[k])
 		M = min(max_x, L)
-		lines_plot[k].set_data(range(0, M), ys[k][-M:])
+		lines_plot[k].set_data(xs[k][-M:], ys[k][-M:])
 		lineValueText[k].set_text('[ID_' + str(k) + '] = ' + '{:.3f}'.format(ys[k][-1]))
 		ax.relim()
 		ax.autoscale_view()
 
 	return lines_plot
 
-ani = animation.FuncAnimation(fig, animate, interval=20, blit=False)
+ani = animation.FuncAnimation(fig, animate, interval=50, blit=False)
 
 plt.legend(loc='upper left')
 plt.show()
