@@ -45,13 +45,13 @@ def animate(i):
 
 	for line in lines:
 		if len(line) > 1:
-			id, t, d, v = line.split(',')
+			id, t, d, e_conjunto, e_local, e_lider, eta = line.split(',')
 			id = int(id)
 			if id + 1 > N_esp:
 				N_esp = id + 1
 			t = float(t)
 			d = float(d)
-			v = float(v)
+			v = float(e_local)
 			xs[id].append(t)
 			ys[id].append(d)
 			ys2[id].append(v)
@@ -60,8 +60,8 @@ def animate(i):
 	for k in range(0, N_esp):
 		L = len(ys[k])
 		M = min(max_x, L)
-		lines_plot[k].set_data(xs[k][-M:], ys[k][-M:])
-		lineValueText[k].set_text('[ID_' + str(k) + '] = ' + '{:.3f}'.format(ys[k][-1]))
+		lines_plot[k].set_data(xs[k][-M:], ys2[k][-M:])
+		lineValueText[k].set_text('[ID_' + str(k) + '] = ' + '{:.3f}'.format(ys2[k][-1]))
 		ax.relim()
 		ax.autoscale_view()
 
