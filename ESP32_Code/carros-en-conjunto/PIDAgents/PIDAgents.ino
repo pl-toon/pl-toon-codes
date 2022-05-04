@@ -23,10 +23,10 @@
 
 #define ONBOARD_LED  2
 
-#define PAYLOAD_SIZE	3     // numero de doubles para monitoreo
+#define PAYLOAD_SIZE	6     // numero de doubles para monitoreo
 #define Ts            	20    // tiempo en ms
 
-#define n_carro 0     // lider = 0
+#define n_carro 		0     // lider = 0
 
 
 ////////////////////////////////////////////
@@ -276,6 +276,9 @@ int SampleTime = 50;						// Controllers sampling time [ms]
 double alpha = 0.0;							// constant spacing policy
 double h = 0.5;								// time headway
 double error_distance;
+double error_local;
+double error_lider;
+
 double error_velocity;
 double etha = 0.5;							// weight of pos and vel errors
 double weighted;							// weighted error
@@ -284,7 +287,7 @@ int lim = 10;								// lower limit for the train to not move
 
 double R_acumulado = 0;
 double sum_s = 0;
-double lambda = 0.5;
+double lambda = 1;
 
 PID myPID(&error_distance, &u_distancia, &rf, Kp, Ki, Kd, DIRECT);
 PID myPID_v(&error_velocity, &u_velocidad, &rf, Kp_v, Ki_v, Kd_v, DIRECT);
@@ -307,7 +310,7 @@ void loop() {
       else x_ref = 15;
     }*/
 	int offset_coseno = 20;
-    int amplitude_coseno = 10;
+    int amplitude_coseno = 5;
     
   	if(n_carro==0){ 		
   		x_ref = offset_coseno + amplitude_coseno*cos(2*3.1415926335*frequencyCos*(0.001)*((double)millis()));
@@ -387,7 +390,11 @@ void loop() {
 	/* Time Headway */
 	//double X_ref = x_ref + h*v_medida;
 
-	error_distance = lambda*(x_ref - pos_med_filt) + (1 - lambda)*(R_acumulado + x_ref - (sum_s + pos_med_filt));  
+	error_distance = lambda*(x_ref - pos_med_filt) + (1 - lambda)*(R_acumulado + x_ref - (sum_s + pos_med_filt));
+
+	error_local = x_ref - pos_med_filt;
+	error_lider = R_acumulado + x_ref - (sum_s + pos_med_filt);
+	
   	if(n_carro==0)
   		error_distance = x_ref - pos_med_filt;
 	error_velocity = -(v_medida - v_leader);
@@ -427,6 +434,9 @@ void loop() {
 		    udp_buffer[0] = (double) n_carro;
 		    udp_buffer[1] = pos_med_filt;
 		    udp_buffer[2] = error_distance;
+		    udp_buffer[3] = error_local;
+		    udp_buffer[4] = error_lider;
+		    udp_buffer[5] = lambda;
 
 		    esp_udp_send((uint8_t*) udp_buffer, sizeof(udp_buffer));
 		    //Serial.printf(" ");
