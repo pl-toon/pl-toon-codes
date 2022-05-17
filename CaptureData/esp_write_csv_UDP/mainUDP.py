@@ -19,7 +19,7 @@ fileOut = open(filename, mode)
 fileOut.close()
 
 #UDP
-UDP_IP = "192.168.1.103" # ip del computador que recibe datos (mismo que el que corre este script)
+UDP_IP = "192.168.1.104" # ip del computador que recibe datos (mismo que el que corre este script)
 UDP_PORT = 3333
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
