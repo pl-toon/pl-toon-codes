@@ -164,7 +164,7 @@ const char* mqtt_server = "192.168.1.101";
 /* UDP Settings */
 WiFiUDP udp;
 uint32_t udp_port = 3333;
-const char* udp_server = "192.168.1.103";
+const char* udp_server = "192.168.1.104";
 double udp_buffer[PAYLOAD_SIZE];
 uint32_t t_udp = 0;
 
@@ -429,7 +429,7 @@ void loop() {
 			monitor_data[2] = R_acumulado + x_ref;				// R_acumulado + referencia_local
 		    monitor_data[3] = sum_s + pos_med_filt;		// SUMA de s_i + s_actual 
 		    monitor_data[4] = pos_med;
-		    Serial.println(monitor_data[2]);
+		    Serial.println(monitor_data[1]);
 
 		    udp_buffer[0] = (double) n_carro;
 		    udp_buffer[1] = pos_med_filt;
@@ -481,13 +481,13 @@ void loop() {
 			else  MotorDirection = 0;
 		}
 
-		if (((u >= -lim) && (u <= lim) && (abs(weighted) <= 0.75)))
+		if (((u >= -lim) && (u <= lim) && (abs(weighted) <= 0.25)))
 		{
 			MotorSpeed = 1;
 			if (u < 0)  MotorDirection = 1;
 			else  MotorDirection = 0;
 		}
-		if( (abs(weighted) > 0.75) && (pos_med < 200)){ // condition to turn on the PID again
+		if( (abs(weighted) > 0.25) && (pos_med < 200)){ // condition to turn on the PID again
 			myPID.SetMode(AUTOMATIC);
 			myPID_v.SetMode(AUTOMATIC);
 		}        
