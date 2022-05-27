@@ -26,7 +26,8 @@
 #define PAYLOAD_SIZE	6     // numero de doubles para monitoreo
 #define Ts            	20    // tiempo en ms
 
-#define n_carro 		0     // lider = 0
+#define n_carro 		3     // lider = 0
+#define delay_size		40	// delay_size * Ts (ms) {ej. 10*50 = 500 ms}
 
 
 
@@ -275,7 +276,9 @@ int umax = 400, umin = -umax;				// actuation limits
 double Kp = 20, Ki = 20, Kd = 0;			// Position PID gains
 double Kp_v = 20, Ki_v = 20, Kd_v = 0;      // Velocity PID gains
 int SampleTime = 50;						// Controllers sampling time [ms]
-double alpha = 0.0;							// constant spacing policy
+
+int alpha = delay_size;						// alpha <= delay_size
+
 double h = 0.5;								// time headway
 double error_distance;
 double error_local;
@@ -307,13 +310,12 @@ double velocity = 0;
 
 /* ------------------------------------------------------------------------------ */
 // Buffer para implementacion de delay artificial en recepcion de datos
-int delay_size = 10;	// delay_size * Ts (ms) {ej. 10*50 = 500 ms}
 double delay_array_med[delay_size];	// Para suma de referencias
-bzero(delay_array_med, delay_size*sizeof(double)); // inicializado en cero
+//bzero(delay_array_med, delay_size*sizeof(double)); // inicializado en cero
 int delay_count = 0; // contador de posicion en el arreglo
 
 double delay_array_ref[delay_size]; 	// Para suma de mediciones
-bzero(delay_array_ref, delay_size*sizeof(double));
+//bzero(delay_array_ref, delay_size*sizeof(double));
 
 /* ------------------------------------------------------------------------------ */
 
@@ -450,7 +452,7 @@ void loop() {
 	    monitor_data[3] = sum_s + pos_med_filt;				// SUMA de s_i + s_actual
 
 	    monitor_data[4] = pos_med;
-	    Serial.println(monitor_data[1]);
+	    Serial.println(sum_s);
 
 	    udp_buffer[0] = (double) n_carro;
 	    udp_buffer[1] = pos_med_filt;
@@ -600,7 +602,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 		h = message.toFloat();
 	}
 	if (strcmp(topic, "trenes/alpha") == 0) {
-		alpha = message.toFloat();
+		alpha = message.toInt();
 	}
   if (strcmp(topic, "trenes/lambda") == 0) {
     lambda = message.toFloat();
@@ -676,9 +678,15 @@ void OnDataRecv(const uint8_t *mac, const uint8_t *Data, int len)
 	delay_array_med[delay_count] = temp[3];
 	/*---------------------------------------------------------------------------*/
 	// lectura
-	delay_count = (delay_count + 1) % delay_size;
+	//delay_count = (delay_count + 1) % delay_size;
+	if(alpha > 0){
+		delay_count = (delay_count + 1) % alpha;
 
-	R_acumulado = 	delay_array_ref[delay_count];
-	sum_s	 	= 	delay_array_med[delay_count];
-	
+		R_acumulado = 	delay_array_ref[delay_count];
+		sum_s	 	= 	delay_array_med[delay_count];
+	}
+	else{
+		R_acumulado = 	temp[2];
+		sum_s	 	= 	temp[3];
+	}
 }
