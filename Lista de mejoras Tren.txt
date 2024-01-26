@@ -1,0 +1,7 @@
+Lista de mejoras Tren:
+1. Conectar a esp32 el STBY (para poder controlar internamente).
+2. Baterias en paralelo.
+3. Conector micro USB soldado apegado a la orilla (para que no se suelte)
+4. Tener salidas (pines) para otro motor y/o libres.
+5. Un interruptor que corte de manera general.
+6. Conectores JST para el motor y el sensor de distancia.
