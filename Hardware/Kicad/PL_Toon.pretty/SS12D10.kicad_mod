@@ -1,0 +1,152 @@
+(footprint "SS12D10"
+	(version 20240108)
+	(generator "pcbnew")
+	(generator_version "8.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0 2.5 0)
+		(layer "F.SilkS")
+		(uuid "0e42aec4-4a2d-43af-acdd-f57f1907e2d3")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(property "Value" "SS12D10"
+		(at -0.24 -4.19 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8087bc30-7d29-4b59-a3ea-1536e83b42cb")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e2f51ad0-5116-4fc1-8fc0-418f038c0e4f")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1c2b9bc9-7a92-4993-a5de-ad6fac02ccfc")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e19bc966-ca10-449d-a1a1-8192e7072d69")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr through_hole)
+	(fp_line
+		(start -6.35 -3.3)
+		(end 6.35 -3.3)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "e363f4dd-19fc-4237-852d-99336f0ce0ed")
+	)
+	(fp_line
+		(start -6.35 3.3)
+		(end -6.35 -3.3)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "570da89c-488d-4fd7-9479-8e204e4d4cdb")
+	)
+	(fp_line
+		(start 6.35 -3.3)
+		(end 6.35 3.3)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "3c83b07a-dab2-4683-a3b5-805504718adb")
+	)
+	(fp_line
+		(start 6.35 3.3)
+		(end -6.35 3.3)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "8e7973f9-2578-418d-bf32-25a0e4e23ff2")
+	)
+	(fp_rect
+		(start -6.63 -3.56)
+		(end 6.63 3.59)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(fill none)
+		(layer "F.CrtYd")
+		(uuid "b5ab1b20-20a0-4d2d-9a35-6b8a61628f2a")
+	)
+	(pad "1" thru_hole oval
+		(at -4.7 0)
+		(size 1.8 3)
+		(drill oval 1.1 2.3)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "a23b9075-8d24-4877-a1c1-573ce9f19bb1")
+	)
+	(pad "2" thru_hole oval
+		(at 0 0)
+		(size 1.8 3)
+		(drill oval 1.1 2.3)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "c350c23b-ef1b-4027-9138-7f8379e87bd9")
+	)
+	(pad "3" thru_hole oval
+		(at 4.7 0)
+		(size 1.8 3)
+		(drill oval 1.1 2.3)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "a3984ca0-9ad7-44fd-9882-cd811ce469f3")
+	)
+	(model "C:/Users/cfuentes/OneDrive/Leman/UAI/Train_Toon/Hardware/Resources/Libraries_Kicad/Switch_SS12D00/SS-12D10L4.STEP"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)
