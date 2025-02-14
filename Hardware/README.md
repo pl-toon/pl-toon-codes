@@ -26,8 +26,14 @@ A bottom view of the rendered 3d PCB design in Kicad is shown below.
 # Finished PCB
 Some pictures of the assembled PCBs are shown below. 
 
+Charging the batteries
 ![PCB Charger](/Hardware/Pictures/PCB_Charger_Battery.jpeg)
 
+Using the H-bridge with a DC motor connected
+![PCB motor](/Hardware/Pictures/PCB_Motor.jpeg)
+
+USB-OTG connected 
+![PCB USB](/Hardware/Pictures/PCB_USB_Connected.jpeg)
 
 # Schematic in pdf
 [Schematic in pdf](/Hardware/Kicad/PL_Toon.pdf)
