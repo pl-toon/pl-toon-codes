@@ -201,6 +201,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -213,6 +214,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -225,6 +227,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -564,6 +567,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -576,6 +580,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -588,6 +593,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -1051,6 +1057,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -1063,6 +1070,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -1075,6 +1083,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -1724,6 +1733,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -1736,6 +1746,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -1748,6 +1759,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -2053,6 +2065,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -2065,6 +2078,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -2077,6 +2091,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -2476,7 +2491,7 @@
 				)
 			)
 		)
-		(property "Value" "~"
+		(property "Value" "330"
 			(at 0 1.82 0)
 			(layer "F.Fab")
 			(uuid "9501667f-724c-48d5-88a0-e5a1ec0d67f2")
@@ -2496,6 +2511,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -2508,6 +2524,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -2520,6 +2537,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -2859,6 +2877,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -2871,6 +2890,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -2883,6 +2903,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -3090,6 +3111,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -3102,6 +3124,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -3114,6 +3137,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -3300,6 +3324,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -3312,6 +3337,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -3324,6 +3350,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -3922,6 +3949,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -3934,6 +3962,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -3946,6 +3975,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -4287,6 +4317,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -4299,6 +4330,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -4311,6 +4343,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -4460,6 +4493,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -4472,6 +4506,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -4483,6 +4518,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -5286,6 +5322,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -5298,6 +5335,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -5310,6 +5348,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -6021,6 +6060,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -6033,6 +6073,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -6045,6 +6086,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -6632,6 +6674,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -6644,6 +6687,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -6656,6 +6700,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -6864,6 +6909,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -6876,6 +6922,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -6888,6 +6935,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -7353,6 +7401,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -7365,6 +7414,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -7377,6 +7427,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -7528,6 +7579,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -7540,6 +7592,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -7552,6 +7605,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -7886,6 +7940,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -7898,6 +7953,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -7910,6 +7966,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -8118,6 +8175,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -8130,6 +8188,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -8142,6 +8201,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -8637,7 +8697,7 @@
 			)
 		)
 		(fp_text user "GND"
-			(at 21.59 53.34 270)
+			(at 21.59 53.34 -90)
 			(unlocked yes)
 			(layer "F.SilkS")
 			(hide yes)
@@ -10444,6 +10504,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -10456,6 +10517,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -10468,6 +10530,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -10619,6 +10682,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -10631,6 +10695,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -10643,6 +10708,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -10851,6 +10917,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -10863,6 +10930,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -10875,6 +10943,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -11214,6 +11283,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -11226,6 +11296,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -11238,6 +11309,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -11701,6 +11773,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -11713,6 +11786,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -11725,6 +11799,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -12065,6 +12140,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -12077,6 +12153,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -12089,6 +12166,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -12503,6 +12581,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -12515,6 +12594,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -12527,6 +12607,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -12678,6 +12759,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -12690,6 +12772,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -12702,6 +12785,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -13021,7 +13105,7 @@
 				)
 			)
 		)
-		(property "Value" "~"
+		(property "Value" "330"
 			(at -0.05 1.8 -90)
 			(layer "F.Fab")
 			(uuid "d900f1d7-7f35-4f1a-9e6a-f500eb4b56d0")
@@ -13041,6 +13125,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -13053,6 +13138,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -13065,6 +13151,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -13404,6 +13491,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -13416,6 +13504,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -13428,6 +13517,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -14077,6 +14167,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -14089,6 +14180,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -14101,6 +14193,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -14441,6 +14534,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -14453,6 +14547,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -14465,6 +14560,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -14819,6 +14915,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -14831,6 +14928,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -14843,6 +14941,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -14850,7 +14949,7 @@
 		(path "/534e342f-b4f4-4dae-8706-34e0c6a26a80")
 		(sheetname "Root")
 		(sheetfile "PL_Toon.kicad_sch")
-		(attr through_hole)
+		(attr through_hole dnp)
 		(fp_line
 			(start -2.06 2.91)
 			(end 8.06 2.91)
@@ -15430,6 +15529,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -15442,6 +15542,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -15454,6 +15555,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -15979,6 +16081,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -15991,6 +16094,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -16003,6 +16107,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -16342,6 +16447,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -16354,6 +16460,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -16366,6 +16473,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -16725,6 +16833,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -16737,6 +16846,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -16748,6 +16858,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -17255,6 +17366,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -17267,6 +17379,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -17278,6 +17391,7 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
 				)
 			)
 		)
@@ -20896,6 +21010,42 @@
 		)
 	)
 	(zone
+		(net 38)
+		(net_name "Net-(J8-Pin_2)")
+		(layer "F.Cu")
+		(uuid "04391149-6349-448d-ad39-0b8452d537b6")
+		(name "$teardrop_padvia$")
+		(hatch full 0.1)
+		(priority 30000)
+		(attr
+			(teardrop
+				(type padvia)
+			)
+		)
+		(connect_pads yes
+			(clearance 0)
+		)
+		(min_thickness 0.0254)
+		(filled_areas_thickness no)
+		(fill yes
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+			(island_removal_mode 1)
+			(island_area_min 10)
+		)
+		(polygon
+			(pts
+				(xy 180.961529 95.825) (xy 180.961529 96.825) (xy 182.15 96.925) (xy 182.426 96.325) (xy 182.15 95.725)
+			)
+		)
+		(filled_polygon
+			(layer "F.Cu")
+			(pts
+				(xy 180.961529 95.825) (xy 180.961529 96.825) (xy 182.15 96.925) (xy 182.426 96.325) (xy 182.15 95.725)
+			)
+		)
+	)
+	(zone
 		(net 1)
 		(net_name "+3V3")
 		(layer "F.Cu")
@@ -21336,45 +21486,6 @@
 		)
 	)
 	(zone
-		(net 39)
-		(net_name "Net-(J8-Pin_3)")
-		(layer "F.Cu")
-		(uuid "146dc213-20fb-4757-96dd-9b7b28d929c2")
-		(name "$teardrop_padvia$")
-		(hatch full 0.1)
-		(priority 30061)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 180.961529 93.825) (xy 180.961529 94.825) (xy 182.15 94.925) (xy 182.426 94.325) (xy 182.032946 93.736529)
-			)
-		)
-		(filled_polygon
-			(layer "F.Cu")
-			(pts
-				(xy 182.034607 93.739829) (xy 182.036771 93.742256) (xy 182.2119 94.004455) (xy 182.422365 94.319558)
-				(xy 182.424111 94.328341) (xy 182.423265 94.330946) (xy 182.15343 94.917542) (xy 182.14686 94.923625)
-				(xy 182.14182 94.924311) (xy 180.972248 94.825901) (xy 180.964291 94.821792) (xy 180.961529 94.814242)
-				(xy 180.961529 93.835773) (xy 180.964956 93.8275) (xy 180.972264 93.824113) (xy 182.026082 93.737095)
-			)
-		)
-	)
-	(zone
 		(net 24)
 		(net_name "/VS_RST")
 		(layer "F.Cu")
@@ -21673,6 +21784,42 @@
 				(xy 175.139638 83.823896) (xy 175.133913 83.827042) (xy 173.563442 84.177501) (xy 173.554621 84.175958)
 				(xy 173.550089 84.170569) (xy 173.406572 83.825) (xy 173.175862 83.269485) (xy 173.175854 83.260535)
 				(xy 173.549811 82.360099) (xy 173.556148 82.353774) (xy 173.563962 82.353377)
+			)
+		)
+	)
+	(zone
+		(net 40)
+		(net_name "Net-(J9-Pin_2)")
+		(layer "F.Cu")
+		(uuid "21016f99-a1d1-486e-a94a-cd6568e961fd")
+		(name "$teardrop_padvia$")
+		(hatch full 0.1)
+		(priority 30002)
+		(attr
+			(teardrop
+				(type padvia)
+			)
+		)
+		(connect_pads yes
+			(clearance 0)
+		)
+		(min_thickness 0.0254)
+		(filled_areas_thickness no)
+		(fill yes
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+			(island_removal_mode 1)
+			(island_area_min 10)
+		)
+		(polygon
+			(pts
+				(xy 182.011529 81.925) (xy 182.011529 82.925) (xy 183.2 83.025) (xy 183.476 82.425) (xy 183.2 81.825)
+			)
+		)
+		(filled_polygon
+			(layer "F.Cu")
+			(pts
+				(xy 182.011529 81.925) (xy 182.011529 82.925) (xy 183.2 83.025) (xy 183.476 82.425) (xy 183.2 81.825)
 			)
 		)
 	)
@@ -22151,6 +22298,42 @@
 				(xy 175.986105 132.620055) (xy 175.400735 132.228833) (xy 175.395762 132.221387) (xy 175.395578 132.218125)
 				(xy 175.404625 132.110612) (xy 175.494098 131.047247) (xy 175.498207 131.039291) (xy 175.505757 131.036529)
 				(xy 176.484227 131.036529)
+			)
+		)
+	)
+	(zone
+		(net 28)
+		(net_name "Net-(LED2-A)")
+		(layer "F.Cu")
+		(uuid "370900a4-9318-4bd3-ad7e-115d7963a731")
+		(name "$teardrop_padvia$")
+		(hatch full 0.1)
+		(priority 30003)
+		(attr
+			(teardrop
+				(type padvia)
+			)
+		)
+		(connect_pads yes
+			(clearance 0)
+		)
+		(min_thickness 0.0254)
+		(filled_areas_thickness no)
+		(fill yes
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+			(island_removal_mode 1)
+			(island_area_min 10)
+		)
+		(polygon
+			(pts
+				(xy 111.425 97.925) (xy 111.425 98.725) (xy 112.090076 98.925796) (xy 112.726 98.225) (xy 112.075 97.623121)
+			)
+		)
+		(filled_polygon
+			(layer "F.Cu")
+			(pts
+				(xy 111.425 97.925) (xy 111.425 98.725) (xy 112.090076 98.925796) (xy 112.726 98.225) (xy 112.075 97.623121)
 			)
 		)
 	)
@@ -22790,45 +22973,6 @@
 		)
 	)
 	(zone
-		(net 40)
-		(net_name "Net-(J9-Pin_2)")
-		(layer "F.Cu")
-		(uuid "481ecbbb-90ae-4def-8fb3-1d5abe10d48c")
-		(name "$teardrop_padvia$")
-		(hatch full 0.1)
-		(priority 30058)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 182.011529 81.925) (xy 182.011529 82.925) (xy 183.2 83.025) (xy 183.476 82.425) (xy 183.082946 81.836529)
-			)
-		)
-		(filled_polygon
-			(layer "F.Cu")
-			(pts
-				(xy 183.084607 81.839829) (xy 183.086771 81.842256) (xy 183.2619 82.104455) (xy 183.472365 82.419558)
-				(xy 183.474111 82.428341) (xy 183.473265 82.430946) (xy 183.20343 83.017542) (xy 183.19686 83.023625)
-				(xy 183.19182 83.024311) (xy 182.022248 82.925901) (xy 182.014291 82.921792) (xy 182.011529 82.914242)
-				(xy 182.011529 81.935773) (xy 182.014956 81.9275) (xy 182.022264 81.924113) (xy 183.076082 81.837095)
-			)
-		)
-	)
-	(zone
 		(net 2)
 		(net_name "GND")
 		(layer "F.Cu")
@@ -23208,45 +23352,6 @@
 		)
 	)
 	(zone
-		(net 28)
-		(net_name "Net-(LED2-A)")
-		(layer "F.Cu")
-		(uuid "562810bb-7b11-4b95-8627-d6bdd90de833")
-		(name "$teardrop_padvia$")
-		(hatch full 0.1)
-		(priority 30119)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 111.425 97.925) (xy 111.425 98.725) (xy 112.090076 98.925796) (xy 112.726 98.225) (xy 112.075 97.623121)
-			)
-		)
-		(filled_polygon
-			(layer "F.Cu")
-			(pts
-				(xy 112.080757 97.628444) (xy 112.717489 98.217131) (xy 112.721237 98.225264) (xy 112.71821 98.233584)
-				(xy 112.095044 98.92032) (xy 112.086947 98.924144) (xy 112.082998 98.923659) (xy 111.433318 98.727511)
-				(xy 111.426389 98.721839) (xy 111.425 98.71631) (xy 111.425 97.932465) (xy 111.428427 97.924192)
-				(xy 111.431768 97.921856) (xy 112.067888 97.626423) (xy 112.076833 97.626047)
-			)
-		)
-	)
-	(zone
 		(net 47)
 		(net_name "Net-(U3-GPIO44{slash}U0RXD)")
 		(layer "F.Cu")
@@ -23283,45 +23388,6 @@
 				(xy 176.484243 131.673471) (xy 175.505773 131.673471) (xy 175.4975 131.670044) (xy 175.494113 131.662734)
 				(xy 175.407012 130.607911) (xy 175.409746 130.599387) (xy 175.410934 130.598175) (xy 175.988248 130.089943)
 				(xy 175.996721 130.08705)
-			)
-		)
-	)
-	(zone
-		(net 38)
-		(net_name "Net-(J8-Pin_2)")
-		(layer "F.Cu")
-		(uuid "5fcb93c9-a1e6-4b8b-894d-cf7a3dafe21e")
-		(name "$teardrop_padvia$")
-		(hatch full 0.1)
-		(priority 30059)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 180.961529 95.825) (xy 180.961529 96.825) (xy 182.15 96.925) (xy 182.426 96.325) (xy 182.032946 95.736529)
-			)
-		)
-		(filled_polygon
-			(layer "F.Cu")
-			(pts
-				(xy 182.034607 95.739829) (xy 182.036771 95.742256) (xy 182.2119 96.004455) (xy 182.422365 96.319558)
-				(xy 182.424111 96.328341) (xy 182.423265 96.330946) (xy 182.15343 96.917542) (xy 182.14686 96.923625)
-				(xy 182.14182 96.924311) (xy 180.972248 96.825901) (xy 180.964291 96.821792) (xy 180.961529 96.814242)
-				(xy 180.961529 95.835773) (xy 180.964956 95.8275) (xy 180.972264 95.824113) (xy 182.026082 95.737095)
 			)
 		)
 	)
@@ -23402,6 +23468,42 @@
 				(xy 181.066105 132.620055) (xy 180.480735 132.228833) (xy 180.475762 132.221387) (xy 180.475578 132.218125)
 				(xy 180.484625 132.110612) (xy 180.574098 131.047247) (xy 180.578207 131.039291) (xy 180.585757 131.036529)
 				(xy 181.564227 131.036529)
+			)
+		)
+	)
+	(zone
+		(net 41)
+		(net_name "Net-(J9-Pin_3)")
+		(layer "F.Cu")
+		(uuid "61bc136b-981e-4e4f-bf2a-98e957a45465")
+		(name "$teardrop_padvia$")
+		(hatch full 0.1)
+		(priority 30003)
+		(attr
+			(teardrop
+				(type padvia)
+			)
+		)
+		(connect_pads yes
+			(clearance 0)
+		)
+		(min_thickness 0.0254)
+		(filled_areas_thickness no)
+		(fill yes
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+			(island_removal_mode 1)
+			(island_area_min 10)
+		)
+		(polygon
+			(pts
+				(xy 182.011529 83.925) (xy 182.011529 84.925) (xy 183.2 85.025) (xy 183.476 84.425) (xy 183.2 83.825)
+			)
+		)
+		(filled_polygon
+			(layer "F.Cu")
+			(pts
+				(xy 182.011529 83.925) (xy 182.011529 84.925) (xy 183.2 85.025) (xy 183.476 84.425) (xy 183.2 83.825)
 			)
 		)
 	)
@@ -24660,10 +24762,10 @@
 		(net 5)
 		(net_name "+5V")
 		(layer "F.Cu")
-		(uuid "a3b3c242-c400-4159-8c39-14cc04e25db8")
+		(uuid "a3c67f59-aabf-4d0b-9e63-03982015ecc1")
 		(name "$teardrop_padvia$")
 		(hatch full 0.1)
-		(priority 30122)
+		(priority 30004)
 		(attr
 			(teardrop
 				(type padvia)
@@ -24688,10 +24790,7 @@
 		(filled_polygon
 			(layer "F.Cu")
 			(pts
-				(xy 116.47713 97.577711) (xy 117.117473 97.822127) (xy 117.123979 97.828278) (xy 117.125 97.833057)
-				(xy 117.125 98.616942) (xy 117.121573 98.625215) (xy 117.117472 98.627873) (xy 116.477134 98.872287)
-				(xy 116.468183 98.872035) (xy 116.464664 98.869604) (xy 116.445818 98.850642) (xy 115.832196 98.233246)
-				(xy 115.828795 98.224964) (xy 115.832196 98.216753) (xy 116.464665 97.580394) (xy 116.472926 97.576943)
+				(xy 117.125 98.625) (xy 117.125 97.825) (xy 116.470027 97.575) (xy 115.824 98.225) (xy 116.470027 98.875)
 			)
 		)
 	)
@@ -24891,6 +24990,42 @@
 				(xy 145.506105 132.620055) (xy 144.920735 132.228833) (xy 144.915762 132.221387) (xy 144.915578 132.218125)
 				(xy 144.924625 132.110612) (xy 145.014098 131.047247) (xy 145.018207 131.039291) (xy 145.025757 131.036529)
 				(xy 146.004227 131.036529)
+			)
+		)
+	)
+	(zone
+		(net 39)
+		(net_name "Net-(J8-Pin_3)")
+		(layer "F.Cu")
+		(uuid "abb72c42-edc4-4b71-9271-1619b367a82b")
+		(name "$teardrop_padvia$")
+		(hatch full 0.1)
+		(priority 30001)
+		(attr
+			(teardrop
+				(type padvia)
+			)
+		)
+		(connect_pads yes
+			(clearance 0)
+		)
+		(min_thickness 0.0254)
+		(filled_areas_thickness no)
+		(fill yes
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+			(island_removal_mode 1)
+			(island_area_min 10)
+		)
+		(polygon
+			(pts
+				(xy 180.961529 93.825) (xy 180.961529 94.825) (xy 182.15 94.925) (xy 182.426 94.325) (xy 182.15 93.725)
+			)
+		)
+		(filled_polygon
+			(layer "F.Cu")
+			(pts
+				(xy 180.961529 93.825) (xy 180.961529 94.825) (xy 182.15 94.925) (xy 182.426 94.325) (xy 182.15 93.725)
 			)
 		)
 	)
@@ -25444,6 +25579,42 @@
 				(xy 138.478541 106.712286) (xy 137.902731 107.219194) (xy 137.894257 107.222088) (xy 137.887269 107.219194)
 				(xy 137.824578 107.164005) (xy 137.311457 106.712284) (xy 137.307513 106.704247) (xy 137.307665 106.701484)
 				(xy 137.493298 105.646201) (xy 137.498106 105.638648) (xy 137.504821 105.636529) (xy 138.285179 105.636529)
+			)
+		)
+	)
+	(zone
+		(net 27)
+		(net_name "Net-(LED1-A)")
+		(layer "F.Cu")
+		(uuid "d70ef671-71af-43a7-8d4f-172877b1505b")
+		(name "$teardrop_padvia$")
+		(hatch full 0.1)
+		(priority 30002)
+		(attr
+			(teardrop
+				(type padvia)
+			)
+		)
+		(connect_pads yes
+			(clearance 0)
+		)
+		(min_thickness 0.0254)
+		(filled_areas_thickness no)
+		(fill yes
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+			(island_removal_mode 1)
+			(island_area_min 10)
+		)
+		(polygon
+			(pts
+				(xy 111.35 91.275) (xy 111.35 92.075) (xy 112.154329 92.30597) (xy 112.876 91.675) (xy 112.154329 91.04403)
+			)
+		)
+		(filled_polygon
+			(layer "F.Cu")
+			(pts
+				(xy 111.35 91.275) (xy 111.35 92.075) (xy 112.154329 92.30597) (xy 112.876 91.675) (xy 112.154329 91.04403)
 			)
 		)
 	)
@@ -26037,45 +26208,6 @@
 		)
 	)
 	(zone
-		(net 41)
-		(net_name "Net-(J9-Pin_3)")
-		(layer "F.Cu")
-		(uuid "edb2d52f-c99b-455a-b9dd-04579c82dfb0")
-		(name "$teardrop_padvia$")
-		(hatch full 0.1)
-		(priority 30060)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 182.011529 83.925) (xy 182.011529 84.925) (xy 183.2 85.025) (xy 183.476 84.425) (xy 183.082946 83.836529)
-			)
-		)
-		(filled_polygon
-			(layer "F.Cu")
-			(pts
-				(xy 183.084607 83.839829) (xy 183.086771 83.842256) (xy 183.2619 84.104455) (xy 183.472365 84.419558)
-				(xy 183.474111 84.428341) (xy 183.473265 84.430946) (xy 183.20343 85.017542) (xy 183.19686 85.023625)
-				(xy 183.19182 85.024311) (xy 182.022248 84.925901) (xy 182.014291 84.921792) (xy 182.011529 84.914242)
-				(xy 182.011529 83.935773) (xy 182.014956 83.9275) (xy 182.022264 83.924113) (xy 183.076082 83.837095)
-			)
-		)
-	)
-	(zone
 		(net 14)
 		(net_name "/USB_D+")
 		(layer "F.Cu")
@@ -26470,45 +26602,6 @@
 				(xy 175.142636 91.581388) (xy 174.448359 92.275665) (xy 174.440086 92.279092) (xy 174.436807 92.278623)
 				(xy 172.808654 91.803293) (xy 172.801673 91.797685) (xy 172.800702 91.788783) (xy 172.801119 91.787595)
 				(xy 173.173401 90.886451) (xy 173.175948 90.882641) (xy 173.866404 90.193577) (xy 173.874681 90.190159)
-			)
-		)
-	)
-	(zone
-		(net 27)
-		(net_name "Net-(LED1-A)")
-		(layer "F.Cu")
-		(uuid "f9ec1b1b-951a-49bc-9988-5f358e338c76")
-		(name "$teardrop_padvia$")
-		(hatch full 0.1)
-		(priority 30088)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 111.35 91.275) (xy 111.35 92.075) (xy 112.154329 92.30597) (xy 112.876 91.675) (xy 112.154329 91.04403)
-			)
-		)
-		(filled_polygon
-			(layer "F.Cu")
-			(pts
-				(xy 112.157097 91.0468) (xy 112.159126 91.048224) (xy 112.472505 91.322217) (xy 112.865925 91.666192)
-				(xy 112.869898 91.674217) (xy 112.867032 91.682701) (xy 112.865925 91.683808) (xy 112.15913 92.301772)
-				(xy 112.150646 92.304638) (xy 112.1482 92.30421) (xy 111.358471 92.077432) (xy 111.351465 92.071854)
-				(xy 111.35 92.066186) (xy 111.35 91.283813) (xy 111.353427 91.27554) (xy 111.358469 91.272567) (xy 112.148202 91.045789)
 			)
 		)
 	)
@@ -28398,6 +28491,42 @@
 		)
 	)
 	(zone
+		(net 4)
+		(net_name "+BATT")
+		(layer "B.Cu")
+		(uuid "2813618f-056d-499d-be91-9ef58277f1f9")
+		(name "$teardrop_padvia$")
+		(hatch full 0.1)
+		(priority 30000)
+		(attr
+			(teardrop
+				(type padvia)
+			)
+		)
+		(connect_pads yes
+			(clearance 0)
+		)
+		(min_thickness 0.0254)
+		(filled_areas_thickness no)
+		(fill yes
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+			(island_removal_mode 1)
+			(island_area_min 10)
+		)
+		(polygon
+			(pts
+				(xy 180.95 98.005) (xy 180.95 99.005) (xy 182.462455 98.925) (xy 182.426 98.325) (xy 181.608505 97.820248)
+			)
+		)
+		(filled_polygon
+			(layer "B.Cu")
+			(pts
+				(xy 180.95 98.005) (xy 180.95 99.005) (xy 182.462455 98.925) (xy 182.426 98.325) (xy 181.608505 97.820248)
+			)
+		)
+	)
+	(zone
 		(net 30)
 		(net_name "Net-(BT1-Pad-)")
 		(layer "B.Cu")
@@ -28539,46 +28668,6 @@
 				(xy 133.647924 101.952124) (xy 133.375749 102.225665) (xy 133.375707 102.225707) (xy 133.102124 102.497924)
 				(xy 133.093843 102.50133) (xy 133.085578 102.497882) (xy 133.084216 102.496237) (xy 132.638021 101.844104)
 				(xy 132.636177 101.835341) (xy 132.639402 101.829226) (xy 132.979225 101.489403) (xy 132.987497 101.485977)
-			)
-		)
-	)
-	(zone
-		(net 4)
-		(net_name "+BATT")
-		(layer "B.Cu")
-		(uuid "8dd270f4-d9f2-45df-9178-6a14bc09b145")
-		(name "$teardrop_padvia$")
-		(hatch full 0.1)
-		(priority 30001)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 180.95 98.005) (xy 180.95 99.005) (xy 182.462455 98.925) (xy 182.426 98.325) (xy 181.608505 97.820248)
-			)
-		)
-		(filled_polygon
-			(layer "B.Cu")
-			(pts
-				(xy 181.612455 97.822699) (xy 181.612871 97.822944) (xy 182.420837 98.321812) (xy 182.426076 98.329074)
-				(xy 182.426368 98.331057) (xy 182.461739 98.913228) (xy 182.458821 98.921694) (xy 182.450771 98.925616)
-				(xy 182.450679 98.925622) (xy 180.962318 99.004348) (xy 180.953875 99.001363) (xy 180.950016 98.993282)
-				(xy 180.95 98.992664) (xy 180.95 98.013869) (xy 180.953427 98.005596) (xy 180.958538 98.002604)
-				(xy 181.603564 97.821634)
 			)
 		)
 	)

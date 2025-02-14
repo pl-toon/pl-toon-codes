@@ -32843,7 +32843,6 @@
 	)
 	(label "Test2"
 		(at 280.67 227.33 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -32855,7 +32854,6 @@
 	)
 	(label "VS_RST"
 		(at 224.79 219.71 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -32867,7 +32865,6 @@
 	)
 	(label "DS_GPIO1"
 		(at 147.32 125.73 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -32879,7 +32876,6 @@
 	)
 	(label "USB_D-"
 		(at 267.97 137.16 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -32891,7 +32887,6 @@
 	)
 	(label "DS_SCL"
 		(at 147.32 118.11 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -32903,7 +32898,6 @@
 	)
 	(label "VS_MISO"
 		(at 224.79 212.09 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -32915,7 +32909,6 @@
 	)
 	(label "DS_GPIO1"
 		(at 44.45 64.77 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -32927,7 +32920,6 @@
 	)
 	(label "H_AI1"
 		(at 144.78 106.68 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -32939,7 +32931,6 @@
 	)
 	(label "H_STBY"
 		(at 306.07 85.09 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -32951,7 +32942,6 @@
 	)
 	(label "H_BI1"
 		(at 306.07 77.47 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -32963,7 +32953,6 @@
 	)
 	(label "VS_NPD"
 		(at 147.32 133.35 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -32975,7 +32964,6 @@
 	)
 	(label "MTCK"
 		(at 274.32 95.25 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -32987,7 +32975,6 @@
 	)
 	(label "USB_Out_D+"
 		(at 283.21 208.28 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -32999,7 +32986,6 @@
 	)
 	(label "USB_Out_D+"
 		(at 294.64 133.35 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33011,7 +32997,6 @@
 	)
 	(label "MTDI"
 		(at 274.32 87.63 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33023,7 +33008,6 @@
 	)
 	(label "VS_RST"
 		(at 276.86 129.54 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33035,7 +33019,6 @@
 	)
 	(label "GPIO35"
 		(at 274.32 110.49 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33047,7 +33030,6 @@
 	)
 	(label "Test1"
 		(at 280.67 224.79 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33059,7 +33041,6 @@
 	)
 	(label "USB_Out_D-"
 		(at 283.21 205.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33071,7 +33052,6 @@
 	)
 	(label "MTMS"
 		(at 274.32 83.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33083,7 +33063,6 @@
 	)
 	(label "DS_SDA"
 		(at 147.32 121.92 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33095,7 +33074,6 @@
 	)
 	(label "USB_D+"
 		(at 267.97 133.35 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33107,7 +33085,6 @@
 	)
 	(label "VS_NPD"
 		(at 224.79 228.6 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33119,7 +33096,6 @@
 	)
 	(label "H_AI2"
 		(at 144.78 102.87 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33131,7 +33107,6 @@
 	)
 	(label "VS_MOSI"
 		(at 276.86 121.92 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33143,7 +33118,6 @@
 	)
 	(label "VS_NCS"
 		(at 224.79 209.55 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33155,7 +33129,6 @@
 	)
 	(label "GPIO37"
 		(at 274.32 102.87 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33167,7 +33140,6 @@
 	)
 	(label "DS_SCL"
 		(at 44.45 59.69 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33179,7 +33151,6 @@
 	)
 	(label "VS_NCS"
 		(at 274.32 76.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33191,7 +33162,6 @@
 	)
 	(label "VS_SCLK"
 		(at 276.86 125.73 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33203,7 +33173,6 @@
 	)
 	(label "VS_LED"
 		(at 224.79 226.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33215,7 +33184,6 @@
 	)
 	(label "VS_LED"
 		(at 147.32 137.16 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33227,7 +33195,6 @@
 	)
 	(label "H_AI1"
 		(at 306.07 69.85 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33239,7 +33206,6 @@
 	)
 	(label "VS_MISO"
 		(at 274.32 80.01 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33251,7 +33217,6 @@
 	)
 	(label "GPIO36"
 		(at 274.32 106.68 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33263,7 +33228,6 @@
 	)
 	(label "DS_XSHUT"
 		(at 44.45 67.31 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33275,7 +33239,6 @@
 	)
 	(label "USB_Out_D-"
 		(at 294.64 137.16 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33287,7 +33250,6 @@
 	)
 	(label "H_BI1"
 		(at 144.78 83.82 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33299,7 +33261,6 @@
 	)
 	(label "Test1"
 		(at 280.67 68.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33311,7 +33272,6 @@
 	)
 	(label "DS_XSHUT"
 		(at 147.32 129.54 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33323,7 +33283,6 @@
 	)
 	(label "H_PWMB"
 		(at 306.07 64.77 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33335,7 +33294,6 @@
 	)
 	(label "MTDO"
 		(at 274.32 91.44 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33347,7 +33305,6 @@
 	)
 	(label "Test2"
 		(at 280.67 72.39 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33359,7 +33316,6 @@
 	)
 	(label "VS_SCLK"
 		(at 224.79 217.17 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33371,7 +33327,6 @@
 	)
 	(label "H_AI2"
 		(at 306.07 72.39 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33383,7 +33338,6 @@
 	)
 	(label "H_BI2"
 		(at 306.07 80.01 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33395,7 +33349,6 @@
 	)
 	(label "H_STBY"
 		(at 144.78 87.63 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33407,7 +33360,6 @@
 	)
 	(label "VS_MOSI"
 		(at 224.79 214.63 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33419,7 +33371,6 @@
 	)
 	(label "H_PWMA"
 		(at 144.78 99.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33431,7 +33382,6 @@
 	)
 	(label "DS_SDA"
 		(at 44.45 62.23 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33443,7 +33393,6 @@
 	)
 	(label "H_BI2"
 		(at 144.78 80.01 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33455,7 +33404,6 @@
 	)
 	(label "H_PWMB"
 		(at 144.78 76.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33467,7 +33415,6 @@
 	)
 	(label "GPIO38"
 		(at 274.32 99.06 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33479,7 +33426,6 @@
 	)
 	(label "H_PWMA"
 		(at 306.07 62.23 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -33633,6 +33579,24 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HIEGHT" ""
+			(at 73.66 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 73.66 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 73.66 64.77 0)
 			(effects
 				(font
@@ -34042,6 +34006,24 @@
 				(hide yes)
 			)
 		)
+		(property "Arrow Part Number" ""
+			(at 397.51 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 397.51 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "407a439c-44f8-4909-af82-76f3b3d0d49f")
 		)
@@ -34107,7 +34089,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "\nBattery Holder (Open) 18650 1 Cell PC Pin\n"
+		(property "Description" "Battery Holder (Open) 18650 1 Cell PC Pin"
 			(at 17.78 157.48 0)
 			(effects
 				(font
@@ -34272,6 +34254,24 @@
 				(hide yes)
 			)
 		)
+		(property "Arrow Part Number" ""
+			(at 17.78 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 17.78 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "+"
 			(uuid "d311fb03-a10c-4b9d-957e-5e4c3f7d4681")
 		)
@@ -34402,6 +34402,24 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 34.29 173.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 34.29 173.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 34.29 173.99 0)
 			(effects
 				(font
@@ -34574,6 +34592,24 @@
 				(hide yes)
 			)
 		)
+		(property "Arrow Part Number" ""
+			(at 280.67 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 280.67 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "c601b25a-d633-4456-acbc-3c5bec8fc0b9")
 		)
@@ -34733,6 +34769,24 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HIEGHT" ""
+			(at 66.04 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 66.04 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 66.04 62.23 0)
 			(effects
 				(font
@@ -34934,7 +34988,7 @@
 				(hide yes)
 			)
 		)
-		(property "Aliexpress" ""
+		(property "Aliexpress" "https://es.aliexpress.com/item/1005003446964388.html?spm=a2g0o.order_list.order_list_main.417.1c3f194dF8uxkJ&gatewayAdapt=glo2esp"
 			(at 55.88 180.34 0)
 			(effects
 				(font
@@ -34962,6 +35016,24 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HIEGHT" ""
+			(at 55.88 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 55.88 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 55.88 180.34 0)
 			(effects
 				(font
@@ -35074,6 +35146,24 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HIEGHT" ""
+			(at 189.23 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 189.23 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 189.23 105.41 0)
 			(effects
 				(font
@@ -35241,7 +35331,7 @@
 				)
 			)
 		)
-		(property "Value" "ROB-14450"
+		(property "Value" "TB6612FNG"
 			(at 332.74 57.531 0)
 			(effects
 				(font
@@ -35268,7 +35358,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "\nTB6612FNG Motor Controller/Driver Power Management Evaluation Board\n"
+		(property "Description" "TB6612FNG Motor Controller/Driver Power Management Evaluation Board"
 			(at 332.74 74.93 0)
 			(effects
 				(font
@@ -35308,7 +35398,7 @@
 				(hide yes)
 			)
 		)
-		(property "Check_prices" "https://www.snapeda.com/parts/ROB-14450/SparkFun+Electronics/view-part/?ref=eda"
+		(property "Check_prices" ""
 			(at 332.74 74.93 0)
 			(effects
 				(font
@@ -35397,7 +35487,7 @@
 				(hide yes)
 			)
 		)
-		(property "Aliexpress" ""
+		(property "Aliexpress" "https://es.aliexpress.com/item/1005006246388728.html?spm=a2g0o.cart.0.0.5d997a9dsD9JCf&mp=1&gatewayAdapt=glo2esp"
 			(at 332.74 74.93 0)
 			(effects
 				(font
@@ -35425,6 +35515,24 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HIEGHT" ""
+			(at 332.74 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 332.74 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 332.74 74.93 0)
 			(effects
 				(font
@@ -35654,6 +35762,24 @@
 				(hide yes)
 			)
 		)
+		(property "Arrow Part Number" ""
+			(at 111.76 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 111.76 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "b14d9c06-fb71-471b-899a-5a5c0367e4e3")
 		)
@@ -35778,7 +35904,7 @@
 				(hide yes)
 			)
 		)
-		(property "Aliexpress" ""
+		(property "Aliexpress" "https://es.aliexpress.com/item/1005003446964388.html?spm=a2g0o.order_list.order_list_main.417.1c3f194dF8uxkJ&gatewayAdapt=glo2esp"
 			(at 135.89 177.8 0)
 			(effects
 				(font
@@ -35806,6 +35932,24 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HIEGHT" ""
+			(at 135.89 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 135.89 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 135.89 177.8 0)
 			(effects
 				(font
@@ -36045,6 +36189,24 @@
 				(hide yes)
 			)
 		)
+		(property "Arrow Part Number" ""
+			(at 76.2 170.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 76.2 170.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "4"
 			(uuid "4dc6bf68-c646-433f-809f-a91bcb4dd029")
 		)
@@ -36113,6 +36275,24 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 241.3 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 241.3 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 241.3 199.39 0)
 			(effects
 				(font
@@ -36193,6 +36373,24 @@
 				(hide yes)
 			)
 		)
+		(property "Arrow Part Number" ""
+			(at 313.69 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 313.69 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "5a3169f5-1655-4d04-8ea6-55e506851af8")
 		)
@@ -36215,7 +36413,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(uuid "534e342f-b4f4-4dae-8706-34e0c6a26a80")
 		(property "Reference" "J9"
 			(at 396.24 93.472 0)
@@ -36254,6 +36452,24 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 397.51 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 397.51 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 397.51 100.33 0)
 			(effects
 				(font
@@ -36329,6 +36545,24 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x06, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 33.02 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 33.02 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 33.02 59.69 0)
 			(effects
 				(font
@@ -36418,6 +36652,33 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HIEGHT" ""
+			(at 34.29 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 34.29 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 34.29 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Aliexpress" "https://es.aliexpress.com/item/4001202080623.html?spm=a2g0o.order_list.order_list_main.437.1c3f194dF8uxkJ&gatewayAdapt=glo2esp"
 			(at 34.29 143.51 0)
 			(effects
 				(font
@@ -36529,7 +36790,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "~"
+		(property "Value" "330"
 			(at 58.42 158.75 90)
 			(effects
 				(font
@@ -36654,6 +36915,24 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HIEGHT" ""
+			(at 55.88 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 55.88 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 55.88 165.1 0)
 			(effects
 				(font
@@ -36862,6 +37141,24 @@
 				(hide yes)
 			)
 		)
+		(property "Arrow Part Number" ""
+			(at 76.2 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 76.2 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "903b3a36-59ca-4322-8798-fe6d32ecb01e")
 		)
@@ -36990,6 +37287,24 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 241.3 226.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 241.3 226.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 241.3 226.06 0)
 			(effects
 				(font
@@ -37179,6 +37494,24 @@
 				(hide yes)
 			)
 		)
+		(property "Arrow Part Number" ""
+			(at 261.62 255.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 261.62 255.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(instances
 			(project "PL_Toon"
 				(path "/c97563fe-7b6d-4c46-af3a-c6fc27f94925"
@@ -37232,6 +37565,33 @@
 			)
 		)
 		(property "Description" ""
+			(at 90.17 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 90.17 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 90.17 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Aliexpress" "https://es.aliexpress.com/item/1005006537133858.html?spm=a2g0o.order_list.order_list_main.422.1c3f194dF8uxkJ&gatewayAdapt=glo2esp"
 			(at 90.17 128.27 0)
 			(effects
 				(font
@@ -37460,6 +37820,24 @@
 				(hide yes)
 			)
 		)
+		(property "Arrow Part Number" ""
+			(at 300.99 205.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 300.99 205.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "da6be79b-a51e-4962-a0e0-b95ba408d897")
 		)
@@ -37650,6 +38028,24 @@
 				(hide yes)
 			)
 		)
+		(property "Arrow Part Number" ""
+			(at 261.62 261.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 261.62 261.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(instances
 			(project "PL_Toon"
 				(path "/c97563fe-7b6d-4c46-af3a-c6fc27f94925"
@@ -37751,6 +38147,24 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HIEGHT" ""
+			(at 237.49 261.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 237.49 261.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 237.49 261.62 0)
 			(effects
 				(font
@@ -37984,6 +38398,24 @@
 				(hide yes)
 			)
 		)
+		(property "Arrow Part Number" ""
+			(at 280.67 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 280.67 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "83e2309f-dd7a-48b7-bf75-35b365bd93b6")
 		)
@@ -38140,6 +38572,24 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HIEGHT" ""
+			(at 289.56 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 289.56 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 289.56 133.35 0)
 			(effects
 				(font
@@ -38547,6 +38997,24 @@
 				(hide yes)
 			)
 		)
+		(property "Arrow Part Number" ""
+			(at 113.03 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 113.03 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "bbd68ff5-8edf-48a7-9857-69bcb18ada8f")
 		)
@@ -38881,6 +39349,24 @@
 				(hide yes)
 			)
 		)
+		(property "Arrow Part Number" ""
+			(at 300.99 224.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 300.99 224.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "fc3c1526-570e-457a-9c9d-939c01392d3c")
 		)
@@ -38988,6 +39474,24 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HIEGHT" ""
+			(at 237.49 255.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 237.49 255.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 237.49 255.27 0)
 			(effects
 				(font
@@ -39118,6 +39622,24 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 241.3 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 241.3 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 241.3 214.63 0)
 			(effects
 				(font
@@ -39299,6 +39821,24 @@
 				(hide yes)
 			)
 		)
+		(property "Arrow Part Number" ""
+			(at 289.56 137.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 289.56 137.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "e4d71467-90c8-4cc2-a3aa-1f68c10ee778")
 		)
@@ -39425,6 +39965,24 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 326.39 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 326.39 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 326.39 142.24 0)
 			(effects
 				(font
@@ -39561,7 +40119,7 @@
 				(hide yes)
 			)
 		)
-		(property "Aliexpress" "https://es.aliexpress.com/item/1005005641884699.html?spm=a2g0o.productlist.main.5.1dbf6983fIy0hs&algo_pvid=2a7b7da6-5266-472a-8435-2e57a785df0c&algo_exp_id=2a7b7da6-5266-472a-8435-2e57a785df0c-2&pdp_npi=4%40dis%21CLP%21736%21662%21%21%215.36%214.82%21%402103297517132091034776429e2bb4%2112000033854713726%21sea%21CL%212985417248%21&curPageLogUid=0fuqQ5QKPXBY&utparam-url=scene%3Asearch%7Cquery_from%3A"
+		(property "Aliexpress" "https://es.aliexpress.com/item/1005006127128914.html?spm=a2g0o.order_list.order_list_main.432.1c3f194dF8uxkJ&gatewayAdapt=glo2esp"
 			(at 128.27 140.97 0)
 			(effects
 				(font
@@ -39589,6 +40147,24 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HIEGHT" ""
+			(at 128.27 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 128.27 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 128.27 140.97 0)
 			(effects
 				(font
@@ -39631,7 +40207,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "~"
+		(property "Value" "330"
 			(at 138.43 156.21 90)
 			(effects
 				(font
@@ -39764,6 +40340,24 @@
 				(hide yes)
 			)
 		)
+		(property "Arrow Part Number" ""
+			(at 135.89 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 135.89 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "e203da4a-1991-42e3-b2bf-75dcf510bc9d")
 		)
@@ -39825,7 +40419,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "\nBattery Holder (Open) 18650 1 Cell PC Pin\n"
+		(property "Description" "Battery Holder (Open) 18650 1 Cell PC Pin"
 			(at 17.78 175.26 0)
 			(effects
 				(font
@@ -39982,6 +40576,24 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HIEGHT" ""
+			(at 17.78 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 17.78 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 17.78 175.26 0)
 			(effects
 				(font
@@ -40149,6 +40761,24 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HIEGHT" ""
+			(at 58.42 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 58.42 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 58.42 59.69 0)
 			(effects
 				(font
@@ -40350,6 +40980,24 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 120.65 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 120.65 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 120.65 179.07 0)
 			(effects
 				(font
@@ -40780,6 +41428,24 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HIEGHT" ""
+			(at 81.28 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 81.28 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
 			(at 81.28 67.31 0)
 			(effects
 				(font
