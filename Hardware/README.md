@@ -26,7 +26,7 @@ A bottom view of the rendered 3d PCB design in Kicad is shown below.
 # Finished PCB
 Some pictures of the assembled PCBs are shown below. 
 
-![PCB1](/Hardware/Pictures/PCB_Charger_Battery.png)
+![PCB Charger](/Hardware/Pictures/PCB_Charger_Battery.jpeg)
 
 
 # Schematic in pdf
