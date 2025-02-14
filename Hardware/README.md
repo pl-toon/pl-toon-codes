@@ -22,7 +22,12 @@ A top view of the rendered 3d PCB design in Kicad is shown below.
 
 A bottom view of the rendered 3d PCB design in Kicad is shown below. 
 ![3d Rendering bottom](/Hardware/Pictures/3D_PCB_Kicad_Bottom.png)
- 
+
+# Finished PCB
+Some pictures of the assembled PCBs are shown bellow. 
+![PCB1](/Hardware/Pictures/PCB_Charger_Battery.png)
+
+
 # Schematic in pdf
 [Schematic in pdf](/Hardware/Kicad/PL_Toon.pdf)
 
@@ -30,7 +35,7 @@ A bottom view of the rendered 3d PCB design in Kicad is shown below.
 The bill of Material can be found [here](/Hardware/Kicad/BOM_PLTOON)
 
 # Production Files (Gerber)
-The .zip file used for producing the PCBs can befound [here](/Hardware/Production_Files)
+The .zip file used for producing the PCBs can be found [here](/Hardware/Production_Files)
 
 # 3d Step file
-[3d Step File](/Hardware/Kicad/PL_Toon.step)
+[3d Step File](/Hardware/Kicad/PL_Toon_3D.step)
