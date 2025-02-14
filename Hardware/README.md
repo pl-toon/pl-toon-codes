@@ -3,7 +3,7 @@
 The hardware for PLTOON was designed using Kicad v8.0. 
 All the Kicad files can be found in [this folder](/Hardware/Kicad/)
 
-At the core of the PCB, there is an ESP32S3 devBoard. It is powered using a DCDC converter module (DC-DC Buck Converter Mini 560) that takes 7.4V  (two 18350 Batteries in series) and gives a regulated 5V output voltage. The purpose of having a DCDC converter is to improve efficiency. Nevertheless, there is an option to use an LDO instead, which needs to be populated on the board. This option has not been used nor tested. 
+At the core of the PCB, there is an ESP32S3 devBoard [(Schematic)](https://dl.espressif.com/dl/schematics/SCH_ESP32-S3-DevKitC-1_V1.1_20221130.pdf). It is powered using a DCDC converter module (DC-DC Buck Converter Mini 560) that takes 7.4V  (two 18350 Batteries in series) and gives a regulated 5V output voltage. The purpose of having a DCDC converter is to improve efficiency. Nevertheless, there is an option to use an LDO instead, which needs to be populated on the board. This option has not been used nor tested. 
 The ESP32S3 internally regulates the 5V to generate 3.3V, which is available for the rest of the electronics.  
 
 The 18350 batteries can be charged through the J2 connector by switching SW1 to the Off/Chg state. There is no protection for reverse polarity, so it is up to the user to connect it correctly. When no charger is connected, the PLTOON remains OFF with this SW1 position. 
@@ -27,10 +27,10 @@ A bottom view of the rendered 3d PCB design in Kicad is shown below.
 [Schematic in pdf](/Hardware/Kicad/PL_Toon.pdf)
 
 # BOM 
-The bill of Material 
+The bill of Material can be found [here](/Hardware/Kicad/BOM_PLTOON)
 
 # Production Files (Gerber)
-The .zip file used for producing the PCBs can befound [here](Hardware/Production_Files)
+The .zip file used for producing the PCBs can befound [here](/Hardware/Production_Files)
 
 # 3d Step file
 [3d Step File](/Hardware/Kicad/PL_Toon.step)
