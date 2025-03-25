@@ -16,3 +16,6 @@ https://youtu.be/QAIMSYgBqKo
 
 # Platform 
 ![Many agents real](/fusion360_images/many.jpg)
+
+# Acknowledgements
+The development of the PL-TOON platform has been supported by the Fondecyt grant 11221365.
