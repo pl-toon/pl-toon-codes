@@ -5,11 +5,9 @@ Repository for a multi agent experimental platooning platform
 PL-TOON Description and Example. Spanish audio with English subtitles (activate them in settings):
 https://youtu.be/QAIMSYgBqKo
 
-# Single agent
-![Single Agent 3D](/fusion360_images/angle.png)
+# Platoon of trains - 2024 version
+![Platoon](/new_pltoon.jpeg)
 
-
-![Single Agent 3D side](/fusion360_images/side%20view.png)
 
 # Connection Diagram
 ![Single Agent Connection Diagram](/Agente.png)
@@ -19,3 +17,4 @@ https://youtu.be/QAIMSYgBqKo
 
 # Acknowledgements
 The development of the PL-TOON platform has been supported by the Fondecyt grant 11221365.
+
