@@ -9,12 +9,13 @@ https://youtu.be/QAIMSYgBqKo
 ![Platoon](/new_pltoon.jpeg)
 
 
-# Connection Diagram
+# Connection Diagram (Old)
 ![Single Agent Connection Diagram](/Agente.png)
 
-# Platform 
+# Platform (Old)
 ![Many agents real](/fusion360_images/many.jpg)
 
 # Acknowledgements
 The development of the PL-TOON platform has been supported by the Fondecyt grant 11221365.
+
 
