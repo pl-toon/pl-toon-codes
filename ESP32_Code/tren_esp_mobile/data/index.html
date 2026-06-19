@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>TrenCE Control</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/uplot.min.css">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface2: #334155;
+      --border: #475569;
+      --text: #f1f5f9;
+      --text-dim: #94a3b8;
+      --primary: #dc2626;
+      --primary-light: #ef4444;
+      --secondary: #3b82f6;
+      --secondary-light: #60a5fa;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+
+    /* Light theme */
+    body.light {
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --surface2: #e2e8f0;
+      --border: #cbd5e1;
+      --text: #0f172a;
+      --text-dim: #64748b;
+    }
+    body.light .overlay { background: rgba(241,245,249,0.92); }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    .header {
+      background: var(--surface);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .train-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary-light);
+    }
+
+    .train-badge {
+      font-size: 11px;
+      background: var(--surface2);
+      color: var(--text-dim);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .conn-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--danger);
+      transition: background 0.3s;
+    }
+
+    .conn-indicator.connected {
+      background: var(--success);
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+    }
+
+    /* Header controls */
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hdr-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      min-width: 32px;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    /* Preset bar */
+    .preset-bar {
+      display: flex;
+      gap: 6px;
+      margin: 8px 12px;
+      align-items: center;
+    }
+
+    .preset-select {
+      flex: 1;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 13px;
+    }
+
+    .preset-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* Mode Tabs */
+    .mode-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0;
+      margin: 12px 12px 0;
+      background: var(--surface);
+      border-radius: 12px 12px 0 0;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      overflow: hidden;
+    }
+
+    .mode-tab {
+      padding: 12px 8px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dim);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .mode-tab.active {
+      color: var(--text);
+      background: var(--surface2);
+    }
+
+    .mode-tab:not(:last-child) {
+      border-right: 1px solid var(--border);
+    }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin: 12px;
+      padding: 16px;
+    }
+
+    .card.tab-card {
+      margin-top: 0;
+      border-radius: 0 0 12px 12px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    /* Tab panels */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* PID Sliders */
+    .param-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+
+    .param-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .param-item {
+      text-align: center;
+    }
+
+    .param-label {
+      font-size: 13px;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+
+    .param-value {
+      font-size: 24px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 8px;
+      min-height: 32px;
+    }
+
+    .param-value.kp { color: var(--primary-light); }
+    .param-value.ki { color: var(--secondary-light); }
+    .param-value.kd { color: var(--success); }
+
+    .param-slider {
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--surface2);
+      outline: none;
+    }
+
+    .param-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid var(--bg);
+    }
+
+    .param-slider.kp::-webkit-slider-thumb { background: var(--primary-light); }
+    .param-slider.ki::-webkit-slider-thumb { background: var(--secondary-light); }
+    .param-slider.kd::-webkit-slider-thumb { background: var(--success); }
+
+    .param-range {
+      font-size: 10px;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    /* Reference/generic slider */
+    .ref-container {
+      margin-top: 16px;
+    }
+
+    .ref-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+
+    .ref-label {
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    .ref-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--warning);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ref-unit {
+      font-size: 14px;
+      color: var(--text-dim);
+      font-weight: 400;
+    }
+
+    .ref-slider {
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--surface2);
+      outline: none;
+    }
+
+    .ref-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--warning);
+      cursor: pointer;
+      border: 2px solid var(--bg);
+    }
+
+    /* Direction toggle */
+    .dir-toggle {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .dir-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-dim);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .dir-btn.active {
+      background: var(--surface2);
+      color: var(--text);
+      border-color: var(--secondary-light);
+    }
+
+    /* Deadband result */
+    .db-result {
+      margin-top: 16px;
+      padding: 12px;
+      background: var(--bg);
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .db-result-label {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+
+    .db-result-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--warning);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .btn-apply {
+      margin-top: 12px;
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background: var(--secondary);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .btn-apply:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* Buttons */
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 12px;
+    }
+
+    .btn {
+      height: 56px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: opacity 0.15s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-start {
+      background: var(--success);
+      color: #000;
+    }
+
+    .btn-stop {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .btn-export {
+      background: var(--surface2);
+      color: var(--text-dim);
+      height: 44px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    /* Chart */
+    .chart-wrap {
+      margin: 12px;
+      background: var(--surface);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 12px 8px 8px 8px;
+      overflow: hidden;
+    }
+
+    .chart-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      padding-left: 8px;
+    }
+
+    #chart-container {
+      width: 100%;
+    }
+
+    /* Override uPlot styles for dark theme */
+    .u-wrap { background: transparent !important; }
+    .u-legend { font-size: 12px !important; color: var(--text-dim) !important; }
+    .u-legend .u-series td { padding: 2px 6px !important; }
+    .u-legend .u-marker { width: 10px !important; height: 3px !important; border-radius: 2px !important; }
+
+    /* Status panel */
+    .status-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+    }
+
+    .status-label {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .status-val {
+      font-size: 13px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .status-val.active {
+      color: var(--success);
+    }
+
+    .status-val.idle {
+      color: var(--text-dim);
+    }
+
+    /* Confirmed params */
+    .confirmed-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .confirmed-item {
+      text-align: center;
+      padding: 8px 4px;
+      background: var(--bg);
+      border-radius: 8px;
+    }
+
+    .confirmed-label {
+      font-size: 10px;
+      color: var(--text-dim);
+      margin-bottom: 2px;
+    }
+
+    .confirmed-val {
+      font-size: 14px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Reconnecting overlay */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.9);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .overlay.visible {
+      display: flex;
+    }
+
+    .overlay-text {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--surface2);
+      border-top-color: var(--primary-light);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .overlay-sub {
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <span class="train-name" id="train-name">TrenCE</span>
+      <span class="train-badge" id="fw-badge">--</span>
+    </div>
+    <div class="header-controls">
+      <button class="hdr-btn" id="btn-lang" onclick="toggleLang()">ES</button>
+      <button class="hdr-btn" id="btn-theme" onclick="toggleTheme()">&#9788;</button>
+      <div class="conn-indicator" id="conn-led"></div>
+    </div>
+  </div>
+
+  <!-- Reconnecting overlay -->
+  <div class="overlay" id="overlay">
+    <div class="spinner"></div>
+    <div class="overlay-text" data-i18n="connecting">Connecting...</div>
+    <div class="overlay-sub" id="overlay-sub" data-i18n="ensure_wifi">Ensure you are connected to the train WiFi</div>
+  </div>
+
+  <!-- Preset bar -->
+  <div class="preset-bar">
+    <select class="preset-select" id="preset-select">
+      <option value="" data-i18n="preset_none">-- Presets --</option>
+    </select>
+    <button class="preset-btn" onclick="loadPreset()" data-i18n="load">Load</button>
+    <button class="preset-btn" onclick="savePreset()" data-i18n="save">Save</button>
+    <button class="preset-btn" onclick="deletePreset()" style="color:var(--danger)" data-i18n="delete">Del</button>
+  </div>
+
+  <!-- Mode Tabs -->
+  <div class="mode-tabs">
+    <button class="mode-tab active" data-mode="pid" onclick="selectMode('pid')">PID</button>
+    <button class="mode-tab" data-mode="step" onclick="selectMode('step')" data-i18n="tab_step">Step</button>
+    <button class="mode-tab" data-mode="deadband" onclick="selectMode('deadband')" data-i18n="tab_deadband">Deadband</button>
+  </div>
+
+  <!-- Parameters Card (tabbed) -->
+  <div class="card tab-card">
+
+    <!-- PID Panel -->
+    <div class="tab-panel active" id="panel-pid">
+      <div class="param-grid">
+        <div class="param-item">
+          <div class="param-label">Kp</div>
+          <div class="param-value kp" id="kp-val">0.00</div>
+          <input type="range" class="param-slider kp" id="kp-slider"
+                 min="0" max="250" step="0.5" value="0">
+          <div class="param-range">0 - 250</div>
+        </div>
+        <div class="param-item">
+          <div class="param-label">Ki</div>
+          <div class="param-value ki" id="ki-val">0.00</div>
+          <input type="range" class="param-slider ki" id="ki-slider"
+                 min="0" max="150" step="0.5" value="0">
+          <div class="param-range">0 - 150</div>
+        </div>
+        <div class="param-item">
+          <div class="param-label">Kd</div>
+          <div class="param-value kd" id="kd-val">0.00</div>
+          <input type="range" class="param-slider kd" id="kd-slider"
+                 min="0" max="150" step="0.5" value="0">
+          <div class="param-range">0 - 150</div>
+        </div>
+      </div>
+
+      <!-- Reference -->
+      <div class="ref-container">
+        <div class="ref-header">
+          <span class="ref-label" data-i18n="reference">Reference</span>
+          <span class="ref-value" id="ref-val">10.0 <span class="ref-unit">cm</span></span>
+        </div>
+        <input type="range" class="ref-slider" id="ref-slider"
+               min="1" max="100" step="0.5" value="10">
+      </div>
+
+      <!-- Deadband -->
+      <div class="ref-container">
+        <div class="ref-header">
+          <span class="ref-label" data-i18n="deadband_pwm">Deadband (PWM)</span>
+          <span class="ref-value" id="db-val" style="color:var(--text-dim)">50</span>
+        </div>
+        <input type="range" class="ref-slider" id="db-slider"
+               min="0" max="200" step="1" value="50">
+        <div class="param-range">0 - 200</div>
+      </div>
+    </div>
+
+    <!-- Step Response Panel -->
+    <div class="tab-panel" id="panel-step">
+      <div class="param-grid-2">
+        <div class="param-item">
+          <div class="param-label" data-i18n="amplitude">Amplitude</div>
+          <div class="param-value" id="step-amp-val" style="color:var(--warning)">0.0 <span class="ref-unit">V</span></div>
+          <input type="range" class="param-slider" id="step-amp-slider"
+                 min="0" max="8.4" step="0.1" value="0"
+                 style="--thumb-color:var(--warning)">
+          <div class="param-range">0 - 8.4 V</div>
+        </div>
+        <div class="param-item">
+          <div class="param-label" data-i18n="duration">Duration</div>
+          <div class="param-value" id="step-time-val" style="color:var(--secondary-light)">5.0 <span class="ref-unit">s</span></div>
+          <input type="range" class="param-slider" id="step-time-slider"
+                 min="0.5" max="20" step="0.5" value="5"
+                 style="--thumb-color:var(--secondary-light)">
+          <div class="param-range">0.5 - 20 s</div>
+        </div>
+      </div>
+
+      <div class="ref-container">
+        <div class="ref-header">
+          <span class="ref-label" data-i18n="battery_voltage">Battery Voltage</span>
+          <span class="ref-value" id="step-vbatt-val" style="color:var(--text-dim)">8.4 <span class="ref-unit">V</span></span>
+        </div>
+        <input type="range" class="ref-slider" id="step-vbatt-slider"
+               min="3.0" max="12.0" step="0.1" value="8.4">
+        <div class="param-range">3.0 - 12.0 V</div>
+      </div>
+
+      <div class="card-title" style="margin-top:16px;margin-bottom:8px" data-i18n="direction">Direction</div>
+      <div class="dir-toggle">
+        <button class="dir-btn active" id="step-dir-fwd" onclick="setStepDir(1)" data-i18n="forward">Forward</button>
+        <button class="dir-btn" id="step-dir-rev" onclick="setStepDir(0)" data-i18n="reverse">Reverse</button>
+      </div>
+    </div>
+
+    <!-- Deadband Calibration Panel -->
+    <div class="tab-panel" id="panel-deadband">
+      <div class="ref-container" style="margin-top:0">
+        <div class="ref-header">
+          <span class="ref-label" data-i18n="motion_threshold">Motion Threshold</span>
+          <span class="ref-value" id="db-thresh-val" style="color:var(--secondary-light)">0.08 <span class="ref-unit">cm</span></span>
+        </div>
+        <input type="range" class="ref-slider" id="db-thresh-slider"
+               min="0.01" max="1.0" step="0.01" value="0.08">
+        <div class="param-range">0.01 - 1.0 cm</div>
+      </div>
+
+      <div class="card-title" style="margin-top:16px;margin-bottom:8px" data-i18n="direction">Direction</div>
+      <div class="dir-toggle">
+        <button class="dir-btn active" id="db-dir-fwd" onclick="setDbDir(1)" data-i18n="forward">Forward</button>
+        <button class="dir-btn" id="db-dir-rev" onclick="setDbDir(0)" data-i18n="reverse">Reverse</button>
+      </div>
+
+      <div class="db-result">
+        <div class="db-result-label" data-i18n="calibrated_db">Calibrated Deadband (PWM)</div>
+        <div class="db-result-value" id="db-result-val">--</div>
+      </div>
+
+      <button class="btn-apply" id="btn-db-apply" onclick="applyDeadband()" disabled data-i18n="apply_to_pid">
+        Apply Result to PID
+      </button>
+    </div>
+  </div>
+
+  <!-- Start / Stop -->
+  <div class="btn-row">
+    <button class="btn btn-start" id="btn-start" onclick="cmdStart()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+      <span data-i18n="start">Start</span>
+    </button>
+    <button class="btn btn-stop" id="btn-stop" onclick="cmdStop()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+      <span data-i18n="stop">Stop</span>
+    </button>
+  </div>
+
+  <!-- Chart -->
+  <div class="chart-wrap">
+    <div class="chart-title" id="chart-title">Distance & Reference vs Time</div>
+    <div id="chart-container"></div>
+  </div>
+
+  <!-- Export buttons -->
+  <div class="btn-row">
+    <button class="btn btn-export" id="btn-csv" onclick="exportCSV()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span data-i18n="save_csv">Save CSV</span>
+    </button>
+    <button class="btn btn-export" id="btn-png" onclick="exportPlot()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <span data-i18n="save_plot">Save Plot</span>
+    </button>
+  </div>
+
+  <!-- Status -->
+  <div class="card">
+    <div class="card-title" data-i18n="status">Status</div>
+    <div class="status-grid">
+      <div class="status-item">
+        <span class="status-label" data-i18n="experiment">Experiment</span>
+        <span class="status-val idle" id="st-active" data-i18n="idle">Idle</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label" data-i18n="packets">Packets</span>
+        <span class="status-val" id="st-packets">0</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label" data-i18n="distance">Distance</span>
+        <span class="status-val" id="st-distance">-- cm</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label" data-i18n="output">Output</span>
+        <span class="status-val" id="st-output">--</span>
+      </div>
+    </div>
+
+    <div class="card-title" style="margin-top:12px" data-i18n="confirmed_values">Confirmed ESP32 Values</div>
+    <div class="confirmed-grid">
+      <div class="confirmed-item">
+        <div class="confirmed-label">Kp</div>
+        <div class="confirmed-val kp" id="conf-kp">--</div>
+      </div>
+      <div class="confirmed-item">
+        <div class="confirmed-label">Ki</div>
+        <div class="confirmed-val ki" id="conf-ki">--</div>
+      </div>
+      <div class="confirmed-item">
+        <div class="confirmed-label">Kd</div>
+        <div class="confirmed-val kd" id="conf-kd">--</div>
+      </div>
+      <div class="confirmed-item">
+        <div class="confirmed-label">Ref</div>
+        <div class="confirmed-val" style="color:var(--warning)" id="conf-ref">--</div>
+      </div>
+      <div class="confirmed-item">
+        <div class="confirmed-label">DB</div>
+        <div class="confirmed-val" style="color:var(--text-dim)" id="conf-db">--</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer" data-i18n="footer">
+    TrenCE Mobile Dashboard v2.2 &middot; UAI SIMU
+  </div>
+
+  <script src="/uplot.min.js"></script>
+  <script>
+    // =========================================================================
+    // State
+    // =========================================================================
+    let ws = null;
+    let connected = false;
+    let reconnectDelay = 1000;
+    const MAX_RECONNECT = 30000;
+    let packetCount = 0;
+    let experimentActive = false;
+    let selectedMode = 'pid';  // 'pid', 'step', 'deadband'
+
+    // Chart data - rolling buffer (varies by mode)
+    const MAX_POINTS = 500;
+    let chartData = [[], [], [], []];
+    let plot = null;
+    let chartMode = 'pid';  // tracks which chart is currently shown
+
+    // =========================================================================
+    // Translations (EN / ES)
+    // =========================================================================
+    let currentLang = localStorage.getItem('tren_lang') || 'en';
+
+    const translations = {
+      en: {
+        // Overlay
+        connecting: 'Connecting...', ensure_wifi: 'Ensure you are connected to the train WiFi',
+        reconnecting: 'Reconnecting in {s}s...',
+        // Tabs
+        tab_step: 'Step', tab_deadband: 'Deadband',
+        // PID panel
+        reference: 'Reference', deadband_pwm: 'Deadband (PWM)',
+        // Step panel
+        amplitude: 'Amplitude', duration: 'Duration', battery_voltage: 'Battery Voltage',
+        direction: 'Direction', forward: 'Forward', reverse: 'Reverse',
+        // Deadband panel
+        motion_threshold: 'Motion Threshold', calibrated_db: 'Calibrated Deadband (PWM)',
+        apply_to_pid: 'Apply Result to PID',
+        // Buttons
+        start: 'Start', stop: 'Stop', save_csv: 'Save CSV', save_plot: 'Save Plot',
+        // Status
+        status: 'Status', experiment: 'Experiment', idle: 'Idle',
+        packets: 'Packets', distance: 'Distance', output: 'Output',
+        confirmed_values: 'Confirmed ESP32 Values',
+        // Presets
+        preset_none: '-- Presets --', load: 'Load', save: 'Save', delete: 'Del',
+        preset_name_prompt: 'Preset name:', preset_delete_confirm: 'Delete preset "{name}"?',
+        preset_loaded: 'Loaded', preset_saved: 'Saved', preset_select: 'Select a preset first',
+        // Chart titles
+        chart_pid: 'Distance & Reference vs Time',
+        chart_step: 'Step Response - Distance vs Time',
+        chart_deadband: 'Deadband Calibration - PWM & Distance vs Time',
+        // Chart series
+        s_distance: 'Distance', s_reference: 'Reference', s_error: 'Error',
+        s_applied: 'Applied (V)', s_pwm: 'PWM', s_baseline: 'Baseline',
+        // Footer
+        footer: 'TrenCE Mobile Dashboard v2.2 &middot; UAI SIMU'
+      },
+      es: {
+        connecting: 'Conectando...', ensure_wifi: 'Verifica estar conectado al WiFi del tren',
+        reconnecting: 'Reconectando en {s}s...',
+        tab_step: 'Escal\u00f3n', tab_deadband: 'Zona Muerta',
+        reference: 'Referencia', deadband_pwm: 'Zona Muerta (PWM)',
+        amplitude: 'Amplitud', duration: 'Duraci\u00f3n', battery_voltage: 'Voltaje Bater\u00eda',
+        direction: 'Direcci\u00f3n', forward: 'Adelante', reverse: 'Reversa',
+        motion_threshold: 'Umbral de Movimiento', calibrated_db: 'Zona Muerta Calibrada (PWM)',
+        apply_to_pid: 'Aplicar Resultado a PID',
+        start: 'Iniciar', stop: 'Detener', save_csv: 'Guardar CSV', save_plot: 'Guardar Gr\u00e1fico',
+        status: 'Estado', experiment: 'Experimento', idle: 'Inactivo',
+        packets: 'Paquetes', distance: 'Distancia', output: 'Salida',
+        confirmed_values: 'Valores Confirmados ESP32',
+        preset_none: '-- Perfiles --', load: 'Cargar', save: 'Guardar', delete: 'Elim',
+        preset_name_prompt: 'Nombre del perfil:', preset_delete_confirm: '\u00bfEliminar perfil "{name}"?',
+        preset_loaded: 'Cargado', preset_saved: 'Guardado', preset_select: 'Selecciona un perfil primero',
+        chart_pid: 'Distancia y Referencia vs Tiempo',
+        chart_step: 'Respuesta al Escal\u00f3n - Distancia vs Tiempo',
+        chart_deadband: 'Calibraci\u00f3n Zona Muerta - PWM y Distancia vs Tiempo',
+        s_distance: 'Distancia', s_reference: 'Referencia', s_error: 'Error',
+        s_applied: 'Aplicado (V)', s_pwm: 'PWM', s_baseline: 'L\u00ednea Base',
+        footer: 'TrenCE Panel M\u00f3vil v2.2 &middot; UAI SIMU'
+      }
+    };
+
+    function T(key) { return (translations[currentLang] || translations.en)[key] || key; }
+
+    function applyLang() {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const val = T(key);
+        if (val.includes('&') || val.includes('<')) el.innerHTML = val;
+        else el.textContent = val;
+      });
+      // Update chart title
+      const titleKey = 'chart_' + chartMode;
+      $id('chart-title').textContent = T(titleKey);
+      // Update lang button to show the OTHER language
+      $id('btn-lang').textContent = currentLang === 'en' ? 'ES' : 'EN';
+      // Rebuild chart with translated series labels
+      rebuildChart(chartMode);
+    }
+
+    function toggleLang() {
+      currentLang = currentLang === 'en' ? 'es' : 'en';
+      localStorage.setItem('tren_lang', currentLang);
+      applyLang();
+    }
+
+    // =========================================================================
+    // Theme
+    // =========================================================================
+    let currentTheme = localStorage.getItem('tren_theme') || 'dark';
+
+    function setTheme(theme) {
+      currentTheme = theme;
+      document.body.classList.toggle('light', theme === 'light');
+      $id('btn-theme').innerHTML = theme === 'dark' ? '&#9788;' : '&#9790;';
+      localStorage.setItem('tren_theme', theme);
+      // Rebuild chart so axis colors adapt to theme
+      if (plot) rebuildChart(chartMode);
+    }
+
+    function toggleTheme() {
+      setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+    }
+
+    // =========================================================================
+    // Presets (localStorage)
+    // =========================================================================
+    const PRESET_KEY = 'tren_presets';
+
+    function getPresets() {
+      try { return JSON.parse(localStorage.getItem(PRESET_KEY)) || {}; }
+      catch { return {}; }
+    }
+
+    function refreshPresetList() {
+      const sel = $id('preset-select');
+      const presets = getPresets();
+      // Keep first option, remove rest
+      while (sel.options.length > 1) sel.remove(1);
+      Object.keys(presets).sort().forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.textContent = name;
+        sel.add(opt);
+      });
+    }
+
+    function savePreset() {
+      const name = prompt(T('preset_name_prompt'));
+      if (!name || !name.trim()) return;
+      const presets = getPresets();
+      presets[name.trim()] = {
+        mode: selectedMode,
+        kp: parseFloat(kpSlider.value), ki: parseFloat(kiSlider.value),
+        kd: parseFloat(kdSlider.value), ref: parseFloat(refSlider.value),
+        db: parseFloat(dbSlider.value),
+        step_amp: parseFloat(stepAmpSlider.value), step_time: parseFloat(stepTimeSlider.value),
+        vbatt: parseFloat(stepVbattSlider.value),
+        db_thresh: parseFloat(dbThreshSlider.value),
+        step_dir: $id('step-dir-fwd').classList.contains('active') ? 1 : 0,
+        db_dir: $id('db-dir-fwd').classList.contains('active') ? 1 : 0
+      };
+      localStorage.setItem(PRESET_KEY, JSON.stringify(presets));
+      refreshPresetList();
+      $id('preset-select').value = name.trim();
+    }
+
+    function loadPreset() {
+      const sel = $id('preset-select');
+      if (!sel.value) { alert(T('preset_select')); return; }
+      const presets = getPresets();
+      const p = presets[sel.value];
+      if (!p) return;
+
+      // Switch mode if different
+      if (p.mode && p.mode !== selectedMode) selectMode(p.mode);
+
+      // Set sliders and send commands
+      const pairs = [
+        [kpSlider, kpVal, 'kp', p.kp, fmt2],
+        [kiSlider, kiVal, 'ki', p.ki, fmt2],
+        [kdSlider, kdVal, 'kd', p.kd, fmt2],
+        [refSlider, refVal, 'ref', p.ref, fmtCm],
+        [dbSlider, dbVal, 'deadband', p.db, fmtInt],
+        [stepAmpSlider, stepAmpVal, 'step_amp', p.step_amp, fmtV],
+        [stepTimeSlider, stepTimeVal, 'step_time', p.step_time, fmtS],
+        [stepVbattSlider, stepVbattVal, 'vbatt', p.vbatt, fmtV],
+        [dbThreshSlider, dbThreshVal, 'db_threshold', p.db_thresh, fmtCm2]
+      ];
+      pairs.forEach(([slider, display, cmd, val, fmt]) => {
+        if (val == null) return;
+        slider.value = val;
+        display.innerHTML = fmt(val);
+        wsSend({t:'cmd', c:cmd, v:val});
+      });
+
+      // Restore directions
+      if (p.step_dir != null) setStepDir(p.step_dir);
+      if (p.db_dir != null) setDbDir(p.db_dir);
+    }
+
+    function deletePreset() {
+      const sel = $id('preset-select');
+      if (!sel.value) return;
+      const msg = T('preset_delete_confirm').replace('{name}', sel.value);
+      if (!confirm(msg)) return;
+      const presets = getPresets();
+      delete presets[sel.value];
+      localStorage.setItem(PRESET_KEY, JSON.stringify(presets));
+      refreshPresetList();
+    }
+
+    // =========================================================================
+    // DOM refs
+    // =========================================================================
+    const $id = (id) => document.getElementById(id);
+    const connLed = $id('conn-led');
+    const overlay = $id('overlay');
+    const overlaySub = $id('overlay-sub');
+    const trainName = $id('train-name');
+    const fwBadge = $id('fw-badge');
+
+    // PID sliders
+    const kpSlider = $id('kp-slider');
+    const kiSlider = $id('ki-slider');
+    const kdSlider = $id('kd-slider');
+    const refSlider = $id('ref-slider');
+    const dbSlider = $id('db-slider');
+    const kpVal = $id('kp-val');
+    const kiVal = $id('ki-val');
+    const kdVal = $id('kd-val');
+    const refVal = $id('ref-val');
+    const dbVal = $id('db-val');
+
+    // Step sliders
+    const stepAmpSlider = $id('step-amp-slider');
+    const stepTimeSlider = $id('step-time-slider');
+    const stepVbattSlider = $id('step-vbatt-slider');
+    const stepAmpVal = $id('step-amp-val');
+    const stepTimeVal = $id('step-time-val');
+    const stepVbattVal = $id('step-vbatt-val');
+
+    // Deadband
+    const dbThreshSlider = $id('db-thresh-slider');
+    const dbThreshVal = $id('db-thresh-val');
+
+    const btnStart = $id('btn-start');
+    const btnStop = $id('btn-stop');
+
+    // =========================================================================
+    // Mode Tabs
+    // =========================================================================
+    function selectMode(mode) {
+      if (experimentActive) return;  // Don't switch while running
+      selectedMode = mode;
+
+      // Update tab buttons
+      document.querySelectorAll('.mode-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.mode === mode);
+      });
+
+      // Show/hide panels
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.toggle('active', panel.id === 'panel-' + mode);
+      });
+
+      // Rebuild chart if mode changed
+      if (chartMode !== mode) {
+        rebuildChart(mode);
+      }
+    }
+
+    // =========================================================================
+    // WebSocket
+    // =========================================================================
+    function wsConnect() {
+      if (ws && ws.readyState <= 1) return;
+
+      overlay.classList.add('visible');
+      overlaySub.textContent = 'Connecting to ESP32...';
+
+      ws = new WebSocket('ws://' + location.host + '/ws');
+
+      ws.onopen = () => {
+        connected = true;
+        reconnectDelay = 1000;
+        connLed.classList.add('connected');
+        overlay.classList.remove('visible');
+        wsSend({t:'cmd', c:'params'});
+      };
+
+      ws.onmessage = (e) => {
+        try {
+          const msg = JSON.parse(e.data);
+          handleMessage(msg);
+        } catch(err) {
+          console.warn('WS parse error:', err);
+        }
+      };
+
+      ws.onclose = () => {
+        connected = false;
+        connLed.classList.remove('connected');
+        overlay.classList.add('visible');
+        overlaySub.textContent = T('reconnecting').replace('{s}', (reconnectDelay/1000).toFixed(0));
+        setTimeout(wsConnect, reconnectDelay);
+        reconnectDelay = Math.min(reconnectDelay * 1.5, MAX_RECONNECT);
+      };
+
+      ws.onerror = () => {
+        ws.close();
+      };
+    }
+
+    function wsSend(obj) {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify(obj));
+      }
+    }
+
+    // =========================================================================
+    // Message Handler
+    // =========================================================================
+    function handleMessage(msg) {
+      switch (msg.t) {
+        case 'd':
+          handleData(msg);
+          break;
+        case 'ack':
+          handleAck(msg);
+          break;
+        case 'status':
+          handleStatus(msg);
+          break;
+        case 'info':
+          handleInfo(msg);
+          break;
+      }
+    }
+
+    function handleData(msg) {
+      packetCount++;
+      $id('st-packets').textContent = packetCount;
+
+      const mode = msg.m || 'pid';
+
+      if (mode === 'step') {
+        $id('st-distance').textContent = msg.d.toFixed(1) + ' cm';
+        $id('st-output').textContent = 'PWM ' + msg.pwm;
+
+        if (chartMode === 'step') {
+          const tSec = msg.ts / 1000;
+          chartData[0].push(tSec);
+          chartData[1].push(msg.d);
+          chartData[2].push(msg.applied);
+          if (chartData[0].length > MAX_POINTS) {
+            for (let i = 0; i < chartData.length; i++) chartData[i] = chartData[i].slice(-MAX_POINTS);
+          }
+          if (plot) plot.setData(chartData);
+        }
+      }
+      else if (mode === 'deadband') {
+        $id('st-distance').textContent = msg.d.toFixed(1) + ' cm';
+        $id('st-output').textContent = 'PWM ' + msg.pwm;
+
+        if (chartMode === 'deadband') {
+          const tSec = msg.ts / 1000;
+          chartData[0].push(tSec);
+          chartData[1].push(msg.pwm);
+          chartData[2].push(msg.d);
+          chartData[3].push(msg.d0);
+          if (chartData[0].length > MAX_POINTS) {
+            for (let i = 0; i < chartData.length; i++) chartData[i] = chartData[i].slice(-MAX_POINTS);
+          }
+          if (plot) plot.setData(chartData);
+        }
+      }
+      else {
+        // PID mode
+        $id('st-distance').textContent = msg.d.toFixed(1) + ' cm';
+        $id('st-output').textContent = msg.u.toFixed(0);
+
+        if (chartMode === 'pid') {
+          const tSec = msg.ts / 1000;
+          chartData[0].push(tSec);
+          chartData[1].push(msg.d);
+          chartData[2].push(msg.r);
+          chartData[3].push(msg.e);
+          if (chartData[0].length > MAX_POINTS) {
+            for (let i = 0; i < chartData.length; i++) chartData[i] = chartData[i].slice(-MAX_POINTS);
+          }
+          if (plot) plot.setData(chartData);
+        }
+      }
+    }
+
+    function handleAck(msg) {
+      const c = msg.c;
+      const v = msg.v;
+
+      switch (c) {
+        // PID params
+        case 'kp':
+          $id('conf-kp').textContent = v.toFixed(1);
+          kpSlider.value = v;
+          kpVal.textContent = v.toFixed(2);
+          break;
+        case 'ki':
+          $id('conf-ki').textContent = v.toFixed(1);
+          kiSlider.value = v;
+          kiVal.textContent = v.toFixed(2);
+          break;
+        case 'kd':
+          $id('conf-kd').textContent = v.toFixed(1);
+          kdSlider.value = v;
+          kdVal.textContent = v.toFixed(2);
+          break;
+        case 'ref':
+          $id('conf-ref').textContent = v.toFixed(1);
+          refSlider.value = v;
+          refVal.innerHTML = v.toFixed(1) + ' <span class="ref-unit">cm</span>';
+          break;
+        case 'deadband':
+          $id('conf-db').textContent = v.toFixed(0);
+          dbSlider.value = v;
+          dbVal.textContent = v.toFixed(0);
+          break;
+        // Step params
+        case 'step_amp':
+          stepAmpSlider.value = v;
+          stepAmpVal.innerHTML = v.toFixed(1) + ' <span class="ref-unit">V</span>';
+          break;
+        case 'step_time':
+          stepTimeSlider.value = v;
+          stepTimeVal.innerHTML = v.toFixed(1) + ' <span class="ref-unit">s</span>';
+          break;
+        case 'step_dir':
+          $id('step-dir-fwd').classList.toggle('active', v === 1);
+          $id('step-dir-rev').classList.toggle('active', v === 0);
+          break;
+        case 'vbatt':
+          stepVbattSlider.value = v;
+          stepVbattVal.innerHTML = v.toFixed(1) + ' <span class="ref-unit">V</span>';
+          stepAmpSlider.max = v;
+          break;
+        // Deadband params
+        case 'db_dir':
+          $id('db-dir-fwd').classList.toggle('active', v === 1);
+          $id('db-dir-rev').classList.toggle('active', v === 0);
+          break;
+        case 'db_threshold':
+          dbThreshSlider.value = v;
+          dbThreshVal.innerHTML = v.toFixed(2) + ' <span class="ref-unit">cm</span>';
+          break;
+        case 'db_result':
+          $id('db-result-val').textContent = v > 0 ? v.toFixed(0) : '--';
+          $id('btn-db-apply').disabled = (v <= 0);
+          break;
+      }
+    }
+
+    function handleStatus(msg) {
+      experimentActive = msg.active;
+      const el = $id('st-active');
+      if (msg.active) {
+        el.textContent = msg.mode.toUpperCase();
+        el.className = 'status-val active';
+        el.removeAttribute('data-i18n');
+        btnStart.disabled = true;
+        btnStop.disabled = false;
+      } else {
+        el.textContent = T('idle');
+        el.setAttribute('data-i18n', 'idle');
+        el.className = 'status-val idle';
+        btnStart.disabled = false;
+        btnStop.disabled = true;
+      }
+    }
+
+    function handleInfo(msg) {
+      trainName.textContent = 'TrenCE-' + msg.id;
+      fwBadge.textContent = 'fw ' + msg.fw;
+      document.title = 'TrenCE-' + msg.id;
+    }
+
+    // =========================================================================
+    // Commands
+    // =========================================================================
+    function cmdStart() {
+      // Clear chart
+      resetChartData();
+      packetCount = 0;
+      $id('st-packets').textContent = '0';
+      if (plot) plot.setData(chartData);
+
+      // Ensure chart matches selected mode
+      if (chartMode !== selectedMode) {
+        rebuildChart(selectedMode);
+      }
+
+      wsSend({t:'cmd', c:'start', m: selectedMode});
+    }
+
+    function cmdStop() {
+      wsSend({t:'cmd', c:'stop'});
+    }
+
+    function setStepDir(dir) {
+      $id('step-dir-fwd').classList.toggle('active', dir === 1);
+      $id('step-dir-rev').classList.toggle('active', dir === 0);
+      wsSend({t:'cmd', c:'step_dir', v: dir});
+    }
+
+    function setDbDir(dir) {
+      $id('db-dir-fwd').classList.toggle('active', dir === 1);
+      $id('db-dir-rev').classList.toggle('active', dir === 0);
+      wsSend({t:'cmd', c:'db_dir', v: dir});
+    }
+
+    function applyDeadband() {
+      wsSend({t:'cmd', c:'db_apply'});
+    }
+
+    // =========================================================================
+    // Sliders
+    // =========================================================================
+    function setupSlider(slider, display, cmd, fmt) {
+      slider.addEventListener('input', () => {
+        display.innerHTML = fmt(parseFloat(slider.value));
+      });
+      slider.addEventListener('change', () => {
+        wsSend({t:'cmd', c:cmd, v: parseFloat(slider.value)});
+      });
+    }
+
+    const fmt2 = (v) => v.toFixed(2);
+    const fmtV = (v) => v.toFixed(1) + ' <span class="ref-unit">V</span>';
+    const fmtS = (v) => v.toFixed(1) + ' <span class="ref-unit">s</span>';
+    const fmtCm = (v) => v.toFixed(1) + ' <span class="ref-unit">cm</span>';
+    const fmtCm2 = (v) => v.toFixed(2) + ' <span class="ref-unit">cm</span>';
+    const fmtInt = (v) => v.toFixed(0);
+
+    // PID sliders
+    setupSlider(kpSlider, kpVal, 'kp', fmt2);
+    setupSlider(kiSlider, kiVal, 'ki', fmt2);
+    setupSlider(kdSlider, kdVal, 'kd', fmt2);
+    setupSlider(refSlider, refVal, 'ref', fmtCm);
+    setupSlider(dbSlider, dbVal, 'deadband', fmtInt);
+
+    // Step sliders
+    setupSlider(stepAmpSlider, stepAmpVal, 'step_amp', fmtV);
+    setupSlider(stepTimeSlider, stepTimeVal, 'step_time', fmtS);
+    setupSlider(stepVbattSlider, stepVbattVal, 'vbatt', fmtV);
+
+    // Deadband threshold slider
+    setupSlider(dbThreshSlider, dbThreshVal, 'db_threshold', fmtCm2);
+
+    // =========================================================================
+    // Chart Setup (uPlot)
+    // =========================================================================
+    function getAxisCommon() {
+      const dark = currentTheme !== 'light';
+      return {
+        stroke: dark ? '#64748b' : '#475569',
+        grid: { stroke: dark ? 'rgba(100,116,139,0.15)' : 'rgba(71,85,105,0.2)', width: 1 },
+        ticks: { stroke: dark ? 'rgba(100,116,139,0.3)' : 'rgba(71,85,105,0.4)', width: 1 },
+        font: '11px -apple-system, sans-serif'
+      };
+    }
+
+    function getChartConfigs() {
+      return {
+        pid: {
+          title: T('chart_pid'),
+          data: () => [[], [], [], []],
+          series: [
+            {},
+            { label: T('s_distance'), stroke: '#ef4444', width: 2, fill: 'rgba(239,68,68,0.08)' },
+            { label: T('s_reference'), stroke: '#3b82f6', width: 2, dash: [6, 4] },
+            { label: T('s_error'), stroke: '#a855f7', width: 1.5, dash: [3, 3] }
+          ],
+          yValues: (u, vals) => vals.map(v => v.toFixed(0))
+        },
+        step: {
+          title: T('chart_step'),
+          data: () => [[], [], []],
+          series: [
+            {},
+            { label: T('s_distance'), stroke: '#ef4444', width: 2, fill: 'rgba(239,68,68,0.08)' },
+            { label: T('s_applied'), stroke: '#f59e0b', width: 2, dash: [6, 4] }
+          ],
+          yValues: (u, vals) => vals.map(v => v.toFixed(1))
+        },
+        deadband: {
+          title: T('chart_deadband'),
+          data: () => [[], [], [], []],
+          series: [
+            {},
+            { label: T('s_pwm'), stroke: '#f59e0b', width: 2 },
+            { label: T('s_distance'), stroke: '#ef4444', width: 2 },
+            { label: T('s_baseline'), stroke: '#3b82f6', width: 1.5, dash: [6, 4] }
+          ],
+          yValues: (u, vals) => vals.map(v => v.toFixed(0))
+        }
+      };
+    }
+
+    function resetChartData() {
+      const cfgs = getChartConfigs();
+      const cfg = cfgs[chartMode] || cfgs.pid;
+      chartData = cfg.data();
+    }
+
+    function rebuildChart(mode) {
+      chartMode = mode;
+      const container = $id('chart-container');
+      const cfg = getChartConfigs()[mode];
+
+      // Update title
+      $id('chart-title').textContent = cfg.title;
+
+      // Destroy old chart
+      if (plot) {
+        plot.destroy();
+        plot = null;
+      }
+
+      chartData = cfg.data();
+
+      const opts = {
+        width: container.clientWidth,
+        height: 250,
+        cursor: { show: false },
+        select: { show: false },
+        legend: { show: true },
+        scales: {
+          x: { time: false },
+          y: {}
+        },
+        axes: [
+          { ...getAxisCommon(), values: (u, vals) => vals.map(v => v.toFixed(1) + 's') },
+          { ...getAxisCommon(), values: cfg.yValues }
+        ],
+        series: cfg.series
+      };
+
+      plot = new uPlot(opts, chartData, container);
+    }
+
+    // Resize chart on orientation change
+    window.addEventListener('resize', () => {
+      if (plot) {
+        const container = $id('chart-container');
+        plot.setSize({ width: container.clientWidth, height: 250 });
+      }
+    });
+
+    // =========================================================================
+    // Export Functions
+    // =========================================================================
+    function getCSVHeaders() {
+      switch (chartMode) {
+        case 'step':   return 'time_s,distance_cm,applied_V';
+        case 'deadband': return 'time_s,pwm,distance_cm,baseline_cm';
+        default:       return 'time_s,distance_cm,reference_cm,error_cm';
+      }
+    }
+
+    function exportCSV() {
+      if (!chartData[0] || chartData[0].length === 0) return;
+
+      const headers = getCSVHeaders();
+      let csv = headers + '\n';
+
+      for (let i = 0; i < chartData[0].length; i++) {
+        const row = chartData.map(col => col[i] != null ? col[i] : '');
+        csv += row.join(',') + '\n';
+      }
+
+      const now = new Date();
+      const ts = now.toISOString().slice(0,19).replace(/[T:]/g, '-');
+      const filename = chartMode + '_' + ts + '.csv';
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function exportPlot() {
+      if (!plot) return;
+
+      const canvas = plot.root.querySelector('canvas');
+      if (!canvas) return;
+
+      // Create a new canvas with white background for better visibility
+      const expCanvas = document.createElement('canvas');
+      expCanvas.width = canvas.width;
+      expCanvas.height = canvas.height;
+      const ctx = expCanvas.getContext('2d');
+      ctx.fillStyle = currentTheme === 'light' ? '#f1f5f9' : '#0f172a';
+      ctx.fillRect(0, 0, expCanvas.width, expCanvas.height);
+      ctx.drawImage(canvas, 0, 0);
+
+      const now = new Date();
+      const ts = now.toISOString().slice(0,19).replace(/[T:]/g, '-');
+      const filename = chartMode + '_' + ts + '.png';
+
+      const url = expCanvas.toDataURL('image/png');
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+    }
+
+    // =========================================================================
+    // Init
+    // =========================================================================
+    document.addEventListener('DOMContentLoaded', () => {
+      setTheme(currentTheme);
+      applyLang();
+      refreshPresetList();
+      rebuildChart('pid');
+      wsConnect();
+      btnStop.disabled = true;
+    });
+  </script>
+</body>
+</html>
