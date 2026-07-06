@@ -246,3 +246,18 @@ Reducing the timing budget to 20 ms increases noise by ~28% — not worth it for
 ## License & Credits
 
 Built for UAI's MIN215 control systems course. Firmware version: `2.2-mobile`.
+
+## v2.4.2 — step-mode brake phase
+
+The step-response experiment gains an optional stop phase, configured over the
+WebSocket before `start` (backward compatible; default is the legacy stop):
+
+| Command | Values | Meaning |
+|---------|--------|---------|
+| `brk_mode` | 0 / 1 / 2 | 0 = legacy stop (TB6612 short brake), 1 = coast (outputs high-Z), 2 = opposite-direction torque |
+| `brk_pwm`  | 0–1023   | torque for `brk_mode` 2 (`brk_pwm` 0 = short brake with telemetry) |
+| `brk_ms`   | seconds  | brake-phase duration (max 5 s) |
+
+Telemetry keeps streaming through the brake phase (`dir` reports the live motor
+direction), which makes matched-speed stopping-distance comparisons per direction
+possible — the diagnostic that separates drivetrain, driver, and sensing effects.

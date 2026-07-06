@@ -73,7 +73,7 @@
 // =============================================================================
 // Firmware Version
 // =============================================================================
-#define FW_VERSION "2.4.1-mobile"   // 2.4.1: 6-tap sensor MA (noise-band fix)
+#define FW_VERSION "2.4.2-mobile"   // 2.4.2: step-mode brake phase (coast/short-brake/reverse-torque stop options)
 
 // =============================================================================
 // EEPROM Configuration Storage
@@ -221,6 +221,14 @@ const int STEP_BASELINE_SAMPLES = 3;
 int stepWarmupCounter = 0;
 int stepBaselineCounter = 0;
 double appliedStepValue = 0.0;
+// Optional brake phase after the drive window (direction-asymmetry diagnostics).
+// 0 = none (legacy stop = TB6612 short brake at PWM 0), 1 = coast (high-Z),
+// 2 = opposite torque at BrakePwm. Duration BrakeMs, then normal stop.
+int BrakeMode = 0;
+int BrakePwm = 400;
+uint32_t BrakeMs = 800;
+bool stepBraking = false;
+uint32_t brakeUntil = 0;
 
 // =============================================================================
 // Deadband Calibration Mode Variables
@@ -658,6 +666,24 @@ void ws_parse_command(const char *json_str, size_t json_len, AsyncWebSocketClien
     Serial.printf(" = %s\n", StepMotorDirection ? "Forward" : "Reverse");
     ws_send_ack(client, "step_dir", (double)StepMotorDirection);
   }
+  else if (strcmp(cmd, "brk_mode") == 0) {
+    int val = doc["v"];
+    BrakeMode = constrain(val, 0, 2);
+    Serial.printf(" = %d (0=stop 1=coast 2=reverse)\n", BrakeMode);
+    ws_send_ack(client, "brk_mode", (double)BrakeMode);
+  }
+  else if (strcmp(cmd, "brk_pwm") == 0) {
+    int val = doc["v"];
+    BrakePwm = constrain(val, 0, 1023);
+    Serial.printf(" = %d\n", BrakePwm);
+    ws_send_ack(client, "brk_pwm", (double)BrakePwm);
+  }
+  else if (strcmp(cmd, "brk_ms") == 0) {
+    double val = doc["v"];
+    BrakeMs = constrain((uint32_t)(val * 1000), 0, 5000);
+    Serial.printf(" = %d ms\n", BrakeMs);
+    ws_send_ack(client, "brk_ms", BrakeMs / 1000.0);
+  }
   else if (strcmp(cmd, "vbatt") == 0) {
     double val = constrain((double)doc["v"], 0.0, 12.0);
     set_shared_double(&v_batt, val);
@@ -757,7 +783,7 @@ void ws_send_step_data() {
   doc["m"] = "step";
   doc["ts"] = ts;
   doc["d"] = round(medi * 100.0) / 100.0;
-  doc["dir"] = StepMotorDirection;
+  doc["dir"] = MotorDirection;   // live direction, so the brake phase is visible
   doc["vb"] = vb;
   doc["amp"] = amp;
   doc["pwm"] = MotorSpeed;
@@ -1171,6 +1197,7 @@ void loop_step_experiment() {
     stepWarmupCounter = 0;
     stepBaselineCounter = 0;
     appliedStepValue = 0.0;
+    stepBraking = false;
     ws_packet_count = 0;
     step_next_tick = millis();
     last_fresh_ms = millis();
@@ -1181,6 +1208,26 @@ void loop_step_experiment() {
   uint32_t now = millis();
   if ((int32_t)(now - step_next_tick) < 0) return;
   step_next_tick += STEP_TICK_MS;
+
+  // Brake phase (replaces the normal stop when BrakeMode > 0): apply the
+  // configured stop mode for BrakeMs, streaming telemetry, then stop.
+  if (stepBraking) {
+    if (BrakeMode == 1) {
+      MotorSpeed = 0;
+      MotorCoast();
+    } else {
+      MotorDirection = !StepMotorDirection;
+      MotorSpeed = BrakePwm;
+      SetMotorControl();
+    }
+    ws_send_step_data();
+    if ((int32_t)(now - brakeUntil) >= 0) {
+      Serial.println("[STEP] Brake phase complete");
+      stop_experiment("step complete");
+      ws_send_status_all();
+    }
+    return;
+  }
 
   // Three-phase: WARMUP -> BASELINE -> STEP APPLIED
   if (stepWarmupCounter < STEP_WARMUP_SAMPLES) {
@@ -1221,6 +1268,13 @@ void loop_step_experiment() {
   ws_send_step_data();
 
   if (StepTime > 0 && (int32_t)(now - StepTime) >= 0) {
+    if (BrakeMode > 0) {
+      stepBraking = true;
+      brakeUntil = now + BrakeMs;
+      appliedStepValue = 0.0;
+      Serial.printf("[STEP] Brake phase: mode %d, pwm %d, %u ms\n", BrakeMode, BrakePwm, BrakeMs);
+      return;
+    }
     Serial.println("[STEP] Experiment complete");
     stop_experiment("step complete");
     ws_send_status_all();
@@ -1432,6 +1486,14 @@ void SetMotorControl() {
 
   int pwm_value = constrain(MotorSpeed, 0, 1023);
   ledcWrite(Control_v, pwm_value);
+}
+
+// TB6612: IN1=IN2=LOW with PWM high puts the outputs in high impedance
+// (freewheel). Contrast with PWM=0 in a drive configuration = short brake.
+void MotorCoast() {
+  digitalWrite(Control_fwd, LOW);
+  digitalWrite(Control_back, LOW);
+  ledcWrite(Control_v, 1023);
 }
 
 // =============================================================================
