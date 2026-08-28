@@ -46,3 +46,16 @@ The .zip file used for producing the PCBs can be found [here](/Hardware/Producti
 
 # 3d Step file
 [3d Step File](/Hardware/Kicad/PL_Toon_3D.step)
+
+# 3d Printed Parts
+The 3MF models for the printed train parts can be found [here](/Hardware/3D_Printed_Parts).
+
+The chassis is made of two parts, a front one and a rear one. Each of them comes in two versions: the file ending in `_IMPRIMIR` holds a single copy of the part, and the one ending in `_DUPLICADAx8` is a plate with 8 copies already arranged for printing a full batch.
+
+| File | Description |
+| --- | --- |
+| [PIEZA_FRONTAL_TREN_IMPRIMIR.3mf](/Hardware/3D_Printed_Parts/PIEZA_FRONTAL_TREN_IMPRIMIR.3mf) | Front chassis part, single copy |
+| [PIEZA_FRONTAL_TREN_DUPLICADAx8.3mf](/Hardware/3D_Printed_Parts/PIEZA_FRONTAL_TREN_DUPLICADAx8.3mf) | Front chassis part, plate with 8 copies |
+| [PIEZA_POSTERIOR_TREN_IMPRIMIR.3mf](/Hardware/3D_Printed_Parts/PIEZA_POSTERIOR_TREN_IMPRIMIR.3mf) | Rear chassis part, single copy |
+| [PIEZA_POSTERIOR_TREN_DUPLICADAx8.3mf](/Hardware/3D_Printed_Parts/PIEZA_POSTERIOR_TREN_DUPLICADAx8.3mf) | Rear chassis part, plate with 8 copies |
+| [Arandela_trencito.3mf](/Hardware/3D_Printed_Parts/Arandela_trencito.3mf) | Washer, single copy |
