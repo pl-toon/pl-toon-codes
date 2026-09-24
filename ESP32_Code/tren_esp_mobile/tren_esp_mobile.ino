@@ -44,6 +44,9 @@
  * - ESP→Phone data (PID):      {"t":"d","m":"pid","ts":1234,"d":15.2,"r":10.0,"e":-5.2,"kp":2.5,"ki":0.8,"kd":1.2,"u":127}
  * - ESP→Phone data (Step):     {"t":"d","m":"step","ts":1234,"d":15.2,"pwm":100,"amp":0.5,"dir":1}
  * - ESP→Phone data (Deadband): {"t":"d","m":"deadband","ts":1234,"d":15.2,"pwm":50,"d0":15.0,"motion":0}
+ * - Every "t":"d" frame also carries "seq": a per-boot monotonic uint32,
+ *   incremented once per frame sent (v2.5; lets the dashboard count
+ *   server-side frame drops within one connected stretch)
  * - Phone→ESP cmd:             {"t":"cmd","c":"kp","v":2.5}
  * - Phone→ESP start:           {"t":"cmd","c":"start","m":"pid"}
  * - ESP→Phone ack:             {"t":"ack","c":"kp","v":2.5}
@@ -73,7 +76,7 @@
 // =============================================================================
 // Firmware Version
 // =============================================================================
-#define FW_VERSION "2.4.2-mobile"   // 2.4.2: step-mode brake phase (coast/short-brake/reverse-torque stop options)
+#define FW_VERSION "2.5.0-mobile"   // 2.5.0: "seq" field in every data frame (link-quality logging); 2.4.2: step-mode brake phase
 
 // =============================================================================
 // EEPROM Configuration Storage
@@ -120,6 +123,10 @@ const byte DNS_PORT = 53;
 // WebSocket state
 bool ws_client_connected = false;
 uint32_t ws_packet_count = 0;
+// Per-boot monotonic sequence number, incremented once per data frame sent
+// (never reset between experiments; the dashboard uses gaps to count
+// server-side frame drops). Only touched from loop() context.
+uint32_t ws_seq = 0;
 
 // =============================================================================
 // Cross-core command / parameter handoff
@@ -762,8 +769,9 @@ void ws_send_pid_data() {
   doc["u"] = round(u_distancia * 10.0) / 10.0;
   doc["pwm"] = MotorSpeed;
   doc["dir"] = PIDMotorDirection;
+  doc["seq"] = ws_seq++;
 
-  char buffer[256];
+  char buffer[320];
   size_t len = serializeJson(doc, buffer);
   ws.textAll(buffer, len);
   ws_packet_count++;
@@ -788,8 +796,9 @@ void ws_send_step_data() {
   doc["amp"] = amp;
   doc["pwm"] = MotorSpeed;
   doc["applied"] = appliedStepValue;
+  doc["seq"] = ws_seq++;
 
-  char buffer[256];
+  char buffer[320];
   size_t len = serializeJson(doc, buffer);
   ws.textAll(buffer, len);
   ws_packet_count++;
@@ -808,8 +817,9 @@ void ws_send_deadband_data() {
   doc["d"] = round(medi * 100.0) / 100.0;
   doc["d0"] = round(initial_distance * 100.0) / 100.0;
   doc["motion"] = motion_detected ? 1 : 0;
+  doc["seq"] = ws_seq++;
 
-  char buffer[256];
+  char buffer[320];
   size_t len = serializeJson(doc, buffer);
   ws.textAll(buffer, len);
   ws_packet_count++;

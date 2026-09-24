@@ -778,6 +778,10 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
       <span data-i18n="save_plot">Save Plot</span>
     </button>
+    <button class="btn btn-export" id="btn-evlog" onclick="exportEventLog()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+      <span data-i18n="export_log">Export log</span>
+    </button>
   </div>
 
   <!-- Status -->
@@ -892,6 +896,134 @@
     let chartMode = 'pid';  // tracks which chart is currently shown
 
     // =========================================================================
+    // Session event log (link-quality study). Timestamped records of mode
+    // switches, parameter changes, start/stop, exports, WS connect/disconnect,
+    // periodic RTT samples and telemetry seq gaps. Persisted to localStorage
+    // (throttled) so a closed tab does not lose it; exported as a second CSV
+    // ("Exportar registro"). Column schema frozen for the term.
+    // NOTE: every train serves from http://192.168.4.1, so localStorage is ONE
+    // origin shared across all trains; the 'info' events (train id + fw) are
+    // what lets the analyst split a log from a phone that changed trains.
+    // =========================================================================
+    const EVENT_SCHEMA_VERSION = 1;
+    const EVLOG_KEY = 'tren_eventlog_v1';
+    const EVLOG_MAX = 20000;       // hard cap (~2 MB persisted worst case)
+    const AUTO_RTT_MS = 30000;     // automatic RTT sample period
+    let eventLog = [];             // row objects, see logEvent()
+    let evDirty = false;           // unpersisted entries exist
+    let evExported = true;         // no unexported entries yet
+    let connEpoch = 0;             // increments on every WS open
+    let lastSent = {};             // last commanded/acked value per cmd key
+    let seqLast = null;            // last telemetry seq in this connected stretch
+    let seqRx = 0, seqDrop = 0;    // cumulative frames received / dropped
+    let seqGapLastLog = 0;         // throttles seq_gap rows to <= 1/s
+    let trainId = '', fwVersion = '';
+    let probeSend = false;         // true while wsSend() carries an RTT probe
+    let autoRttPending = null;     // performance.now() of in-flight auto probe
+    let lastAckedRef = null;       // last 'ref' value acked by the ESP32
+
+    function logEvent(event, key, oldV, newV, rtt) {
+      eventLog.push({
+        w: new Date().toISOString(),
+        t: Math.round(performance.now()),
+        c: connEpoch,
+        e: event,
+        k: key == null ? '' : String(key),
+        o: oldV == null ? '' : String(oldV),
+        n: newV == null ? '' : String(newV),
+        rx: seqRx, dr: seqDrop,
+        rtt: rtt == null ? '' : rtt.toFixed(1)
+      });
+      if (eventLog.length > EVLOG_MAX) {
+        eventLog.splice(0, eventLog.length - EVLOG_MAX);
+        eventLog[0].e = 'log_truncated';  // overwrite oldest surviving row's tag
+      }
+      evDirty = true;
+      evExported = false;
+    }
+
+    function evPersist() {
+      try {
+        localStorage.setItem(EVLOG_KEY, JSON.stringify({
+          v: EVENT_SCHEMA_VERSION, exported: evExported,
+          train: trainId, fw: fwVersion, entries: eventLog
+        }));
+        evDirty = false;
+      } catch (e) { /* storage full or blocked: log lives in memory only */ }
+    }
+
+    function evRestore() {
+      let restored = false;
+      try {
+        const st = JSON.parse(localStorage.getItem(EVLOG_KEY));
+        if (st && st.v === EVENT_SCHEMA_VERSION && !st.exported &&
+            Array.isArray(st.entries) && st.entries.length) {
+          eventLog = st.entries;
+          trainId = st.train || '';
+          fwVersion = st.fw || '';
+          // Keep the frame counters cumulative across a reload
+          const lastRow = st.entries[st.entries.length - 1];
+          seqRx = lastRow.rx || 0;
+          seqDrop = lastRow.dr || 0;
+          restored = true;
+        }
+      } catch (e) {}
+      logEvent(restored ? 'page_reload' : 'page_load', 'dashboard_schema', '', EVENT_SCHEMA_VERSION);
+    }
+
+    setInterval(() => { if (evDirty) evPersist(); }, 5000);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') evPersist();
+    });
+    window.addEventListener('pagehide', evPersist);
+
+    // Header comment lines stamped into every exported CSV. The device 'ts'
+    // is relative to boot/experiment start; the wall-clock line orders
+    // sessions across groups.
+    function metaHeader() {
+      return '# train_id: ' + (trainId || 'unknown') + '\n' +
+             '# fw: ' + (fwVersion || 'unknown') + '\n' +
+             '# dashboard_schema: ' + EVENT_SCHEMA_VERSION + '\n' +
+             '# exported_at: ' + new Date().toISOString() + '\n';
+    }
+
+    function csvEsc(s) {
+      s = String(s);
+      return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    }
+
+    function exportEventLog(copyOnly) {
+      logEvent('export', 'event_csv');
+      let csv = metaHeader() +
+        'idx,wall_time_iso,session_ms,conn,event,key,old_value,new_value,frames_rx,frames_dropped,rtt_ms\n';
+      eventLog.forEach((r, i) => {
+        csv += [i, r.w, r.t, r.c, r.e, csvEsc(r.k), csvEsc(r.o), csvEsc(r.n),
+                r.rx, r.dr, r.rtt].join(',') + '\n';
+      });
+      evExported = true;
+      evPersist();
+      const ts = new Date().toISOString().slice(0,19).replace(/[T:]/g, '-');
+      openExport(csv, 'registro_' + (trainId || 'tren') + '_' + ts + '.csv', copyOnly);
+    }
+
+    // One automatic RTT sample every AUTO_RTT_MS: re-send the last ACKED
+    // reference (a no-op the firmware acknowledges) and time the round trip
+    // to its 'ref' ack. Separate pending state from the manual run so the
+    // two never mix. Skipped while a manual run is in flight.
+    function autoRttProbe() {
+      if (autoRttPending !== null && performance.now() - autoRttPending > 10000) {
+        autoRttPending = null;   // probe lost (dropped frame): discard
+      }
+      if (!connected || rttPending !== null || autoRttPending !== null) return;
+      if (lastAckedRef == null) return;
+      autoRttPending = performance.now();
+      probeSend = true;
+      wsSend({t:'cmd', c:'ref', v: lastAckedRef});
+      probeSend = false;
+    }
+    setInterval(autoRttProbe, AUTO_RTT_MS);
+
+    // =========================================================================
     // Translations (EN / ES)
     // =========================================================================
     let currentLang = localStorage.getItem('tren_lang') || 'en';
@@ -935,7 +1067,7 @@
         // Export
         copy_csv: 'Copy CSV', copy_data: 'Copy data', copied: 'Copied!',
         copy_manual: 'Select the text above and copy', export_title: 'Export data',
-        export_close: 'Close',
+        export_close: 'Close', export_log: 'Export log',
         export_hint: 'To save a .csv file, open this page in your phone browser (not the WiFi sign-in screen).',
         // Footer
         footer: 'TrenCE Mobile Dashboard v2.2 &middot; UAI SIMU'
@@ -966,7 +1098,7 @@
         lat_running: 'Midiendo...',
         copy_csv: 'Copiar CSV', copy_data: 'Copiar datos', copied: '¡Copiado!',
         copy_manual: 'Selecciona el texto de arriba y cópialo', export_title: 'Exportar datos',
-        export_close: 'Cerrar',
+        export_close: 'Cerrar', export_log: 'Exportar registro',
         export_hint: 'Para guardar un archivo .csv, abre esta página en el navegador del teléfono (no en la pantalla de inicio de sesión de WiFi).',
         footer: 'TrenCE Panel M\u00f3vil v2.2 &middot; UAI SIMU'
       }
@@ -1144,6 +1276,7 @@
     // =========================================================================
     function selectMode(mode) {
       if (experimentActive) return;  // Don't switch while running
+      if (mode !== selectedMode) logEvent('mode_switch', 'mode', selectedMode, mode);
       selectedMode = mode;
 
       // Update tab buttons
@@ -1176,6 +1309,10 @@
       ws.onopen = () => {
         connected = true;
         reconnectDelay = 1000;
+        connEpoch++;
+        seqLast = null;         // reconnect: first seq received is the new gap baseline
+        autoRttPending = null;  // the params burst below emits a 'ref' ack; don't mis-time it
+        logEvent('ws_connect', 'conn', '', connEpoch);
         connLed.classList.add('connected');
         overlay.classList.remove('visible');
         wsSend({t:'cmd', c:'params'});
@@ -1191,6 +1328,11 @@
       };
 
       ws.onclose = () => {
+        if (connected) {  // log real disconnects, not failed reconnect attempts
+          logEvent('ws_disconnect', 'conn', connEpoch, '');
+          evPersist();
+        }
+        autoRttPending = null;
         connected = false;
         connLed.classList.remove('connected');
         overlay.classList.add('visible');
@@ -1205,7 +1347,24 @@
     }
 
     function wsSend(obj) {
-      if (ws && ws.readyState === WebSocket.OPEN) {
+      const open = ws && ws.readyState === WebSocket.OPEN;
+      // Event log: every user command passes through here. RTT probes
+      // (probeSend) and the bulk 'params' request are not user actions.
+      if (obj.t === 'cmd' && obj.c !== 'params' && !probeSend) {
+        const off = open ? '' : '_offline';
+        if (obj.c === 'start') {
+          logEvent('start' + off, 'mode', '', obj.m);
+        } else if (obj.c === 'stop') {
+          logEvent('stop' + off);
+        } else if (obj.c === 'db_apply') {
+          logEvent('param_change' + off, 'db_apply', '', '');
+        } else {
+          const old = (obj.c in lastSent) ? lastSent[obj.c] : '';
+          logEvent('param_change' + off, obj.c, old, obj.v);
+          lastSent[obj.c] = obj.v;
+        }
+      }
+      if (open) {
         ws.send(JSON.stringify(obj));
       }
     }
@@ -1233,6 +1392,30 @@
     function handleData(msg) {
       packetCount++;
       $id('st-packets').textContent = packetCount;
+
+      // Telemetry sequence tracking (fw >= 2.5.0). Gaps are counted only
+      // within one connected stretch: ws.onopen resets seqLast, so the first
+      // frame after a reconnect is the new baseline, never a mass drop.
+      if (msg.seq != null) {
+        seqRx++;
+        if (seqLast !== null) {
+          if (msg.seq > seqLast + 1) {
+            seqDrop += msg.seq - seqLast - 1;
+            // At most one seq_gap row per second: sustained loss at 20 Hz
+            // would otherwise flood the log; frames_dropped deltas between
+            // rows still give the per-second loss.
+            const nowMs = performance.now();
+            if (nowMs - seqGapLastLog >= 1000) {
+              seqGapLastLog = nowMs;
+              logEvent('seq_gap', 'seq', seqLast, msg.seq);
+            }
+          } else if (msg.seq <= seqLast) {
+            // seq went backwards without a reconnect: firmware rebooted
+            logEvent('seq_reset', 'seq', seqLast, msg.seq);
+          }
+        }
+        seqLast = msg.seq;
+      }
 
       const mode = msg.m || 'pid';
 
@@ -1289,6 +1472,11 @@
     function handleAck(msg) {
       const c = msg.c;
       const v = msg.v;
+
+      // Track acked values so param_change entries have accurate old values
+      // even after a reload/reconnect (db_result is a result, not a param).
+      if (c !== 'db_result') lastSent[c] = v;
+      if (c === 'ref') lastAckedRef = v;
 
       switch (c) {
         // PID params
@@ -1353,6 +1541,11 @@
     }
 
     function handleStatus(msg) {
+      // Log ESP-side transitions: step mode auto-stops without a user 'stop',
+      // and this also records safety stops after a disconnect.
+      if (msg.active !== experimentActive) {
+        logEvent(msg.active ? 'exp_active' : 'exp_idle', 'mode', '', msg.mode);
+      }
       experimentActive = msg.active;
       const el = $id('st-active');
       if (msg.active) {
@@ -1371,6 +1564,12 @@
     }
 
     function handleInfo(msg) {
+      // Log the identity even when unchanged: localStorage is shared across
+      // trains (same origin), so these entries let the analyst split a log
+      // from a phone that moved between trains.
+      logEvent('info', 'train', trainId + ' ' + fwVersion, msg.id + ' ' + msg.fw);
+      trainId = msg.id;
+      fwVersion = msg.fw;
       trainName.textContent = 'TrenCE-' + msg.id;
       fwBadge.textContent = 'fw ' + msg.fw;
       document.title = 'TrenCE-' + msg.id;
@@ -1563,7 +1762,7 @@
       if (!chartData[0] || chartData[0].length === 0) return;
 
       const headers = getCSVHeaders();
-      let csv = headers + '\n';
+      let csv = metaHeader() + headers + '\n';
 
       for (let i = 0; i < chartData[0].length; i++) {
         const row = chartData.map(col => col[i] != null ? col[i] : '');
@@ -1572,7 +1771,9 @@
 
       const now = new Date();
       const ts = now.toISOString().slice(0,19).replace(/[T:]/g, '-');
-      openExport(csv, chartMode + '_' + ts + '.csv', copyOnly);
+      const filename = chartMode + '_' + ts + '.csv';
+      logEvent('export', copyOnly ? 'run_csv_copy' : 'run_csv', '', filename);
+      openExport(csv, filename, copyOnly);
     }
 
     function exportPlot() {
@@ -1593,6 +1794,7 @@
       const now = new Date();
       const ts = now.toISOString().slice(0,19).replace(/[T:]/g, '-');
       const filename = chartMode + '_' + ts + '.png';
+      logEvent('export', 'plot_png', '', filename);
 
       const url = expCanvas.toDataURL('image/png');
       const a = document.createElement('a');
@@ -1678,19 +1880,29 @@
       rttPending = performance.now();
       clearTimeout(rttWatchdog);
       rttWatchdog = setTimeout(rttAbort, RTT_TIMEOUT_MS);
+      probeSend = true;  // not a user parameter change: keep out of the event log
       wsSend({t:'cmd', c:'ref', v: parseFloat(refSlider.value)});  // no-op re-send
+      probeSend = false;
     }
 
-    // Called from handleAck() on every 'ref' ack; only acts during a run.
+    // Called from handleAck() on every 'ref' ack. A manual run's probe takes
+    // precedence; otherwise a pending automatic 30 s sample is resolved and
+    // appended to the event log.
     function rttOnAck() {
-      if (rttPending === null) return;
-      clearTimeout(rttWatchdog);
-      rttSamples.push(performance.now() - rttPending);
-      rttPending = null;
-      rttRemaining--;
-      $id('rtt-n').textContent = rttSamples.length;
-      if (rttRemaining > 0) setTimeout(rttSendProbe, RTT_GAP_MS);
-      else rttFinish();
+      if (rttPending !== null) {
+        clearTimeout(rttWatchdog);
+        rttSamples.push(performance.now() - rttPending);
+        rttPending = null;
+        rttRemaining--;
+        $id('rtt-n').textContent = rttSamples.length;
+        if (rttRemaining > 0) setTimeout(rttSendProbe, RTT_GAP_MS);
+        else rttFinish();
+        return;
+      }
+      if (autoRttPending !== null) {
+        logEvent('rtt_sample', 'ref_ack', '', '', performance.now() - autoRttPending);
+        autoRttPending = null;
+      }
     }
 
     function rttAbort() {
@@ -1720,6 +1932,7 @@
       rttSamples.forEach((v, i) => { csv += i + ',' + v.toFixed(2) + '\n'; });
       const now = new Date();
       const ts = now.toISOString().slice(0,19).replace(/[T:]/g, '-');
+      logEvent('export', 'rtt_csv', '', rttSamples.length);
       openExport(csv, 'rtt_phone_' + ts + '.csv', copyOnly);
     }
 
@@ -1727,6 +1940,7 @@
     // Init
     // =========================================================================
     document.addEventListener('DOMContentLoaded', () => {
+      evRestore();
       setTheme(currentTheme);
       applyLang();
       refreshPresetList();
