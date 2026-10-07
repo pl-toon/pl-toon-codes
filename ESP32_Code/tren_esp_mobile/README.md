@@ -11,7 +11,7 @@ This folder is **self-contained**: firmware (`.ino`), partition table, web dashb
 ```
 tren_esp_mobile/
 ├── README.md               ← This file
-├── tren_esp_mobile.ino     ← Main firmware (~1230 lines)
+├── tren_esp_mobile.ino     ← Main firmware (~1530 lines)
 ├── partitions.csv          ← Custom partition table (1.5MB app + 1.5MB LittleFS)
 └── data/
     ├── index.html          ← Mobile dashboard UI
@@ -72,6 +72,7 @@ Open `tren_esp_mobile.ino` in Arduino IDE. The `.ino` file must remain in a fold
 | Flash Size | 4MB |
 | Upload Speed | 921600 |
 | Port | Your ESP32's serial port |
+| Erase All Flash Before Sketch Upload | Disabled (keeps the train ID) |
 
 ### 3. Upload the LittleFS filesystem (web dashboard files)
 
@@ -122,7 +123,7 @@ Type:
 SET_TRAIN:trainA:5555
 ```
 
-The ESP32 will save the config to EEPROM, flash the LED 3 times, and reboot. After reboot:
+The ESP32 saves the config to its NVS flash area (`Preferences`), flashes the LED 3 times, and reboots. After reboot:
 
 ```
 TRAIN CONFIGURATION LOADED
@@ -135,6 +136,8 @@ Setup Complete! Ready for mobile control.
 ```
 
 The port number is stored but unused in mobile mode (it exists for compatibility with the laptop firmware).
+
+**Re-flashing keeps the train ID.** The ID lives in the `nvs` partition (0x9000), which neither the firmware upload nor the LittleFS upload touches. It is erased only by `RESET_TRAIN`, by `esptool.py erase_flash`, or by the Arduino IDE option *Tools → Erase All Flash Before Sketch Upload: Enabled*. Keep that option **Disabled** when updating trains that are already configured.
 
 ### Serial commands
 
@@ -174,10 +177,14 @@ Open-loop motor step. Sliders: Amplitude (0–Vbatt V), Duration (0.5–20 s), B
 Ramps PWM from 0 until motion is detected. Sliders: Motion Threshold (0.01–1.0 cm), Direction. Result appears as a large number when done — tap **Apply Result to PID** to use as PID deadband.
 
 ### Data Export
-- **Save CSV** — downloads chart data as `<mode>_<timestamp>.csv`
+- **Save CSV** — downloads the current run's chart data as `<mode>_<timestamp>.csv`
+- **Copy CSV** — same data, shown in a panel to copy (for browsers that block downloads)
 - **Save Plot** — downloads chart as PNG
+- **Export log** — downloads the session event log as `registro_<trainID>_<timestamp>.csv` (since 2.5.0, see below)
 
-Data is only available while the page is open. Export before closing or refreshing.
+Run data lives only in the open page, and each new run clears the previous one: save the CSV after every run, before
+starting the next. The event log is different: it is kept in the phone's browser storage and survives a reload or a
+closed tab, until it is exported.
 
 ### Language / Theme / Presets
 - **ES/EN** toggle (top-right) — full Spanish/English translation, saved in phone localStorage
@@ -245,7 +252,7 @@ Reducing the timing budget to 20 ms increases noise by ~28% — not worth it for
 
 ## License & Credits
 
-Built for UAI's MIN215 control systems course. Firmware version: `2.2-mobile`.
+Built for UAI's MIN215 control systems course. Firmware version: `2.5.0-mobile`.
 
 ## v2.4.2 — step-mode brake phase
 
@@ -261,3 +268,65 @@ WebSocket before `start` (backward compatible; default is the legacy stop):
 Telemetry keeps streaming through the brake phase (`dir` reports the live motor
 direction), which makes matched-speed stopping-distance comparisons per direction
 possible — the diagnostic that separates drivetrain, driver, and sensing effects.
+
+## v2.5.0 — link-quality logging
+
+- Every data frame (`"t":"d"`) carries `seq`, a per-boot counter. Gaps in `seq` seen by the phone are frames the ESP32
+  dropped because the phone's WebSocket queue was full.
+- The dashboard keeps an event log: page load/reload, WebSocket connect/disconnect, mode switches, experiment
+  start/stop, parameter changes, exports, `seq` gaps and resets, and an automatic latency sample every 30 s.
+- **Export log** writes it as CSV with columns
+  `idx,wall_time_iso,session_ms,conn,event,key,old_value,new_value,frames_rx,frames_dropped,rtt_ms`.
+- Both exports (run CSV and event log) start with four `#` header lines: `train_id`, `fw`, `dashboard_schema`,
+  `exported_at`. Analysis scripts must skip lines starting with `#`.
+- After an export, the next page load starts a fresh log instead of appending.
+
+---
+
+## Preparing the trains for a lab session
+
+One person does this before the lab, not in the room. Use the same firmware version on every train for the whole term.
+
+1. `git pull` this repository.
+2. For each train: upload LittleFS (step 3), then the firmware (step 4), with *Erase All Flash* **Disabled**.
+3. If the train is new, or its ID was lost, configure it (step 5): trains are `trainA` … `trainN`, one letter per
+   train, matching the label on the chassis.
+4. Run the acceptance test below. Mark the train as ready only if every item passes.
+5. Charge the batteries.
+
+### Acceptance test (about 3 minutes per train)
+
+With the train on the track, switch ON, an object 18–28 cm in front of the sensor:
+
+- [ ] The phone sees the WiFi network `TrenCE-trainX` with the right letter, and `http://192.168.4.1` loads.
+- [ ] The badge at the top of the dashboard shows `fw 2.5.0-mobile`.
+- [ ] Deadband tab: one sweep forward at the default threshold ends with a PWM value in the result box.
+- [ ] Step tab: amplitude 1.2 V, duration 1 s, forward: the train moves and then brakes.
+- [ ] **Save CSV** downloads a file. Its first lines are `# train_id: trainX` and `# fw: 2.5.0-mobile`.
+- [ ] **Export log** downloads `registro_trainX_....csv` with the same `#` header lines.
+- [ ] Switch OFF.
+
+If the dashboard does not load but the WiFi network appears, the LittleFS upload is missing: repeat step 3.
+
+### Bench test of a new firmware version (once, on two trains)
+
+Run this once whenever the firmware version changes, before flashing the whole fleet.
+
+- [ ] **Frames under load:** run PID for 2+ minutes while walking the phone away or shielding it. Export the log:
+      `seq_gap` rows appear (at most one per second), `frames_dropped` is plausible, and `frames_rx` roughly matches the
+      Packets counter.
+- [ ] **Frame integrity:** with Kp/Ki/Kd at non-round values (e.g. 2.55), the browser console shows no
+      `WS parse error`.
+- [ ] **Reconnect:** turn the phone's WiFi off and on during a run. The log shows `ws_disconnect`, then `ws_connect`,
+      `info` and `exp_idle` (the train stops for safety), and `frames_dropped` does not jump by the length of the outage.
+- [ ] **Train reboot:** power-cycle the train with the page open. The log shows `seq_reset`, not a burst of drops.
+- [ ] **Automatic latency:** leave the page idle 2 minutes. About four `rtt_sample` rows appear, with values close to a
+      manual **Measure Latency** run.
+- [ ] **Log survives the tab:** generate some events, close the tab from the app switcher, reopen
+      `http://192.168.4.1`. The log is restored with a `page_reload` row, and the frame counters continue.
+- [ ] **Two trains, one phone:** connect to train A, then join train B's network and reload. The `info` rows show the
+      change of train.
+- [ ] **Exports:** run CSV and event log both start with the four `#` lines; the download works and the copy panel
+      works.
+- [ ] **Parse check:** read both exported files with the analysis script (skip `#` lines, check `seq` increases within
+      each connection, recount gaps against `frames_dropped`, join the two files by train ID) before the first lab.
