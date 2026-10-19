@@ -72,6 +72,20 @@
 #include <ESPAsyncWebServer.h>
 #include <ArduinoJson.h>
 #include <DNSServer.h>
+#include <HTTPUpdate.h>
+#include <esp_ota_ops.h>
+
+// Tipos del OTA: deben ir antes de los prototipos automáticos de Arduino
+struct OtaManifest {
+  String version, app_url, app_sha, fs_url, fs_sha;
+};
+
+struct OtaImage {
+  uint8_t* data = nullptr;
+  size_t size = 0;
+};
+
+bool sta_connect(uint32_t timeout_ms);
 
 // =============================================================================
 // Firmware Version
@@ -350,6 +364,8 @@ void checkSerialConfig() {
   if (Serial.available() > 0) {
     String command = Serial.readStringUntil('\n');
     command.trim();
+
+    if (handle_sta_command(command)) return;   // SET_WIFI:... y OTA_CHECK
 
     if (command.startsWith("SET_TRAIN:")) {
       int firstColon = command.indexOf(':');
@@ -940,6 +956,8 @@ void setup() {
   Serial.setTimeout(100);   // bound readStringUntil so serial can't stall loop()
   pinMode(STATUS_LED, OUTPUT);
 
+  esp_ota_mark_app_valid_cancel_rollback()
+
   Serial.println("\n\n");
   Serial.println("==============================================");
   Serial.println("  MOBILE Train Control Firmware");
@@ -978,6 +996,14 @@ void setup() {
 
   // Web Server + WebSocket Setup
   setup_webserver();
+
+  sta_load();
+  if (sta_connect(15000)) {
+    Serial.println("[STA] Conectado: " + WiFi.localIP().toString());
+    ota_check_and_update();   // comprueba la versión al arrancar
+  } else {
+    Serial.println("[STA] Sin conexion; solo AP");
+  }
 
   // Motor Setup
   setup_motor();

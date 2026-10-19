@@ -1,0 +1,68 @@
+name: Release tren_esp_mobile
+
+on:
+  push:
+    tags: ['tren-v*']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      SKETCH_DIR: ESP32_Code/tren_esp_mobile
+      FQBN: esp32:esp32:esp32s3:FlashSize=16M,PSRAM=opi,PartitionScheme=custom
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: arduino/setup-arduino-cli@v2
+
+      - name: Core ESP32 y librerias
+        run: |
+          arduino-cli config init
+          arduino-cli core update-index
+          arduino-cli core install esp32:esp32@3.3.12
+          arduino-cli lib install \
+            "ArduinoJson@7.4.3" \
+            "AsyncTCP@3.5.0" \
+            "ESPAsyncWebServer@3.12.1" \
+            "PID_v1_bc@1.2.7" \
+            "VL53L0X@1.3.1"
+
+      - name: Obtener version del tag
+        run: |
+          VER="${GITHUB_REF_NAME#tren-v}"
+          grep -q "#define FW_VERSION \"${VER}\"" "$SKETCH_DIR/tren_esp_mobile.ino" \
+            || { echo "FW_VERSION no coincide con el tag $VER"; exit 1; }
+          echo "VER=$VER" >> "$GITHUB_ENV"
+
+      - name: Compilar firmware
+        run: arduino-cli compile --fqbn "$FQBN" --output-dir build "$SKETCH_DIR"
+
+      - name: Generar LittleFS
+        run: |
+          MKLFS=$(find ~/.arduino15 -name mklittlefs -type f | head -1)
+          "$MKLFS" -c "$SKETCH_DIR/data" -b 4096 -p 256 -s 0xCF0000 build/littlefs.bin
+
+      - name: Preparar archivos y version.json
+        run: |
+          cp build/tren_esp_mobile.ino.bin build/firmware.bin
+          APP_SHA=$(sha256sum build/firmware.bin | cut -d' ' -f1)
+          FS_SHA=$(sha256sum build/littlefs.bin | cut -d' ' -f1)
+          BASE="https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}"
+          cat > build/version.json <<EOF
+          {
+            "version": "${VER}",
+            "app": { "url": "${BASE}/firmware.bin", "sha256": "${APP_SHA}" },
+            "fs":  { "url": "${BASE}/littlefs.bin", "sha256": "${FS_SHA}" }
+          }
+          EOF
+
+      - name: Publicar release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            build/firmware.bin build/littlefs.bin build/version.json \
+            --title "tren_esp_mobile ${VER}" --generate-notes
