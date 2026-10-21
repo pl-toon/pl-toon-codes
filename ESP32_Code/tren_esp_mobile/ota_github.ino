@@ -225,7 +225,7 @@ void ota_check_and_update() {
   if (!ota_fetch_manifest(m)) { Serial.println("[OTA] No se pudo leer el manifiesto"); return; }
   if (m.version == FW_VERSION) { Serial.println("[OTA] Ya esta en la version " FW_VERSION); return; }
 
-  Serial.printf("[OTA] Version disponible %s (actual %s)\n", m.version.c_str(), FW_VERSION);
+  Serial.printf("[OTA] Available version %s (actual %s)\n", m.version.c_str(), FW_VERSION);
 
   // Parar el motor antes de cualquier escritura
   MotorSpeed = 0;
@@ -237,7 +237,7 @@ void ota_check_and_update() {
     staged = ota_stage(m.fs_url, m.fs_sha, fs);
   }
   if (!staged) {
-    Serial.println("[OTA] Descarga o verificacion fallida: no se ha escrito nada");
+    Serial.println("[OTA] Failed download or verification: nothing has been written");
     ota_free(app);
     ota_free(fs);
     return;
@@ -246,7 +246,7 @@ void ota_check_and_update() {
   // Punto de no retorno: la app queda marcada como arranque. Si falla antes, la app
   // activa no cambia.
   if (!ota_flash(app, U_FLASH)) {
-    Serial.println("[OTA] Fallo escribiendo la app: no se ha cambiado nada");
+    Serial.println("[OTA] Failure while writing the app: no change has been made");
     ota_free(app);
     ota_free(fs);
     return;
@@ -261,7 +261,7 @@ void ota_check_and_update() {
     ota_free(fs);
   }
 
-  Serial.println("[OTA] Actualizacion completa. Reiniciando...");
+  Serial.println("[OTA] Update completed. Rebooting...");
   delay(1000);
   ESP.restart();
 }
