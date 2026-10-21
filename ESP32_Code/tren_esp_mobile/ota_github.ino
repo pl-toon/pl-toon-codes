@@ -103,7 +103,7 @@ bool handle_sta_command(const String& cmd) {
   if (cmd.startsWith("SET_WIFI:")) {
     String rest = cmd.substring(9);
     int sep = rest.indexOf(':');
-    if (sep <= 0) { Serial.println("[STA] Formato: SET_WIFI:ssid:password"); return true; }
+    if (sep <= 0) { Serial.println("[STA] Format: SET_WIFI:ssid:password"); return true; }
     sta_save(rest.substring(0, sep), rest.substring(sep + 1));
     sta_load();
     Serial.println("[STA] Credentials saved. Reboot to conect.");
