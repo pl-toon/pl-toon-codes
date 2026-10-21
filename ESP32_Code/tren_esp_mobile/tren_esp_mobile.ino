@@ -956,7 +956,7 @@ void setup() {
   Serial.setTimeout(100);   // bound readStringUntil so serial can't stall loop()
   pinMode(STATUS_LED, OUTPUT);
 
-  esp_ota_mark_app_valid_cancel_rollback()
+  esp_ota_mark_app_valid_cancel_rollback();
 
   Serial.println("\n\n");
   Serial.println("==============================================");
