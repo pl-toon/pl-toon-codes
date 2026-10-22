@@ -126,7 +126,7 @@ bool ota_fetch_manifest(OtaManifest& m) {
   http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
   http.setTimeout(10000);
   if (!http.begin(client, OTA_MANIFEST_URL)) return false;
-  Serial.printf("[TIME] epoch=%ld\n", (long)time(nullptr));
+  
   int code = http.GET();
   if (code != HTTP_CODE_OK) {
     char tls_err[120] = {0};

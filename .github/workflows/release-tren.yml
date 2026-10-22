@@ -43,7 +43,7 @@ jobs:
       - name: Generar LittleFS
         run: |
           MKLFS=$(find ~/.arduino15 -name mklittlefs -type f | head -1)
-          "$MKLFS" -c "$SKETCH_DIR/data" -b 4096 -p 256 -s 0xCF0000 build/littlefs.bin
+          "$MKLFS" -c "$SKETCH_DIR/data" -b 4096 -p 256 -s 0x100000 build/littlefs.bin
 
       - name: Preparar archivos y version.json
         run: |

@@ -89,23 +89,6 @@ struct OtaImage {
 };
 
 
-bool sync_time_from_http_date() {
-  HTTPClient http;
-  http.setTimeout(8000);
-  if (!http.begin("http://www.google.com/")) return false;   // just to read Date header
-  int code = http.sendRequest("HEAD");
-  String date = http.header("Date");
-  http.end();
-  if (code <= 0 || date.isEmpty()) return false;
-
-  struct tm t = {};
-  if (!strptime(date.c_str(), "%a, %d %b %Y %H:%M:%S GMT", &t)) return false;
-  time_t epoch = mktime(&t);            // strptime uses GMT, so mktime with TZ=UTC
-  struct timeval tv = { epoch, 0 };
-  settimeofday(&tv, nullptr);
-  return true;
-}
-
 bool sta_connect(uint32_t timeout_ms);
 
 // =============================================================================
@@ -981,7 +964,7 @@ void setup() {
 
   Serial.println("\n\n");
   Serial.println("==============================================");
-  Serial.println("  MOBILE Train Control Firmware");
+  Serial.println("  MOBILE Train Control Firmware (OTA beta test)");
   Serial.println("  Version: " FW_VERSION);
   Serial.println("  Mode: WiFi AP + WebSocket Dashboard");
   Serial.println("  Modes: PID, Step Response, Deadband");
