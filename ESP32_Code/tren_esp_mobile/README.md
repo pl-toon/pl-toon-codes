@@ -11,8 +11,9 @@ This folder is **self-contained**: firmware (`.ino`), partition table, web dashb
 ```
 tren_esp_mobile/
 ├── README.md               ← This file
-├── tren_esp_mobile.ino     ← Main firmware (~1530 lines)
-├── partitions.csv          ← Custom partition table (1.5MB app + 1.5MB LittleFS)
+├── tren_esp_mobile.ino     ← Main firmware
+├── ota_github.ino          ← Over-the-air updates from GitHub Releases
+├── partitions.csv          ← Custom partition table (2 × 2 MB app slots for OTA + 1 MB LittleFS)
 └── data/
     ├── index.html          ← Mobile dashboard UI
     ├── uplot.min.js        ← Chart library (bundled, no CDN)
@@ -25,7 +26,7 @@ No external assets — the dashboard works fully offline once flashed.
 
 ## Hardware
 
-- ESP32-S3 Dev Module (4MB flash)
+- ESP32-S3 Dev Module with **16 MB flash**
 - VL53L0X Time-of-Flight distance sensor (I2C: SDA=GPIO 10, SCL=GPIO 9)
 - Motor driver with these connections:
   - `STBY = GPIO 7`
@@ -47,11 +48,11 @@ No external assets — the dashboard works fully offline once flashed.
 
 | Library | Author | Version |
 |---------|--------|---------|
-| ESPAsyncWebServer | ESP32Async (mathieucarbou) | v3.0+ |
-| AsyncTCP | ESP32Async (mathieucarbou) | latest |
-| ArduinoJson | Benoit Blanchon | v7.x |
-| PID_v1_bc | — | latest |
-| VL53L0X | Pololu | latest |
+| ESPAsyncWebServer | ESP32Async (mathieucarbou) | v3.0+ (tested with 3.12.1) |
+| AsyncTCP | ESP32Async (mathieucarbou) | latest (tested with 3.5.0) |
+| ArduinoJson | Benoit Blanchon | v7.x (tested with 7.4.3) |
+| PID_v1_bc | — | latest (tested with 1.2.7) |
+| VL53L0X | Pololu | latest (tested with 1.3.1) |
 
 LittleFS is built into the ESP32 core — no separate install needed.
 
@@ -61,7 +62,7 @@ LittleFS is built into the ESP32 core — no separate install needed.
 
 ### 1. Open the sketch
 
-Open `tren_esp_mobile.ino` in Arduino IDE. The `.ino` file must remain in a folder named `tren_esp_mobile/` (Arduino IDE requirement).
+Open `tren_esp_mobile.ino` in Arduino IDE. The `.ino` file must remain in a folder named `tren_esp_mobile/` (Arduino IDE requirement). `ota_github.ino` must stay in the same folder.
 
 ### 2. Board settings
 
@@ -69,7 +70,8 @@ Open `tren_esp_mobile.ino` in Arduino IDE. The `.ino` file must remain in a fold
 |---------|-------|
 | Board | ESP32S3 Dev Module |
 | Partition Scheme | Custom (auto-detects `partitions.csv`) |
-| Flash Size | 4MB |
+| Flash Size | **16MB** |
+| PSRAM | **OPI PSRAM** (required: OTA buffers each image in PSRAM) |
 | Upload Speed | 921600 |
 | Port | Your ESP32's serial port |
 | Erase All Flash Before Sketch Upload | Disabled (keeps the train ID) |
@@ -83,16 +85,16 @@ This is the step most people miss. The firmware needs `index.html`, `uplot.min.j
 ```bash
 # Build the LittleFS image from the data/ folder
 ~/Library/Arduino15/packages/esp32/tools/mklittlefs/4.0.2-db0513a/mklittlefs \
-  -c data -s 0x170000 -p 256 -b 4096 /tmp/littlefs.bin
+  -c data -s 0x100000 -p 256 -b 4096 /tmp/littlefs.bin
 
 # Flash the image (replace port with your actual serial port)
 esptool.py --chip esp32s3 --port /dev/cu.usbmodem1101 --baud 460800 \
-  write_flash 0x190000 /tmp/littlefs.bin
+  write_flash 0x410000 /tmp/littlefs.bin
 ```
 
 - macOS path shown; on Windows use `%LOCALAPPDATA%\Arduino15\packages\esp32\tools\mklittlefs\...`, on Linux `~/.arduino15/...`
-- `-s 0x170000` = LittleFS partition size from `partitions.csv`
-- `0x190000` = LittleFS partition offset from `partitions.csv`
+- `-s 0x100000` = LittleFS partition size from `partitions.csv` (1 MB)
+- `0x410000` = LittleFS partition offset from `partitions.csv`
 - Use the **UART** port, not the native USB-CDC port, on ESP32-S3
 - **Close the Arduino Serial Monitor first**, or the port will be busy
 
@@ -103,6 +105,8 @@ esptool.py --chip esp32s3 --port /dev/cu.usbmodem1101 --baud 460800 \
 **Alternative — PlatformIO**: `pio run --target uploadfs`
 
 > Upload LittleFS **before** the firmware, or the first boot will log "LittleFS mount failed."
+>
+> The LittleFS image must be generated with `-s 0x100000`. An image built for another partition size will not mount correctly.
 
 ### 4. Upload the firmware
 
@@ -147,6 +151,8 @@ The port number is stored but unused in mobile mode (it exists for compatibility
 | `GET_TRAIN` | Show current configuration |
 | `RESET_TRAIN` | Clear config and reboot |
 | `STATUS` | Same as GET_TRAIN |
+| `SET_WIFI:ssid:password` | Store the Wi-Fi network used for OTA updates (see below) |
+| `OTA_CHECK` | Check GitHub Releases for a newer firmware now |
 
 ### LED status
 
@@ -155,6 +161,50 @@ The port number is stored but unused in mobile mode (it exists for compatibility
 | Fast blink (5 Hz) | Not configured — waiting for `SET_TRAIN` |
 | Slow blink (1 Hz) | AP active, waiting for phone |
 | Solid ON | Phone connected via WebSocket |
+
+---
+
+## Over-the-air updates (GitHub Releases)
+
+The firmware can update itself from the releases of this repository. The train keeps its own access point for the phone; only while checking for an update does it also join a Wi-Fi network that has Internet access, and it leaves that network as soon as the check ends.
+
+### Setup (once per train)
+
+1. Connect the train by USB and type over Serial:
+   ```
+   SET_WIFI:<network name>:<password>
+   ```
+   The ssid cannot contain `:`. The password can.
+2. Reboot the train. The log shows `[STA] Connected: <ip>` and the check runs at boot.
+
+Without `SET_WIFI`, the train works normally in AP-only mode and no update is attempted.
+
+### How an update runs
+
+- At boot, and on demand with `OTA_CHECK`, the train reads `version.json` from the latest release.
+- If the version differs from `FW_VERSION`, the train downloads `firmware.bin` and `littlefs.bin` and checks each one against its SHA-256 **before** writing anything.
+- Only then does it write the application and the filesystem, and it restarts.
+- The update is skipped if an experiment is running or the motor is not stopped.
+- If the download or verification fails, nothing is written and the current firmware keeps running.
+- After the check, whether it succeeds or fails, the train disconnects from the Wi-Fi network and returns to AP-only mode, so it does not keep scanning for the router during experiments.
+
+### Publishing a release (maintainers)
+
+1. Set `FW_VERSION` in `tren_esp_mobile.ino` to the new version (for example `2.5.1-mobile`) and merge it into `main`.
+2. Create and push a tag with the prefix `tren-v`:
+   ```bash
+   git tag -a tren-v2.5.1-mobile -m "Release tren_esp_mobile 2.5.1-mobile"
+   git push origin tren-v2.5.1-mobile
+   ```
+3. GitHub Actions (`.github/workflows/release-tren.yml`) compiles the firmware, builds `littlefs.bin`, computes the hashes and publishes `firmware.bin`, `littlefs.bin` and `version.json` in a new release.
+
+The tag must match `FW_VERSION` exactly, without the `tren-v` prefix. If they differ, the workflow stops before publishing.
+
+### Notes
+
+- **The first install of this partition table must be done by USB** (steps 3 and 4). Later updates can come from GitHub.
+- The root certificates in `GITHUB_ROOT_CA` (`ota_github.ino`) must be valid for `github.com` and `objects.githubusercontent.com`. If GitHub changes its certificate chain, the update will stop until the certificate is replaced.
+- The network must allow outbound HTTPS and DNS. The phone can stay connected to `TrenCE-xxx` while the update runs.
 
 ---
 
@@ -233,6 +283,9 @@ Full command/data field reference is in the firmware header comment (`tren_esp_m
 | esptool: "Port is busy" | Close Arduino Serial Monitor before flashing |
 | esptool: "Failed to write to target RAM" | Use the UART port, not the native USB-CDC port |
 | Chart not updating | Chart updates only during a running experiment. First 5 points are discarded (sensor warm-up) |
+| Serial: `[OTA] Couldn't read the manifest` or `GET failed: -1` | Check the Wi-Fi network has Internet access, and that the root certificates in `GITHUB_ROOT_CA` are valid |
+| Serial: `[OTA] SHA-256 mismatch` | The downloaded file does not match `version.json`. Check the release, then retry with `OTA_CHECK` |
+| Serial: `[OTA] Experiment in progress or active engine` | Stop the experiment and the motor, then run `OTA_CHECK` again |
 
 ---
 
@@ -330,3 +383,5 @@ Run this once whenever the firmware version changes, before flashing the whole f
       works.
 - [ ] **Parse check:** read both exported files with the analysis script (skip `#` lines, check `seq` increases within
       each connection, recount gaps against `frames_dropped`, join the two files by train ID) before the first lab.
+- [ ] **OTA update:** with a newer release published, `OTA_CHECK` installs it, the badge shows the new version, and
+      the train still starts an experiment normally.

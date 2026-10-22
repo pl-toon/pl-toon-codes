@@ -72,11 +72,30 @@
 #include <ESPAsyncWebServer.h>
 #include <ArduinoJson.h>
 #include <DNSServer.h>
+#include <HTTPUpdate.h>
+#include <esp_ota_ops.h>
+#include <esp_sntp.h>
+#include <sys/time.h>
+#include <time.h>
+
+// Tipos del OTA: deben ir antes de los prototipos automáticos de Arduino
+struct OtaManifest {
+  String version, app_url, app_sha, fs_url, fs_sha;
+};
+
+struct OtaImage {
+  uint8_t* data = nullptr;
+  size_t size = 0;
+};
+
+
+bool sta_connect(uint32_t timeout_ms);
+void ota_check_with_sta();
 
 // =============================================================================
 // Firmware Version
 // =============================================================================
-#define FW_VERSION "2.5.0-mobile"   // 2.5.0: "seq" field in every data frame (link-quality logging); 2.4.2: step-mode brake phase
+#define FW_VERSION "2.5.1-mobile"   // 2.5.0: "seq" field in every data frame (link-quality logging); 2.4.2: step-mode brake phase
 
 // =============================================================================
 // EEPROM Configuration Storage
@@ -350,6 +369,8 @@ void checkSerialConfig() {
   if (Serial.available() > 0) {
     String command = Serial.readStringUntil('\n');
     command.trim();
+
+    if (handle_sta_command(command)) return;   // SET_WIFI:... y OTA_CHECK
 
     if (command.startsWith("SET_TRAIN:")) {
       int firstColon = command.indexOf(':');
@@ -940,9 +961,11 @@ void setup() {
   Serial.setTimeout(100);   // bound readStringUntil so serial can't stall loop()
   pinMode(STATUS_LED, OUTPUT);
 
+  esp_ota_mark_app_valid_cancel_rollback();
+
   Serial.println("\n\n");
   Serial.println("==============================================");
-  Serial.println("  MOBILE Train Control Firmware");
+  Serial.println("  MOBILE Train Control Firmware (OTA beta test)");
   Serial.println("  Version: " FW_VERSION);
   Serial.println("  Mode: WiFi AP + WebSocket Dashboard");
   Serial.println("  Modes: PID, Step Response, Deadband");
@@ -978,6 +1001,9 @@ void setup() {
 
   // Web Server + WebSocket Setup
   setup_webserver();
+
+  sta_load();
+  ota_check_with_sta();
 
   // Motor Setup
   setup_motor();
