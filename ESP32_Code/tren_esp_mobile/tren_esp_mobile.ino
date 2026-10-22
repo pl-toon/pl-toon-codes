@@ -90,6 +90,7 @@ struct OtaImage {
 
 
 bool sta_connect(uint32_t timeout_ms);
+void ota_check_with_sta();
 
 // =============================================================================
 // Firmware Version
@@ -1002,20 +1003,7 @@ void setup() {
   setup_webserver();
 
   sta_load();
-  if (sta_connect(15000)) {
-    Serial.println("[STA] Connected: " + WiFi.localIP().toString());
-
-    configTime(0, 0, "162.159.200.1", "pool.ntp.org");   // NTP en segundo plano
-    uint32_t t0 = millis();
-    while (time(nullptr) < 1700000000 && millis() - t0 < 10000) {
-      delay(200);
-    }
-    Serial.printf("[TIME] epoch=%ld\n", (long)time(nullptr));
-
-    ota_check_and_update();
-  } else {
-    Serial.println("[STA] No connection; only AP");
-  }
+  ota_check_with_sta();
 
   // Motor Setup
   setup_motor();

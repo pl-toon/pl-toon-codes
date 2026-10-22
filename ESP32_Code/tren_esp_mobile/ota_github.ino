@@ -99,6 +99,37 @@ bool sta_connect(uint32_t timeout_ms) {
   return WiFi.status() == WL_CONNECTED;
 }
 
+// Apaga la STA y deja solo el AP: sin esto la STA sigue reconectando y sus escaneos
+// sacan al radio del canal del AP, perdiendo frames del enlace con el teléfono.
+void sta_off() {
+  WiFi.disconnect(true);
+  WiFi.mode(WIFI_AP);
+}
+
+// Conecta la STA solo durante la búsqueda de actualización y la apaga después (éxito o fallo).
+void ota_check_with_sta() {
+  if (experimentActive || MotorSpeed != 0) {
+    Serial.println("[OTA] Experiment in progress or active engine: omitted");
+    return;
+  }
+  if (!sta_connect(15000)) {
+    Serial.println("[STA] No connection; only AP");
+    sta_off();
+    return;
+  }
+  Serial.println("[STA] Connected: " + WiFi.localIP().toString());
+
+  configTime(0, 0, "162.159.200.1", "pool.ntp.org");   // NTP en segundo plano
+  uint32_t t0 = millis();
+  while (time(nullptr) < 1700000000 && millis() - t0 < 10000) {
+    delay(200);
+  }
+  Serial.printf("[TIME] epoch=%ld\n", (long)time(nullptr));
+
+  ota_check_and_update();   // si actualiza, reinicia y no vuelve
+  sta_off();
+}
+
 // Comandos serie: SET_WIFI:ssid:password (la contraseña puede contener ':')
 // Llama a esta función desde el parser serie existente. Devuelve true si el comando era suyo.
 bool handle_sta_command(const String& cmd) {
@@ -108,12 +139,11 @@ bool handle_sta_command(const String& cmd) {
     if (sep <= 0) { Serial.println("[STA] Format: SET_WIFI:ssid:password"); return true; }
     sta_save(rest.substring(0, sep), rest.substring(sep + 1));
     sta_load();
-    Serial.println("[STA] Credentials saved. Reboot to conect.");
+    Serial.println("[STA] Credentials saved. Reboot to connect.");
     return true;
   }
   if (cmd == "OTA_CHECK") {
-    if (WiFi.status() != WL_CONNECTED) { Serial.println("[OTA] No STA connection"); return true; }
-    ota_check_and_update();
+    ota_check_with_sta();
     return true;
   }
   return false;
@@ -131,7 +161,7 @@ bool ota_fetch_manifest(OtaManifest& m) {
   if (code != HTTP_CODE_OK) {
     char tls_err[120] = {0};
     client.lastError(tls_err, sizeof(tls_err));   // motivo real del fallo TLS
-    Serial.printf("[OTA] GET fallo: %d (%s) TLS: %s\n",
+    Serial.printf("[OTA] GET failed: %d (%s) TLS: %s\n",
                   code, http.errorToString(code).c_str(), tls_err);
     http.end();
     return false;
@@ -203,7 +233,7 @@ bool ota_stage(const String& url, const String& sha_hex, OtaImage& img) {
   char hex[65];
   for (int i = 0; i < 32; i++) sprintf(hex + 2 * i, "%02x", digest[i]);
   if (!sha_hex.equalsIgnoreCase(hex)) {
-    Serial.printf("[OTA] SHA-256 no coincide: %s\n", hex);
+    Serial.printf("[OTA] SHA-256 mismatch: %s\n", hex);
     ota_free(img);
     return false;
   }

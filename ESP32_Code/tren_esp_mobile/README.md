@@ -71,7 +71,7 @@ Open `tren_esp_mobile.ino` in Arduino IDE. The `.ino` file must remain in a fold
 | Board | ESP32S3 Dev Module |
 | Partition Scheme | Custom (auto-detects `partitions.csv`) |
 | Flash Size | **16MB** |
-| PSRAM | Disabled (not required by the current firmware) |
+| PSRAM | **OPI PSRAM** (required: OTA buffers each image in PSRAM) |
 | Upload Speed | 921600 |
 | Port | Your ESP32's serial port |
 | Erase All Flash Before Sketch Upload | Disabled (keeps the train ID) |
@@ -166,7 +166,7 @@ The port number is stored but unused in mobile mode (it exists for compatibility
 
 ## Over-the-air updates (GitHub Releases)
 
-The firmware can update itself from the releases of this repository. The train keeps its own access point for the phone; for the update it also joins a Wi-Fi network that has Internet access.
+The firmware can update itself from the releases of this repository. The train keeps its own access point for the phone; only while checking for an update does it also join a Wi-Fi network that has Internet access, and it leaves that network as soon as the check ends.
 
 ### Setup (once per train)
 
@@ -175,7 +175,7 @@ The firmware can update itself from the releases of this repository. The train k
    SET_WIFI:<network name>:<password>
    ```
    The ssid cannot contain `:`. The password can.
-2. Reboot the train. The log shows `[STA] Conectado: <ip>` and the check runs at boot.
+2. Reboot the train. The log shows `[STA] Connected: <ip>` and the check runs at boot.
 
 Without `SET_WIFI`, the train works normally in AP-only mode and no update is attempted.
 
@@ -186,6 +186,7 @@ Without `SET_WIFI`, the train works normally in AP-only mode and no update is at
 - Only then does it write the application and the filesystem, and it restarts.
 - The update is skipped if an experiment is running or the motor is not stopped.
 - If the download or verification fails, nothing is written and the current firmware keeps running.
+- After the check, whether it succeeds or fails, the train disconnects from the Wi-Fi network and returns to AP-only mode, so it does not keep scanning for the router during experiments.
 
 ### Publishing a release (maintainers)
 
@@ -282,9 +283,9 @@ Full command/data field reference is in the firmware header comment (`tren_esp_m
 | esptool: "Port is busy" | Close Arduino Serial Monitor before flashing |
 | esptool: "Failed to write to target RAM" | Use the UART port, not the native USB-CDC port |
 | Chart not updating | Chart updates only during a running experiment. First 5 points are discarded (sensor warm-up) |
-| Serial: `[OTA] No se pudo leer el manifiesto` or `GET fallo: -1` | Check the Wi-Fi network has Internet access, and that the root certificates in `GITHUB_ROOT_CA` are valid |
-| Serial: `[OTA] Imagen rechazada` | The downloaded file does not match `version.json`. Check the release, then retry with `OTA_CHECK` |
-| Serial: `[OTA] Experimento en curso` | Stop the experiment and the motor, then run `OTA_CHECK` again |
+| Serial: `[OTA] Couldn't read the manifest` or `GET failed: -1` | Check the Wi-Fi network has Internet access, and that the root certificates in `GITHUB_ROOT_CA` are valid |
+| Serial: `[OTA] SHA-256 mismatch` | The downloaded file does not match `version.json`. Check the release, then retry with `OTA_CHECK` |
+| Serial: `[OTA] Experiment in progress or active engine` | Stop the experiment and the motor, then run `OTA_CHECK` again |
 
 ---
 
