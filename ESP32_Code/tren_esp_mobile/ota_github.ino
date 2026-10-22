@@ -7,7 +7,7 @@
 #include <esp_ota_ops.h>
 
 static const char* OTA_MANIFEST_URL =
-  "https://github.com/MarceloLagosS/pl-toon-codes/releases/latest/download/version.json";
+  "https://github.com/pl-toon/pl-toon-codes/releases/latest/download/version.json";
 
 // Pega aquí las raíces obtenidas con openssl (github.com y objects.githubusercontent.com)
 static const char* GITHUB_ROOT_CA = R"CERT(
