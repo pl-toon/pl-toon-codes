@@ -74,6 +74,9 @@
 #include <DNSServer.h>
 #include <HTTPUpdate.h>
 #include <esp_ota_ops.h>
+#include <esp_sntp.h>
+#include <sys/time.h>
+#include <time.h>
 
 // Tipos del OTA: deben ir antes de los prototipos automáticos de Arduino
 struct OtaManifest {
@@ -85,12 +88,30 @@ struct OtaImage {
   size_t size = 0;
 };
 
+
+bool sync_time_from_http_date() {
+  HTTPClient http;
+  http.setTimeout(8000);
+  if (!http.begin("http://www.google.com/")) return false;   // just to read Date header
+  int code = http.sendRequest("HEAD");
+  String date = http.header("Date");
+  http.end();
+  if (code <= 0 || date.isEmpty()) return false;
+
+  struct tm t = {};
+  if (!strptime(date.c_str(), "%a, %d %b %Y %H:%M:%S GMT", &t)) return false;
+  time_t epoch = mktime(&t);            // strptime uses GMT, so mktime with TZ=UTC
+  struct timeval tv = { epoch, 0 };
+  settimeofday(&tv, nullptr);
+  return true;
+}
+
 bool sta_connect(uint32_t timeout_ms);
 
 // =============================================================================
 // Firmware Version
 // =============================================================================
-#define FW_VERSION "2.5.1-mobile"   // 2.5.0: "seq" field in every data frame (link-quality logging); 2.4.2: step-mode brake phase
+#define FW_VERSION "2.5.0-mobile"   // 2.5.0: "seq" field in every data frame (link-quality logging); 2.4.2: step-mode brake phase
 
 // =============================================================================
 // EEPROM Configuration Storage
@@ -999,10 +1020,18 @@ void setup() {
 
   sta_load();
   if (sta_connect(15000)) {
-    Serial.println("[STA] Conectado: " + WiFi.localIP().toString());
-    ota_check_and_update();   // comprueba la versión al arrancar
+    Serial.println("[STA] Connected: " + WiFi.localIP().toString());
+
+    configTime(0, 0, "162.159.200.1", "pool.ntp.org");   // NTP en segundo plano
+    uint32_t t0 = millis();
+    while (time(nullptr) < 1700000000 && millis() - t0 < 10000) {
+      delay(200);
+    }
+    Serial.printf("[TIME] epoch=%ld\n", (long)time(nullptr));
+
+    ota_check_and_update();
   } else {
-    Serial.println("[STA] Sin conexion; solo AP");
+    Serial.println("[STA] No connection; only AP");
   }
 
   // Motor Setup

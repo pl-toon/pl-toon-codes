@@ -30,6 +30,8 @@ KwYBBQUHAQEEKTAnMCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3Qu
 Y29tMAoGCCqGSM49BAMDA2kAMGYCMQCMCyBit99vX2ba6xEkDe+YO7vC0twjbkv9
 PKpqGGuZ61JZryjFsp+DFpEclCVy4noCMQCwvZDXD/m2Ko1HA5Bkmz7YQOFAiNDD
 49IWa2wdT7R3DtODaSXH/BiXv8fwB9su4tU=
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
 MIIF9DCCA9ygAwIBAgIRAPJLbRf52a18scn+p4eCaZ8wDQYJKoZIhvcNAQELBQAw
 TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
 cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwHhcNMjYwNTEzMDAwMDAw
@@ -110,7 +112,7 @@ bool handle_sta_command(const String& cmd) {
     return true;
   }
   if (cmd == "OTA_CHECK") {
-    if (WiFi.status() != WL_CONNECTED) { Serial.println("[OTA] Sin conexion STA"); return true; }
+    if (WiFi.status() != WL_CONNECTED) { Serial.println("[OTA] No STA connection"); return true; }
     ota_check_and_update();
     return true;
   }
@@ -124,7 +126,16 @@ bool ota_fetch_manifest(OtaManifest& m) {
   http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
   http.setTimeout(10000);
   if (!http.begin(client, OTA_MANIFEST_URL)) return false;
-  if (http.GET() != HTTP_CODE_OK) { http.end(); return false; }
+  Serial.printf("[TIME] epoch=%ld\n", (long)time(nullptr));
+  int code = http.GET();
+  if (code != HTTP_CODE_OK) {
+    char tls_err[120] = {0};
+    client.lastError(tls_err, sizeof(tls_err));   // motivo real del fallo TLS
+    Serial.printf("[OTA] GET fallo: %d (%s) TLS: %s\n",
+                  code, http.errorToString(code).c_str(), tls_err);
+    http.end();
+    return false;
+  }
 
   JsonDocument doc;
   DeserializationError err = deserializeJson(doc, http.getStream());
@@ -158,7 +169,7 @@ bool ota_stage(const String& url, const String& sha_hex, OtaImage& img) {
   if (total <= 0) { http.end(); return false; }
 
   img.data = (uint8_t*)ps_malloc(total);
-  if (!img.data) { http.end(); Serial.println("[OTA] Sin PSRAM para la imagen"); return false; }
+  if (!img.data) { http.end(); Serial.println("[OTA] Without PSRAM for the image"); return false; }
 
   WiFiClient* s = http.getStreamPtr();
   size_t got = 0;
@@ -217,13 +228,13 @@ bool ota_flash(OtaImage& img, int cmd) {
 // ---------- Flujo principal ----------
 void ota_check_and_update() {
   if (experimentActive || MotorSpeed != 0) {
-    Serial.println("[OTA] Experimento en curso o motor activo: omitido");
+    Serial.println("[OTA] Experiment in progress or active engine: omitted");
     return;
   }
 
   OtaManifest m;
-  if (!ota_fetch_manifest(m)) { Serial.println("[OTA] No se pudo leer el manifiesto"); return; }
-  if (m.version == FW_VERSION) { Serial.println("[OTA] Ya esta en la version " FW_VERSION); return; }
+  if (!ota_fetch_manifest(m)) { Serial.println("[OTA] Couldn't read the manifest"); return; }
+  if (m.version == FW_VERSION) { Serial.println("[OTA] Firmware is already at version " FW_VERSION); return; }
 
   Serial.printf("[OTA] Available version %s (actual %s)\n", m.version.c_str(), FW_VERSION);
 
@@ -256,7 +267,7 @@ void ota_check_and_update() {
   if (fs.size > 0) {
     if (!ota_flash(fs, U_SPIFFS)) {
       // Caso raro: la app nueva ya está activa con la UI antigua. Ver notas.
-      Serial.println("[OTA] ERROR escribiendo LittleFS tras la app");
+      Serial.println("[OTA] ERROR while writing LittleFS after the app");
     }
     ota_free(fs);
   }
