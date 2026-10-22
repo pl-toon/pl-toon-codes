@@ -111,7 +111,7 @@ bool sta_connect(uint32_t timeout_ms);
 // =============================================================================
 // Firmware Version
 // =============================================================================
-#define FW_VERSION "2.5.0-mobile"   // 2.5.0: "seq" field in every data frame (link-quality logging); 2.4.2: step-mode brake phase
+#define FW_VERSION "2.5.1-mobile"   // 2.5.0: "seq" field in every data frame (link-quality logging); 2.4.2: step-mode brake phase
 
 // =============================================================================
 // EEPROM Configuration Storage
