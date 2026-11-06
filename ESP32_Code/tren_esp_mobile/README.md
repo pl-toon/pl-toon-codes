@@ -24,6 +24,21 @@ No external assets — the dashboard works fully offline once flashed.
 
 ---
 
+## Re-flashing a train that runs 2.5.0 or earlier (read this first)
+
+Version 2.5.1 changed the flash layout to make room for over-the-air updates. A train on 2.5.0 or earlier cannot reach 2.5.1 or later over the air: its firmware has no update code, and only a USB upload writes the new partition table. Update each of these trains once by USB, as follows.
+
+1. **Board settings.** Use the settings of step 2: Flash Size 16MB, PSRAM OPI PSRAM, Partition Scheme Custom. With the default 4 MB scheme the firmware looks for its dashboard files in the wrong place, and without PSRAM the over-the-air update cannot run.
+2. **Keep the train's settings.** Leave *Erase All Flash Before Sketch Upload* **Disabled**. The train ID, the motor-direction setting and the `SET_WIFI` credentials are stored in `nvs` (0x9000). That partition is at the same address in the old and new layouts, and an upload does not touch it.
+3. **Flash LittleFS and the firmware in the same session.** Do step 3, then step 4, on every train. The new firmware reads the dashboard files at 0x410000, where the old layout never wrote anything. A train that gets only the firmware boots with `FATAL: Cannot start without LittleFS!` and shows no dashboard.
+4. **Use the new LittleFS values.** Build the image with `-s 0x100000` and write it at `0x410000`. The old instructions wrote it at `0x190000`. In the new layout that address is inside the first application slot, so an old command overwrites part of the firmware.
+5. **Upload the firmware with the Arduino IDE or `arduino-cli upload`.** Do not write only the `.bin` with `esptool.py write_flash 0x10000`. The IDE upload also writes the bootloader, the partition table and `otadata`, and `otadata` selects which application slot boots. A train that was updated over the air may be running from the second slot (0x210000). Writing only the first slot leaves that train booting its old firmware.
+6. **Do one train first.** After the upload, open the Serial Monitor at 115200 baud. The boot log must show `Version: 2.5.2-mobile` and no `FATAL` line. Run the acceptance test in "Preparing the trains for a lab session" on that train before flashing the rest.
+
+Trains that already run 2.5.1 or later can be re-flashed the same way, or updated over the air (see "Over-the-air updates").
+
+---
+
 ## Hardware
 
 - ESP32-S3 Dev Module with **16 MB flash**
@@ -190,11 +205,11 @@ Without `SET_WIFI`, the train works normally in AP-only mode and no update is at
 
 ### Publishing a release (maintainers)
 
-1. Set `FW_VERSION` in `tren_esp_mobile.ino` to the new version (for example `2.5.1-mobile`) and merge it into `main`.
+1. Set `FW_VERSION` in `tren_esp_mobile.ino` to the new version (for example `2.5.2-mobile`) and merge it into `main`.
 2. Create and push a tag with the prefix `tren-v`:
    ```bash
-   git tag -a tren-v2.5.1-mobile -m "Release tren_esp_mobile 2.5.1-mobile"
-   git push origin tren-v2.5.1-mobile
+   git tag -a tren-v2.5.2-mobile -m "Release tren_esp_mobile 2.5.2-mobile"
+   git push origin tren-v2.5.2-mobile
    ```
 3. GitHub Actions (`.github/workflows/release-tren.yml`) compiles the firmware, builds `littlefs.bin`, computes the hashes and publishes `firmware.bin`, `littlefs.bin` and `version.json` in a new release.
 
@@ -202,7 +217,12 @@ The tag must match `FW_VERSION` exactly, without the `tren-v` prefix. If they di
 
 ### Notes
 
-- **The first install of this partition table must be done by USB** (steps 3 and 4). Later updates can come from GitHub.
+- **The first install of this partition table must be done by USB** (steps 3 and 4, and "Re-flashing a train that runs 2.5.0 or earlier"). Later updates can come from GitHub.
+- Nothing happens until a release exists. Without one, `OTA_CHECK` logs `[OTA] Couldn't read the manifest` and the train keeps its firmware.
+- The train installs the version of the release GitHub marks as **Latest** whenever it differs from its own `FW_VERSION`, including an older version. Publish a release only after the bench test below has passed, and never publish an older version after a newer one: every train that boots with Internet access would go back to it.
+- With `SET_WIFI` stored, every boot runs the check before the motor is set up. The train waits up to 15 s for the network. When it connects, the time sync (up to 10 s), the manifest (up to 10 s) and any download come on top. If a release is published during a lab day, trains that reach the network update the next time they are switched on. Publish between sessions.
+- `RESET_TRAIN` clears only the train ID and the motor-direction setting. The Wi-Fi credentials stay, and no serial command removes them.
+- The train joins networks with a name and a password (WPA2-Personal), such as a phone hotspot. Networks with a login page or a user name (eduroam, enterprise networks) do not work.
 - The root certificates in `GITHUB_ROOT_CA` (`ota_github.ino`) must be valid for `github.com` and `objects.githubusercontent.com`. If GitHub changes its certificate chain, the update will stop until the certificate is replaced.
 - The network must allow outbound HTTPS and DNS. The phone can stay connected to `TrenCE-xxx` while the update runs.
 
@@ -347,7 +367,7 @@ Motor safety guard. Any running experiment stops when (a) the commanded PWM is 2
 One person does this before the lab, not in the room. Use the same firmware version on every train for the whole term.
 
 1. `git pull` this repository.
-2. For each train: upload LittleFS (step 3), then the firmware (step 4), with *Erase All Flash* **Disabled**.
+2. For each train: upload LittleFS (step 3), then the firmware (step 4), with *Erase All Flash* **Disabled**. If the train runs 2.5.0 or earlier, read "Re-flashing a train that runs 2.5.0 or earlier" first.
 3. If the train is new, or its ID was lost, configure it (step 5): trains are `trainA` … `trainN`, one letter per
    train, matching the label on the chassis.
 4. Run the acceptance test below. Mark the train as ready only if every item passes.
