@@ -95,7 +95,7 @@ void ota_check_with_sta();
 // =============================================================================
 // Firmware Version
 // =============================================================================
-#define FW_VERSION "2.5.1-mobile"   // 2.5.0: "seq" field in every data frame (link-quality logging); 2.4.2: step-mode brake phase
+#define FW_VERSION "2.5.2-mobile"   // 2.5.2: Ki and Kd accepted up to 150 (match the dashboard sliders), motor safety guard (stall, proximity, stale sensor); 2.5.1: OTA from GitHub Releases; 2.5.0: "seq" field in every data frame (link-quality logging); 2.4.2: step-mode brake phase
 
 // =============================================================================
 // EEPROM Configuration Storage
@@ -620,14 +620,14 @@ void ws_parse_command(const char *json_str, size_t json_len, AsyncWebSocketClien
     ws_send_ack(client, "kp", val);
   }
   else if (strcmp(cmd, "ki") == 0) {
-    double val = constrain((double)doc["v"], 0.0, 50.0);
+    double val = constrain((double)doc["v"], 0.0, 150.0);   // slider max (index.html)
     set_shared_double(&Ki, val);
     pid_params_changed = true;
     Serial.printf(" = %.2f\n", val);
     ws_send_ack(client, "ki", val);
   }
   else if (strcmp(cmd, "kd") == 0) {
-    double val = constrain((double)doc["v"], 0.0, 50.0);
+    double val = constrain((double)doc["v"], 0.0, 150.0);   // slider max (index.html)
     set_shared_double(&Kd, val);
     pid_params_changed = true;
     Serial.printf(" = %.2f\n", val);
@@ -1073,6 +1073,49 @@ void stop_experiment(const char *reason) {
   Serial.printf("[STOP] %s\n", reason);
 }
 
+// =============================================================================
+// Motor safety guard (2.5.1)
+// =============================================================================
+// Stops any running experiment when the motor is driven but the train does
+// not move (stall: wheels blocked, train pushing the object or the end of the
+// track), when the train gets too close to the object in the open-loop modes,
+// or when the sensor stops delivering samples. It only reads the commanded
+// PWM and the filtered distance, so it does not change the control law or
+// the PID timing.
+const int      STALL_PWM          = 250;   // counts of 1023: below this the stall current is small
+const double   STALL_MIN_MOVE_CM  = 0.5;   // movement that resets the stall timer
+const uint32_t STALL_WINDOW_MS    = 1500;  // driven this long without moving -> stop
+const double   OPEN_LOOP_MIN_CM   = 8.0;   // step/deadband: stop before touching the object
+bool     stall_armed = false;
+uint32_t stall_t0 = 0;
+double   stall_d0 = 0;
+
+// Returns a reason string when the experiment must stop, nullptr otherwise.
+const char *motor_safety_check() {
+  uint32_t now = millis();
+
+  // Sensor stopped delivering fresh samples while the motor may be driven.
+  // (PID mode already parks the motor in this case; the stop also covers it.)
+  if (now - last_fresh_ms > 2 * TOF_STALE_MS) return "safety: sensor stale";
+
+  // Open-loop modes have no feedback that would stop the train at the object.
+  bool open_loop = (currentExperimentMode == STEP_MODE ||
+                    currentExperimentMode == DEADBAND_MODE);
+  if (open_loop && MotorSpeed > 0 && medi > 0.5 && medi < OPEN_LOOP_MIN_CM)
+    return "safety: object too close";
+
+  // Stall: commanded PWM high, distance not changing.
+  if (MotorSpeed < STALL_PWM) { stall_armed = false; return nullptr; }
+  if (!stall_armed || fabs(medi - stall_d0) >= STALL_MIN_MOVE_CM) {
+    stall_armed = true;
+    stall_t0 = now;
+    stall_d0 = medi;
+    return nullptr;
+  }
+  if (now - stall_t0 >= STALL_WINDOW_MS) return "safety: stall";
+  return nullptr;
+}
+
 void loop() {
   // Always check for serial config commands
   checkSerialConfig();
@@ -1112,6 +1155,14 @@ void loop() {
       case DEADBAND_MODE:
         loop_deadband_experiment();
         break;
+    }
+    if (experimentActive) {
+      const char *why = motor_safety_check();
+      if (why) {
+        stall_armed = false;
+        stop_experiment(why);
+        ws_send_status_all();
+      }
     }
   } else {
     // Idle mode - motor off

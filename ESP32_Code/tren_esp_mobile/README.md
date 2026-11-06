@@ -218,7 +218,7 @@ The tag must match `FW_VERSION` exactly, without the `tren-v` prefix. If they di
 The dashboard has three experiment modes selected by tabs at the top.
 
 ### PID Control
-Closed-loop distance tracking. Sliders: Kp (0–100), Ki (0–50), Kd (0–50), Reference (1–100 cm), Deadband (0–200 PWM). Parameters can be adjusted live while running. Chart shows distance, reference, and error.
+Closed-loop distance tracking. Sliders: Kp (0–250 on the slider; the firmware accepts 0–100), Ki (0–150), Kd (0–150), Reference (1–100 cm), Deadband (0–200 PWM). Parameters can be adjusted live while running. Chart shows distance, reference, and error.
 
 ### Step Response
 Open-loop motor step. Sliders: Amplitude (0–Vbatt V), Duration (0.5–20 s), Battery Voltage (3.0–12.0 V), Direction. Three-phase execution: 5-sample warm-up → 3-sample baseline → step applied. Auto-stops when duration expires.
@@ -305,7 +305,7 @@ Reducing the timing budget to 20 ms increases noise by ~28% — not worth it for
 
 ## License & Credits
 
-Built for UAI's MIN215 control systems course. Firmware version: `2.5.0-mobile`.
+Built for UAI's MIN215 control systems course. Firmware version: `2.5.2-mobile`.
 
 ## v2.4.2 — step-mode brake phase
 
@@ -321,6 +321,12 @@ WebSocket before `start` (backward compatible; default is the legacy stop):
 Telemetry keeps streaming through the brake phase (`dir` reports the live motor
 direction), which makes matched-speed stopping-distance comparisons per direction
 possible — the diagnostic that separates drivetrain, driver, and sensing effects.
+
+## v2.5.2 — Ki and Kd up to 150
+
+The firmware clamped Ki and Kd to 50 while the dashboard sliders go to 150, so the slider silently snapped back above 50. Both now accept up to 150. No dashboard or LittleFS change: only the application image changes.
+
+Motor safety guard. Any running experiment stops when (a) the commanded PWM is 250 or more and the distance changes by less than 0.5 cm for 1.5 s (wheels blocked, train pushing the object or the end of the track), (b) in the step and deadband modes the measured distance falls below 8 cm, or (c) the sensor delivers no fresh sample for 1 s. The guard reads the PWM and the filtered distance only, so the PID law and its 50 ms timing are unchanged. The reason is printed on the serial port (`[STOP] safety: ...`); the dashboard shows the experiment as stopped.
 
 ## v2.5.0 — link-quality logging
 
@@ -352,10 +358,10 @@ One person does this before the lab, not in the room. Use the same firmware vers
 With the train on the track, switch ON, an object 18–28 cm in front of the sensor:
 
 - [ ] The phone sees the WiFi network `TrenCE-trainX` with the right letter, and `http://192.168.4.1` loads.
-- [ ] The badge at the top of the dashboard shows `fw 2.5.0-mobile`.
+- [ ] The badge at the top of the dashboard shows `fw 2.5.2-mobile`.
 - [ ] Deadband tab: one sweep forward at the default threshold ends with a PWM value in the result box.
 - [ ] Step tab: amplitude 1.2 V, duration 1 s, forward: the train moves and then brakes.
-- [ ] **Save CSV** downloads a file. Its first lines are `# train_id: trainX` and `# fw: 2.5.0-mobile`.
+- [ ] **Save CSV** downloads a file. Its first lines are `# train_id: trainX` and `# fw: 2.5.2-mobile`.
 - [ ] **Export log** downloads `registro_trainX_....csv` with the same `#` header lines.
 - [ ] Switch OFF.
 
