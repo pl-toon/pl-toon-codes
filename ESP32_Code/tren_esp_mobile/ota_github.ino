@@ -130,7 +130,7 @@ void ota_check_with_sta() {
   sta_off();
 }
 
-// Comandos serie: SET_WIFI:ssid:password (la contraseña puede contener ':')
+// Comandos serie: SET_WIFI:ssid:password (la contraseña puede contener ':'), CLEAR_WIFI (borra la red guardada), OTA_CHECK
 // Llama a esta función desde el parser serie existente. Devuelve true si el comando era suyo.
 bool handle_sta_command(const String& cmd) {
   if (cmd.startsWith("SET_WIFI:")) {
@@ -140,6 +140,15 @@ bool handle_sta_command(const String& cmd) {
     sta_save(rest.substring(0, sep), rest.substring(sep + 1));
     sta_load();
     Serial.println("[STA] Credentials saved. Reboot to connect.");
+    return true;
+  }
+  if (cmd == "CLEAR_WIFI") {
+    staPrefs.begin("sta", false);
+    staPrefs.clear();
+    staPrefs.end();
+    sta_load();
+    sta_off();
+    Serial.println("[STA] Credentials cleared. AP only; no update check at boot.");
     return true;
   }
   if (cmd == "OTA_CHECK") {

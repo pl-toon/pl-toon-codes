@@ -33,6 +33,9 @@
  * - GET_TRAIN                - Display current configuration
  * - RESET_TRAIN              - Clear configuration and restart
  * - STATUS                   - Show connection status
+ * - SET_WIFI:ssid:password    - Store the Wi-Fi network used for OTA updates
+ * - CLEAR_WIFI               - Forget that network (AP only, no update check)
+ * - OTA_CHECK                - Check GitHub Releases for a newer firmware now
  *
  * LED FEEDBACK:
  * - Fast blink (200ms)  : Not configured, waiting for setup
@@ -95,7 +98,7 @@ void ota_check_with_sta();
 // =============================================================================
 // Firmware Version
 // =============================================================================
-#define FW_VERSION "2.5.2-mobile"   // 2.5.2: Ki and Kd accepted up to 150 (match the dashboard sliders), motor safety guard (stall, proximity, stale sensor); 2.5.1: OTA from GitHub Releases; 2.5.0: "seq" field in every data frame (link-quality logging); 2.4.2: step-mode brake phase
+#define FW_VERSION "2.5.2-mobile"   // 2.5.2: Ki and Kd accepted up to 150 (match the dashboard sliders), motor safety guard (stall, proximity, stale sensor), CLEAR_WIFI serial command; 2.5.1: OTA from GitHub Releases; 2.5.0: "seq" field in every data frame (link-quality logging); 2.4.2: step-mode brake phase
 
 // =============================================================================
 // EEPROM Configuration Storage
@@ -370,7 +373,7 @@ void checkSerialConfig() {
     String command = Serial.readStringUntil('\n');
     command.trim();
 
-    if (handle_sta_command(command)) return;   // SET_WIFI:... y OTA_CHECK
+    if (handle_sta_command(command)) return;   // SET_WIFI:..., CLEAR_WIFI y OTA_CHECK
 
     if (command.startsWith("SET_TRAIN:")) {
       int firstColon = command.indexOf(':');
@@ -424,6 +427,9 @@ void checkSerialConfig() {
       Serial.println("  GET_TRAIN              - Show configuration");
       Serial.println("  RESET_TRAIN            - Clear configuration");
       Serial.println("  STATUS                 - Show status");
+      Serial.println("  SET_WIFI:ssid:password - Store Wi-Fi network for OTA");
+      Serial.println("  CLEAR_WIFI             - Forget the OTA Wi-Fi network");
+      Serial.println("  OTA_CHECK              - Check GitHub for an update now");
     }
   }
 }

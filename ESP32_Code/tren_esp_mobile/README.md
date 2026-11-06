@@ -167,6 +167,7 @@ The port number is stored but unused in mobile mode (it exists for compatibility
 | `RESET_TRAIN` | Clear config and reboot |
 | `STATUS` | Same as GET_TRAIN |
 | `SET_WIFI:ssid:password` | Store the Wi-Fi network used for OTA updates (see below) |
+| `CLEAR_WIFI` | Forget that network: AP only, no update check at boot |
 | `OTA_CHECK` | Check GitHub Releases for a newer firmware now |
 
 ### LED status
@@ -192,7 +193,7 @@ The firmware can update itself from the releases of this repository. The train k
    The ssid cannot contain `:`. The password can.
 2. Reboot the train. The log shows `[STA] Connected: <ip>` and the check runs at boot.
 
-Without `SET_WIFI`, the train works normally in AP-only mode and no update is attempted.
+Without `SET_WIFI`, the train works normally in AP-only mode and no update is attempted. `CLEAR_WIFI` removes the stored network and returns the train to that mode, with no wait at boot.
 
 ### How an update runs
 
@@ -221,7 +222,7 @@ The tag must match `FW_VERSION` exactly, without the `tren-v` prefix. If they di
 - Nothing happens until a release exists. Without one, `OTA_CHECK` logs `[OTA] Couldn't read the manifest` and the train keeps its firmware.
 - The train installs the version of the release GitHub marks as **Latest** whenever it differs from its own `FW_VERSION`, including an older version. Publish a release only after the bench test below has passed, and never publish an older version after a newer one: every train that boots with Internet access would go back to it.
 - With `SET_WIFI` stored, every boot runs the check before the motor is set up. The train waits up to 15 s for the network. When it connects, the time sync (up to 10 s), the manifest (up to 10 s) and any download come on top. If a release is published during a lab day, trains that reach the network update the next time they are switched on. Publish between sessions.
-- `RESET_TRAIN` clears only the train ID and the motor-direction setting. The Wi-Fi credentials stay, and no serial command removes them.
+- `RESET_TRAIN` clears only the train ID and the motor-direction setting. The Wi-Fi credentials stay until `CLEAR_WIFI`. Run `CLEAR_WIFI` on a train after an update day if it should not check at boot during the labs.
 - The train joins networks with a name and a password (WPA2-Personal), such as a phone hotspot. Networks with a login page or a user name (eduroam, enterprise networks) do not work.
 - The root certificates in `GITHUB_ROOT_CA` (`ota_github.ino`) must be valid for `github.com` and `objects.githubusercontent.com`. If GitHub changes its certificate chain, the update will stop until the certificate is replaced.
 - The network must allow outbound HTTPS and DNS. The phone can stay connected to `TrenCE-xxx` while the update runs.
@@ -345,6 +346,8 @@ possible — the diagnostic that separates drivetrain, driver, and sensing effec
 ## v2.5.2 — Ki and Kd up to 150
 
 The firmware clamped Ki and Kd to 50 while the dashboard sliders go to 150, so the slider silently snapped back above 50. Both now accept up to 150. No dashboard or LittleFS change: only the application image changes.
+
+New serial command `CLEAR_WIFI`: forgets the network stored with `SET_WIFI`, so the train boots in AP-only mode without the update check. `RESET_TRAIN` does not touch that network.
 
 Motor safety guard. Any running experiment stops when (a) the commanded PWM is 250 or more and the distance changes by less than 0.5 cm for 1.5 s (wheels blocked, train pushing the object or the end of the track), (b) in the step and deadband modes the measured distance falls below 8 cm, or (c) the sensor delivers no fresh sample for 1 s. The guard reads the PWM and the filtered distance only, so the PID law and its 50 ms timing are unchanged. The reason is printed on the serial port (`[STOP] safety: ...`); the dashboard shows the experiment as stopped.
 
